@@ -5,10 +5,12 @@ import { Input } from "@/src/components/ui/input";
 import { Label } from "@/src/components/ui/label";
 import Link from "next/link";
 import { SmtpMessage } from "../smtp-message";
+import { redirect } from "next/navigation";
 
 export default async function Signup(props: {
   searchParams: Promise<Message>;
 }) {
+  redirect("/");
   const searchParams = await props.searchParams;
   if ("message" in searchParams) {
     return (
