@@ -1,11 +1,11 @@
-import { signUpAction } from "@/src/app/actions";
-import { FormMessage, Message } from "@/src/components/form-message";
-import { SubmitButton } from "@/src/components/submit-button";
-import { Input } from "@/src/components/ui/input";
-import { Label } from "@/src/components/ui/label";
 import Link from "next/link";
 import { SmtpMessage } from "../smtp-message";
 import { redirect } from "next/navigation";
+import { FormMessage, Message } from "@/components/form-message";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { SubmitButton } from "@/components/submit-button";
+import { signUpAction } from "@/app/actions";
 
 export default async function Signup(props: {
   searchParams: Promise<Message>;

@@ -12,10 +12,15 @@ type Props = {
 };
 
 const CustomImage = ({ src, alt, className }: Props) => {
-  const i = 1;
   return (
     <div className={cn("relative", className)}>
-      <Image src={src} alt={""} objectFit="cover" layout="fill" priority />
+      <Image
+        src={src}
+        alt={alt || ""}
+        objectFit="cover"
+        layout="fill"
+        priority
+      />
     </div>
   );
 };
