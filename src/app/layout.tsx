@@ -1,8 +1,15 @@
 import { GeistSans } from "geist/font/sans";
 import { ThemeProvider } from "next-themes";
 import "./globals.css";
-import HeaderAuth from "@/components/header-auth";
+
 import Navbar from "@/components/navbar";
+import { Toaster } from "@/components/ui/sonner";
+import {
+  SidebarInset,
+  SidebarProvider,
+  SidebarTrigger,
+} from "@/components/ui/sidebar";
+import AppSidebar from "@/components/app-sidebar";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -28,13 +35,19 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <main className="min-h-screen flex flex-col items-center">
-            <div className="flex-1 w-full flex flex-col items-center">
-              <Navbar />
+          <SidebarProvider>
+            <AppSidebar />
+            <SidebarInset>
+              <main className="min-h-screen flex flex-col items-center">
+                <div className="flex-1 w-full flex flex-col items-center">
+                  <Navbar />
 
-              <div className="w-full">{children}</div>
-            </div>
-          </main>
+                  <div className="w-full">{children}</div>
+                  <Toaster />
+                </div>
+              </main>
+            </SidebarInset>
+          </SidebarProvider>
         </ThemeProvider>
       </body>
     </html>

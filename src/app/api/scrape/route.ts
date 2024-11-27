@@ -35,21 +35,53 @@ export const GET = async () => {
 
     const supabase = await createClient();
 
-    const newGoldData = await supabase.from("golds").insert([
-      {
-        price: currentGoldPrice,
-      },
-    ]);
+    const { data: latestData, error: fetchError } = await supabase
+      .from("golds")
+      .select("price")
+      .order("created_at", { ascending: false })
+      .limit(1);
 
-    return NextResponse.json({
-      message: "Scraping data successfully",
-      data: newGoldData,
-    });
+    if (fetchError) {
+      console.error("Error fetching latest data:", fetchError);
+      return;
+    }
+
+    if (latestData[0].price === currentGoldPrice) {
+      return NextResponse.json(
+        {
+          message: "Data already up to date",
+        },
+        { status: 200 }
+      );
+    }
+
+    const { data: newGoldData, error: insertError } = await supabase
+      .from("golds")
+      .insert([
+        {
+          price: currentGoldPrice,
+        },
+      ]);
+
+    if (insertError) {
+      return NextResponse.json({
+        message: "Error inserting new data",
+        error: insertError,
+      });
+    }
+
+    return NextResponse.json(
+      {
+        message: "Update data successfully",
+        data: newGoldData,
+      },
+      { status: 201 }
+    );
   } catch (error) {
     console.error(error);
     return NextResponse.json(
       {
-        message: "Gagal melakukan scraping",
+        message: "Scrape Failed",
         error,
       },
       { status: 500 }

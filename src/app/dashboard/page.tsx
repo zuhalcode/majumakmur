@@ -19,7 +19,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Loader } from "lucide-react";
+import { Banknote, DollarSign, Loader } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Area, AreaChart, Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 import { createClient } from "../utils/supabase/client";
@@ -29,16 +29,18 @@ import {
   FormattedTime,
   IntlProvider,
 } from "react-intl";
-
-type Gold = {
-  created_at: number;
-  price: number;
-};
+import { useFetchGold } from "@/hooks/useGold";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { toast } from "sonner";
 
 export default function ProtectedPage() {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [golds, setGolds] = useState<Gold[]>([]);
-
   const chartData = [
     { month: "January", desktop: 186, mobile: 80 },
     { month: "February", desktop: 305, mobile: 200 },
@@ -59,83 +61,204 @@ export default function ProtectedPage() {
     },
   } satisfies ChartConfig;
 
-  const supabase = createClient();
+  const [loading, setLoading] = useState<boolean>(false);
 
-  const getGoldData = async () => {
-    const { data, error } = await supabase.from("golds").select("*");
-
-    if (error) {
-      console.error("Gagal mengambil data:", error);
-      return [];
-    }
-
-    return data;
-  };
+  const { data, refetch } = useFetchGold();
 
   const handleOnClick = async () => {
-    setIsLoading(true);
+    setLoading(true);
 
     const scrapeResponse = await fetch("/api/scrape");
+    const scrapeResponseJSON = await scrapeResponse.json();
 
-    if (scrapeResponse.ok) fetchInitialData();
+    toast(scrapeResponseJSON.message, { duration: 1500 });
 
-    setIsLoading(false);
+    refetch();
+
+    setLoading(false);
   };
-
-  const fetchInitialData = async () => {
-    const initialData = await getGoldData();
-    console.log(initialData);
-    setGolds(initialData);
-  };
-
-  useEffect(() => {
-    fetchInitialData();
-  }, []);
 
   const locale = "id-ID"; // Bahasa Indonesia
+  const gap: number = 16000;
+
+  const goldRates = [
+    { karat: 6, exchange: 35, melt: 28, color: "#D0A25C" },
+    { karat: 8, exchange: 45, melt: 36, color: "#F1C14B" },
+    { karat: 9, exchange: 48.5, melt: 40, color: "#F9D44D" },
+    { karat: 16, exchange: 77, melt: 68, color: "#F5C541" },
+  ];
 
   return (
     <IntlProvider locale={locale}>
-      <div className="w-full flex flex-col gap-12 px-10 mt-5">
-        <Button onClick={handleOnClick} variant="outline">
-          {isLoading ? <Loader className="animate-spin" /> : "Refresh Data"}
-        </Button>
+      <div className="w-full flex flex-col gap-5 px-10 mt-5">
+        {/* <Button
+          onClick={handleOnClick}
+          disabled={loading}
+          variant="outline"
+          className="mx-auto"
+        >
+          {loading ? <Loader className="animate-spin" /> : "Update Data"}
+        </Button> */}
 
-        <Table>
-          <TableCaption>A list of your recent invoices.</TableCaption>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Date</TableHead>
-              <TableHead>Price</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {golds.map((gold, i) => (
-              <TableRow key={i}>
-                <TableCell className="font-medium ">
-                  <FormattedDate
-                    value={gold.created_at}
-                    year="numeric"
-                    month="long"
-                    day="numeric"
-                  />{" "}
-                  <FormattedTime
-                    value={gold.created_at}
-                    hour="2-digit"
-                    minute="2-digit"
-                  />
-                </TableCell>
-                <TableCell>
+        <div className="w-full grid grid-cols-6 gap-5">
+          <Card className="col-start-2 col-span-2">
+            <CardHeader>
+              <CardTitle className="text-base flex items-center justify-between">
+                <p style={{ color: "#FFD700" }}>
+                  24K <span className="text-white">Local Gold</span>{" "}
+                </p>
+                <Banknote className="size-7" style={{ color: "#FFD700" }} />
+              </CardTitle>
+              <div className="text-2xl font-bold">
+                <FormattedNumber
+                  value={data[0]?.price}
+                  style="currency"
+                  currency="IDR"
+                />
+              </div>
+              <CardDescription className="flex flex-col">
+                +20.1% from last month
+              </CardDescription>
+            </CardHeader>
+          </Card>
+
+          <Card className="col-start-4 col-span-2">
+            <CardHeader>
+              <CardTitle className="text-base flex items-center justify-between">
+                <p style={{ color: "#FFD700" }}>
+                  24K <span className="text-white">Current Gold</span>{" "}
+                </p>
+                <Banknote className="size-7" style={{ color: "#FFD700" }} />
+              </CardTitle>
+              <div className="text-2xl font-bold">
+                <FormattedNumber
+                  value={data[0]?.price - gap}
+                  style="currency"
+                  currency="IDR"
+                />
+              </div>
+              <CardDescription className="flex flex-col">
+                +20.1% from last month
+              </CardDescription>
+            </CardHeader>
+          </Card>
+        </div>
+
+        <div className="w-full grid grid-cols-4 gap-5">
+          {goldRates.map(({ karat, exchange, color }, i) => (
+            <Card key={i}>
+              <CardHeader>
+                <CardTitle className="text-base flex items-center justify-between">
+                  <p style={{ color }}>
+                    {karat}K <span className="text-white">Gold Wholesale</span>{" "}
+                  </p>
+                  <Banknote className="size-7" style={{ color }} />
+                </CardTitle>
+                <div className="text-2xl font-bold">
                   <FormattedNumber
-                    value={gold.price}
+                    value={(data[0]?.price * exchange) / 100}
                     style="currency"
                     currency="IDR"
                   />
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+                </div>
+                <CardDescription className="flex flex-col">
+                  +20.1% from last month
+                </CardDescription>
+              </CardHeader>
+            </Card>
+          ))}
+        </div>
+
+        <div className="w-full grid grid-cols-4 gap-5">
+          {goldRates.map(({ karat, melt, color }, i) => (
+            <Card key={i}>
+              <CardHeader>
+                <CardTitle className="text-base flex items-center justify-between">
+                  <p style={{ color }}>
+                    {karat}K <span className="text-white">Gold Melt</span>{" "}
+                  </p>
+                  <Banknote className="size-7" style={{ color }} />
+                </CardTitle>
+                <div className="text-2xl font-bold">
+                  <FormattedNumber
+                    value={(data[0]?.price * melt) / 100}
+                    style="currency"
+                    currency="IDR"
+                  />
+                </div>
+                <CardDescription className="flex flex-col">
+                  +20.1% from last month
+                </CardDescription>
+              </CardHeader>
+            </Card>
+          ))}
+        </div>
+
+        <div className="w-full grid grid-cols-4 gap-5">
+          {goldRates.map(({ karat, exchange, color }, i) => (
+            <Card key={i}>
+              <CardHeader>
+                <CardTitle className="text-base flex items-center justify-between">
+                  <p style={{ color }}>
+                    {karat}K <span className="text-white">Gold Wholesale</span>{" "}
+                  </p>
+                  <Banknote className="size-7" style={{ color }} />
+                </CardTitle>
+                <div className="text-2xl font-bold">
+                  <FormattedNumber
+                    value={((data[0]?.price * exchange) / 100) * 1.1}
+                    style="currency"
+                    currency="IDR"
+                  />
+                </div>
+                <CardDescription className="flex flex-col">
+                  +20.1% from last month
+                </CardDescription>
+              </CardHeader>
+            </Card>
+          ))}
+        </div>
+
+        <div className="flex gap-5">
+          <div className="w-full space-y-3">
+            <Table>
+              <TableCaption>A list of your gold price changing.</TableCaption>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Date</TableHead>
+                  <TableHead>Price</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {data.map((gold, i) => (
+                  <TableRow key={i}>
+                    <TableCell className="font-medium ">
+                      <FormattedDate
+                        value={gold.created_at}
+                        year="numeric"
+                        month="long"
+                        day="numeric"
+                      />{" "}
+                      <FormattedTime
+                        value={gold.created_at}
+                        hour="2-digit"
+                        minute="2-digit"
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <FormattedNumber
+                        value={gold.price}
+                        style="currency"
+                        currency="IDR"
+                      />
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+          <div className="w-full bg-red-500">zuhal</div>
+        </div>
 
         <div className="flex">
           <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
