@@ -19,7 +19,7 @@ export const useFetchGold = () => {
 
   const fetchData = useCallback(async () => {
     const { data, count, error, status, statusText } = await supabase
-      .from("golds")
+      .from("global_golds")
       .select("*")
       .order("created_at", { ascending: false })
       .limit(10);

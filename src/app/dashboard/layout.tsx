@@ -1,5 +1,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "../utils/supabase/server";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import AppSidebar from "@/components/app-sidebar";
 
 export default async function RootLayout({
   children,
@@ -14,5 +16,10 @@ export default async function RootLayout({
 
   if (!user) return redirect("/sign-in");
 
-  return <div>{children}</div>;
+  return (
+    <SidebarProvider>
+      <AppSidebar />
+      <SidebarInset>{children}</SidebarInset>
+    </SidebarProvider>
+  );
 }

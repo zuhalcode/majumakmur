@@ -36,7 +36,7 @@ export const GET = async () => {
     const supabase = await createClient();
 
     const { data: latestData, error: fetchError } = await supabase
-      .from("golds")
+      .from("global_golds")
       .select("price")
       .order("created_at", { ascending: false })
       .limit(1);
