@@ -85,7 +85,7 @@ export default function AppSidebar() {
   const pathname = usePathname();
 
   return (
-    pathname === "/dashboard" && (
+    pathname.startsWith("/dashboard") && (
       <Sidebar>
         <SidebarHeader>
           <SidebarMenu>

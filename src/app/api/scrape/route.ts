@@ -56,7 +56,7 @@ export const GET = async () => {
     }
 
     const { data: newGoldData, error: insertError } = await supabase
-      .from("golds")
+      .from("global_golds")
       .insert([
         {
           price: currentGoldPrice,
