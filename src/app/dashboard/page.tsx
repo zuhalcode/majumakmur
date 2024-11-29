@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import {
   ChartConfig,
   ChartContainer,
@@ -14,35 +13,19 @@ import {
   TableBody,
   TableCaption,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Area, AreaChart, Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
 import { toast } from "sonner";
 
-import { Banknote, GalleryVerticalEnd } from "lucide-react";
+import { Banknote } from "lucide-react";
 
 import { Separator } from "@/components/ui/separator";
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
-  SidebarHeader,
-  SidebarInput,
-  SidebarInset,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  SidebarProvider,
-  SidebarRail,
-  SidebarTrigger,
-} from "@/components/ui/sidebar";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 import { useFetchGold } from "@/hooks/useGold";
 import {
   Card,
@@ -56,45 +39,6 @@ import {
   FormattedTime,
   IntlProvider,
 } from "react-intl";
-
-const sidebarMenu = [
-  {
-    title: "Getting Started",
-    url: "#",
-    items: [
-      {
-        title: "Dashboard",
-        url: "#",
-        isActive: true,
-      },
-      {
-        title: "Transaction",
-        url: "#",
-      },
-      {
-        title: "Customers",
-        url: "#",
-      },
-      {
-        title: "Sales",
-        url: "#",
-      },
-
-      {
-        title: "Gold Analytics",
-        url: "#",
-      },
-      {
-        title: "Capital Management",
-        url: "#",
-      },
-      {
-        title: "Buyback Analytics",
-        url: "#",
-      },
-    ],
-  },
-];
 
 export default function Page() {
   const { data, refetch } = useFetchGold();
@@ -142,12 +86,6 @@ export default function Page() {
 
   return (
     <>
-      <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
-        <SidebarTrigger className="-ml-1" />
-        <Separator orientation="vertical" className="mr-2 h-4" />
-        header
-      </header>
-
       <IntlProvider locale="id-ID">
         <div className="w-full flex flex-col gap-5 px-10 mt-5">
           {/* <Button
