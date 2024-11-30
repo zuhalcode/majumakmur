@@ -36,6 +36,9 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
   SidebarProvider,
   SidebarRail,
   SidebarTrigger,
@@ -44,37 +47,67 @@ import { usePathname } from "next/navigation";
 
 const sidebarMenu = [
   {
-    title: "Getting Started",
+    title: "Dashboard",
     url: "#",
     items: [
       {
-        title: "Dashboard",
+        title: "Gold Analytics",
+        url: "/dashboard/gold-analytics",
+        isActive: true,
+      },
+      {
+        title: "Buyback Analytics",
+        url: "/dashboard/buyback-analytics",
+        isActive: true,
+      },
+      {
+        title: "Capital Management",
+        url: "/dashboard/capital-management",
+        isActive: true,
+      },
+    ],
+  },
+  {
+    title: "Sales",
+    url: "#",
+    items: [
+      {
+        title: "List Sales",
         url: "#",
         isActive: true,
       },
       {
-        title: "Transaction",
+        title: "Add Sales",
         url: "#",
       },
+    ],
+  },
+  {
+    title: "Transaction",
+    url: "#",
+    items: [
       {
-        title: "Customers",
+        title: "List Transaction",
         url: "#",
+        isActive: true,
       },
       {
-        title: "Sales",
+        title: "Add Transaction",
         url: "#",
       },
-
+    ],
+  },
+  {
+    title: "Customers",
+    url: "#",
+    items: [
       {
-        title: "Gold Analytics",
+        title: "List Customer",
         url: "#",
+        isActive: true,
       },
       {
-        title: "Capital Management",
-        url: "#",
-      },
-      {
-        title: "Buyback Analytics",
+        title: "Add Customer",
         url: "#",
       },
     ],
@@ -105,23 +138,34 @@ export default function AppSidebar() {
           </SidebarMenu>
         </SidebarHeader>
 
-        <SidebarContent>
-          {sidebarMenu.map((item) => (
-            <SidebarGroup key={item.title}>
-              <SidebarGroupLabel>{item.title}</SidebarGroupLabel>
-              <SidebarGroupContent>
-                <SidebarMenu>
-                  {item.items.map((item) => (
-                    <SidebarMenuItem key={item.title}>
-                      <SidebarMenuButton asChild isActive={item.isActive}>
-                        <a href={item.url}>{item.title}</a>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  ))}
-                </SidebarMenu>
-              </SidebarGroupContent>
-            </SidebarGroup>
-          ))}
+        <SidebarContent className="hidden-scrollbar">
+          <SidebarGroup>
+            <SidebarMenu>
+              {sidebarMenu.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton asChild>
+                    <a href={item.url} className="font-medium">
+                      {item.title}
+                    </a>
+                  </SidebarMenuButton>
+                  {item.items?.length ? (
+                    <SidebarMenuSub>
+                      {item.items.map((item) => (
+                        <SidebarMenuSubItem key={item.title}>
+                          <SidebarMenuSubButton
+                            asChild
+                            isActive={pathname === item.url}
+                          >
+                            <a href={item.url}>{item.title}</a>
+                          </SidebarMenuSubButton>
+                        </SidebarMenuSubItem>
+                      ))}
+                    </SidebarMenuSub>
+                  ) : null}
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroup>
         </SidebarContent>
       </Sidebar>
     )

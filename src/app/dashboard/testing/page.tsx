@@ -43,7 +43,7 @@ import {
   SidebarRail,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { useFetchGold } from "@/hooks/useGold";
+import { useFetchGold } from "@/hooks/use-gold";
 import {
   Card,
   CardDescription,

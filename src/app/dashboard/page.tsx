@@ -26,7 +26,7 @@ import { Banknote } from "lucide-react";
 
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { useFetchGold } from "@/hooks/useGold";
+import { useFetchGold } from "@/hooks/use-gold";
 import {
   Card,
   CardDescription,
