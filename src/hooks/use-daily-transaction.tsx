@@ -25,9 +25,9 @@ export const useFetchDailyTransaction = () => {
   const fetchData = useCallback(async () => {
     setLoading(true);
     const { data, count, error, status, statusText } = await supabase
-      .from("daily_transactions")
+      .from("capitals")
       .select("*")
-      .order("date");
+      .order("date", { ascending: false });
 
     if (error) {
       setError(error.message);
