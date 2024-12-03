@@ -43,25 +43,6 @@ import { Button } from "@/components/ui/button";
 
 export default function Page() {
   const { data, refetch } = useFetchGold();
-  const chartData = [
-    { month: "January", desktop: 186, mobile: 80 },
-    { month: "February", desktop: 305, mobile: 200 },
-    { month: "March", desktop: 237, mobile: 120 },
-    { month: "April", desktop: 73, mobile: 190 },
-    { month: "May", desktop: 209, mobile: 130 },
-    { month: "June", desktop: 214, mobile: 140 },
-  ];
-
-  const chartConfig = {
-    desktop: {
-      label: "Desktop",
-      color: "hsl(var(--chart-1))",
-    },
-    mobile: {
-      label: "Mobile",
-      color: "hsl(var(--chart-2))",
-    },
-  } satisfies ChartConfig;
 
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -109,6 +90,7 @@ export default function Page() {
                 </CardTitle>
                 <div className="text-2xl font-bold">
                   <FormattedNumber
+                    maximumFractionDigits={0}
                     value={data[0]?.price}
                     style="currency"
                     currency="IDR"
@@ -130,6 +112,7 @@ export default function Page() {
                 </CardTitle>
                 <div className="text-2xl font-bold">
                   <FormattedNumber
+                    maximumFractionDigits={0}
                     value={data[0]?.price - 16000}
                     style="currency"
                     currency="IDR"
@@ -155,13 +138,14 @@ export default function Page() {
                   </CardTitle>
                   <div className="text-2xl font-bold">
                     <FormattedNumber
+                      maximumFractionDigits={0}
                       value={(data[0]?.price * exchange) / 100}
                       style="currency"
                       currency="IDR"
                     />
                   </div>
                   <CardDescription className="flex flex-col">
-                    +20.1% from last month
+                    {exchange} % from 24K Gold
                   </CardDescription>
                 </CardHeader>
               </Card>
@@ -180,13 +164,14 @@ export default function Page() {
                   </CardTitle>
                   <div className="text-2xl font-bold">
                     <FormattedNumber
+                      maximumFractionDigits={0}
                       value={(data[0]?.price * melt) / 100}
                       style="currency"
                       currency="IDR"
                     />
                   </div>
                   <CardDescription className="flex flex-col">
-                    +20.1% from last month
+                    {melt} % from 24K Gold
                   </CardDescription>
                 </CardHeader>
               </Card>
@@ -200,7 +185,7 @@ export default function Page() {
                   <CardTitle className="text-base flex items-center justify-between">
                     <p style={{ color }}>
                       {karat}K{" "}
-                      <span className="text-white">Gold Wholesale</span>{" "}
+                      <span className="text-white">Gold Sale Price</span>{" "}
                     </p>
                     <Banknote className="size-7" style={{ color }} />
                   </CardTitle>
@@ -209,6 +194,7 @@ export default function Page() {
                       value={((data[0]?.price * exchange) / 100) * 1.1}
                       style="currency"
                       currency="IDR"
+                      maximumFractionDigits={0}
                     />
                   </div>
                   <CardDescription className="flex flex-col">

@@ -51,7 +51,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useFetchDailyTransaction } from "@/hooks/use-daily-transaction";
+import { useFetchCapital } from "@/hooks/use-capital";
 import { cn } from "@/lib/utils";
 import { AreaConfig, BuyAndSell, CashFlow } from "@/types/chart";
 import CustomAreaChart from "@/components/charts/area";
@@ -127,7 +127,7 @@ const cashFlowAreas: AreaConfig[] = [
 ];
 
 export default function Page() {
-  const { data, refetch, loading, insertData } = useFetchDailyTransaction();
+  const { data, refetch, loading, insertData } = useFetchCapital();
 
   const buyAndSells: BuyAndSell[] = data
     .map(({ date, purchase, sell }) => ({
@@ -187,6 +187,11 @@ export default function Page() {
     0
   );
 
+  const lastPurchaseDay = new Date(data[0]?.date).getTime();
+  const firstPurchaseDay = new Date(data[data.length - 1]?.date).getTime();
+
+  const purchaseDays = (lastPurchaseDay - firstPurchaseDay) / 86400000;
+
   const cardInfos: CardInfo[] = [
     {
       title: "Cash Flow",
@@ -200,6 +205,7 @@ export default function Page() {
     {
       title: "Total Customer Purchase",
       value: totalPurchase,
+      desc: `From last ${purchaseDays} days`,
       percent: 0,
       active: false,
     },

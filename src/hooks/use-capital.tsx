@@ -3,33 +3,30 @@ import { useCallback, useEffect, useState } from "react";
 
 const supabase = createClient();
 
-type DailyTransaction = {
+type Capital = {
   id?: number;
-  buy_date: Date;
-  buy_price: number;
-  sell_date: Date;
-  sell_price: number;
-  profit?: number;
+  capital: number;
+  purchase: number;
+  sell: number;
+  date: Date;
   created_at?: Date;
   updated_at?: Date;
 };
 
-export const useFetchDailyTransaction = () => {
-  const [data, setData] = useState<DailyTransaction[]>([]);
+export const useFetchCapital = () => {
+  const [data, setData] = useState<Capital[]>([]);
   const [count, setCount] = useState<number | null>(null);
   const [statusText, setStatusText] = useState<string>("");
   const [status, setStatus] = useState<number>(0);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const table: string = "daily_transactions";
-
   const fetchData = useCallback(async () => {
     setLoading(true);
     const { data, count, error, status, statusText } = await supabase
-      .from(table)
+      .from("capitals")
       .select("*")
-      .order("sell_date", { ascending: true });
+      .order("date", { ascending: false });
 
     if (error) {
       setError(error.message);
@@ -42,33 +39,11 @@ export const useFetchDailyTransaction = () => {
     setLoading(false);
   }, []);
 
-  const insertData = useCallback(async (transaction: DailyTransaction) => {
+  const insertData = useCallback(async (transaction: Capital) => {
     setLoading(true);
-    const { error } = await supabase.from(table).insert([transaction]);
+    const { error } = await supabase.from("capitals").insert([transaction]);
 
     if (error) setError(error.message);
-
-    setLoading(false);
-  }, []);
-
-  const deleteData = useCallback(async (id: number) => {
-    if (!id) {
-      setError("ID tidak valid untuk penghapusan.");
-      return;
-    }
-
-    setLoading(true);
-    setError(null); // Reset error sebelum memulai operasi
-
-    const { error } = await supabase.from(table).delete().eq("id", id);
-
-    if (error) {
-      console.log(error);
-      setError(error.message);
-      fetchData();
-    }
-
-    console.log("aman bolo");
 
     setLoading(false);
   }, []);
@@ -85,7 +60,6 @@ export const useFetchDailyTransaction = () => {
     statusText,
     loading,
     insertData,
-    deleteData,
     refetch: fetchData,
   };
 };

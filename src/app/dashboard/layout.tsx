@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/sidebar";
 import AppSidebar from "@/components/app-sidebar";
 import { Separator } from "@/components/ui/separator";
-import { IntlProvider } from "react-intl";
+import DashboardHeader from "@/components/dashboard/header";
 
 export default async function RootLayout({
   children,
@@ -26,11 +26,7 @@ export default async function RootLayout({
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-        <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
-          <SidebarTrigger className="-ml-1" />
-          <Separator orientation="vertical" className="mr-2 h-4" />
-          header
-        </header>
+        <DashboardHeader />
         {children}
       </SidebarInset>
     </SidebarProvider>

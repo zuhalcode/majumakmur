@@ -1,47 +1,17 @@
 "use client";
 
-import * as React from "react";
-import {
-  Check,
-  ChevronsUpDown,
-  GalleryVerticalEnd,
-  Search,
-} from "lucide-react";
-
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
+import { GalleryVerticalEnd } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
   SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarHeader,
-  SidebarInput,
-  SidebarInset,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
-  SidebarProvider,
-  SidebarRail,
-  SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { usePathname } from "next/navigation";
 
@@ -63,6 +33,11 @@ const sidebarMenu = [
       {
         title: "Capital Management",
         url: "/dashboard/capital-management",
+        isActive: true,
+      },
+      {
+        title: "Daily Transaction",
+        url: "/dashboard/daily-transaction",
         isActive: true,
       },
     ],

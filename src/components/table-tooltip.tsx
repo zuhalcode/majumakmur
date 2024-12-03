@@ -1,6 +1,7 @@
 import React, { ReactNode } from "react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 import { Button } from "./ui/button";
+import { Badge } from "./ui/badge";
 
 const TableTooltip = ({
   icon,
@@ -13,8 +14,8 @@ const TableTooltip = ({
 }) => {
   return (
     <Tooltip>
-      <TooltipTrigger asChild>
-        <Button variant={variant}>{icon}</Button>
+      <TooltipTrigger asChild className="flex items-center cursor-pointer">
+        <Badge variant={variant}>{icon}</Badge>
       </TooltipTrigger>
       <TooltipContent>
         <p>{text}</p>
