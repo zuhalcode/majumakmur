@@ -1,24 +1,17 @@
 "use client";
 
-import {
-  ChartConfig,
-  ChartContainer,
-  ChartLegend,
-  ChartLegendContent,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@/components/ui/chart";
+import { ChartConfig } from "@/components/ui/chart";
 
 import {
   Table,
   TableBody,
   TableCell,
+  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
 
-import { Area, AreaChart, Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 import {
   Banknote,
   Loader,
@@ -53,9 +46,7 @@ import {
 } from "@/components/ui/form";
 import { useFetchCapital } from "@/hooks/use-capital";
 import { cn } from "@/lib/utils";
-import { AreaConfig, BuyAndSell, CashFlow } from "@/types/chart";
-import CustomAreaChart from "@/components/charts/area";
-import { SVGProps } from "react";
+import { BuyAndSell } from "@/types/chart";
 
 const formSchema = z.object({
   date: z.string().min(1, { message: "Date is required" }),
@@ -84,65 +75,8 @@ type CardInfo = {
   active: boolean;
 };
 
-const buyAndSellChartConfig = {
-  buy: {
-    label: "Buy",
-    color: "hsl(var(--chart-1))",
-  },
-  sell: {
-    label: "Sell",
-    color: "hsl(var(--chart-2))",
-  },
-} satisfies ChartConfig;
-
-const buyAndSellAreas: AreaConfig[] = [
-  {
-    dataKey: "buy",
-    label: "Buy",
-    fill: "url(#fillDesktop)",
-    stroke: "hsl(var(--chart-1))",
-  },
-  {
-    dataKey: "sell",
-    label: "Sell",
-    fill: "url(#fillMobile)",
-    stroke: "hsl(var(--chart-2))",
-  },
-];
-
-const cashFlowChartConfig = {
-  cashFlow: {
-    label: "Cash Flow",
-    color: "hsl(var(--chart-1))",
-  },
-} satisfies ChartConfig;
-
-const cashFlowAreas: AreaConfig[] = [
-  {
-    dataKey: "cashFlow",
-    label: "Cash Flow",
-    fill: "url()",
-    stroke: "hsl(var(--chart-1))",
-  },
-];
-
 export default function Page() {
-  const { data, refetch, loading, insertData } = useFetchCapital();
-
-  const buyAndSells: BuyAndSell[] = data
-    .map(({ date, purchase, sell }) => ({
-      date,
-      buy: purchase,
-      sell,
-    }))
-    .reverse();
-
-  const cashFlows: CashFlow[] = data
-    .map(({ date, purchase, sell }) => ({
-      date,
-      cashFlow: purchase - sell,
-    }))
-    .reverse();
+  const { data, dataByMonth, refetch, loading, insertData } = useFetchCapital();
 
   const form = useForm<Form>({
     resolver: zodResolver(formSchema),
@@ -173,15 +107,6 @@ export default function Page() {
     }
   });
 
-  const { totalPurchase, totalSell } = data?.reduce(
-    (totals, item) => {
-      totals.totalPurchase += item.purchase;
-      totals.totalSell += item.sell;
-      return totals;
-    },
-    { totalPurchase: 0, totalSell: 0 }
-  ) || { totalPurchase: 0, totalSell: 0 };
-
   const totalCashFlow = data.reduce(
     (total, item) => total + (item.purchase - item.sell),
     0
@@ -192,38 +117,28 @@ export default function Page() {
 
   const purchaseDays = (lastPurchaseDay - firstPurchaseDay) / 86400000;
 
+  const totalTax = dataByMonth.reduce(
+    (total, item) => total + (item.totalPurchase * 0.5) / 100,
+    0
+  );
+
+  const totalPurchase = dataByMonth.reduce(
+    (total, item) => total + item.totalPurchase,
+    0
+  );
+
   const cardInfos: CardInfo[] = [
     {
-      title: "Cash Flow",
-      value: totalCashFlow,
-      desc: `From last ${purchaseDays} days`,
-      percent: parseFloat(
-        ((totalCashFlow / (totalPurchase + totalSell)) * 100).toFixed(2)
-      ),
-      active: true,
+      title: "Total Tax",
+      value: totalTax,
+      desc: `From last ${dataByMonth.length} Months`,
+      percent: 0,
+      active: false,
     },
     {
-      title: "Total Customer Purchase",
+      title: "Total Purchase",
       value: totalPurchase,
-      desc: `From last ${purchaseDays} days`,
-      percent: 0,
-      active: false,
-    },
-    {
-      title: "Total Customer Sell",
-      value: totalSell,
-      percent: 0,
-      active: false,
-    },
-    {
-      title: "Sell Ratio",
-      value: (totalSell / totalPurchase) * 100,
-      percent: 0,
-      active: false,
-    },
-    {
-      title: "Buy Ratio",
-      value: (totalPurchase / totalSell) * 100,
+      desc: `From last ${dataByMonth.length} Months`,
       percent: 0,
       active: false,
     },
@@ -231,7 +146,7 @@ export default function Page() {
 
   return (
     <IntlProvider locale="id-ID">
-      <div className="w-full flex flex-col gap-5 px-10 mt-5">
+      <div className="w-full flex flex-col gap-5 px-10 mt-5 pb-10">
         <div className="w-full grid grid-cols-3 gap-2">
           {cardInfos.map(({ title, desc, value, percent, active }, i) => (
             <Card key={i}>
@@ -286,42 +201,7 @@ export default function Page() {
           ))}
         </div>
 
-        <div className="flex gap-5 flex-col">
-          <CustomAreaChart
-            data={cashFlows}
-            chartConfig={cashFlowChartConfig}
-            areas={cashFlowAreas}
-          />
-          <CustomAreaChart
-            data={buyAndSells}
-            chartConfig={buyAndSellChartConfig}
-            areas={buyAndSellAreas}
-          />
-          {/* Bar Chart */}
-          {/* <ChartContainer
-            config={buyAndSellChartConfig}
-            className="aspect-auto h-screen w-full"
-          >
-            <BarChart accessibilityLayer data={chartData}>
-              <CartesianGrid vertical={false} />
-              <XAxis
-                dataKey="date"
-                tickLine={false}
-                tickMargin={10}
-                axisLine={false}
-                tickFormatter={tickFormatter}
-              />
-              <ChartTooltip
-                cursor={false}
-                content={<ChartTooltipContent indicator="dashed" />}
-              />
-              <Bar dataKey="buy" fill="hsl(var(--chart-1))" radius={4} />
-              <Bar dataKey="sell" fill="hsl(var(--chart-2))" radius={4} />
-              <ChartLegend content={<ChartLegendContent />} />
-            </BarChart>
-          </ChartContainer> */}
-          {/* Bar Chart */}
-        </div>
+        <div className="flex gap-5 flex-col">{/* Bar Chart */}</div>
 
         <Card className="w-full mx-auto">
           <CardHeader>
@@ -431,56 +311,35 @@ export default function Page() {
                   <TableRow>
                     <TableHead>No</TableHead>
                     <TableHead>Date</TableHead>
-                    <TableHead>Capital</TableHead>
                     <TableHead>Purchase</TableHead>
-                    <TableHead>Sell</TableHead>
-                    <TableHead>Net Cash Flow</TableHead>
+                    <TableHead>Tax</TableHead>
                     <TableHead>Action</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {data.map(({ id, date, capital, purchase, sell }, i) => (
-                    <TableRow key={id}>
+                  {dataByMonth.map(({ date, data, totalPurchase }, i) => (
+                    <TableRow key={i}>
                       <TableCell>{i + 1}</TableCell>
                       <TableCell>{date.toString()}</TableCell>
+
                       <TableCell>
                         <FormattedNumber
-                          value={capital}
+                          value={totalPurchase}
                           style="currency"
                           currency="IDR"
                           minimumFractionDigits={0}
                         />
                       </TableCell>
+
                       <TableCell>
                         <FormattedNumber
-                          value={purchase}
+                          value={(totalPurchase * 0.5) / 100}
                           style="currency"
                           currency="IDR"
                           minimumFractionDigits={0}
                         />
                       </TableCell>
-                      <TableCell>
-                        <FormattedNumber
-                          value={sell}
-                          style="currency"
-                          currency="IDR"
-                          minimumFractionDigits={0}
-                        />
-                      </TableCell>
-                      <TableCell
-                        className={
-                          purchase - sell < 0
-                            ? "text-red-500"
-                            : "text-green-500"
-                        }
-                      >
-                        <FormattedNumber
-                          value={purchase - sell}
-                          style="currency"
-                          currency="IDR"
-                          minimumFractionDigits={0}
-                        />
-                      </TableCell>
+
                       <TableCell>
                         <TooltipProvider>
                           <div className="flex gap-2">

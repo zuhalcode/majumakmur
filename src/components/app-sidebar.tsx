@@ -40,6 +40,11 @@ const sidebarMenu = [
         url: "/dashboard/daily-transaction",
         isActive: true,
       },
+      {
+        title: "Tax Management",
+        url: "/dashboard/tax-management",
+        isActive: true,
+      },
     ],
   },
   {

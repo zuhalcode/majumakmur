@@ -48,12 +48,40 @@ export const useFetchCapital = () => {
     setLoading(false);
   }, []);
 
+  const groupDataByMonth = () => {
+    const grouped: { date: string; data: Capital[]; totalPurchase: number }[] =
+      [];
+
+    data.forEach((item) => {
+      const date = new Date(item.date).toLocaleString("default", {
+        month: "2-digit",
+        year: "2-digit",
+      });
+
+      // Cek apakah bulan sudah ada dalam grouped
+      const existingGroup = grouped.find((group) => group.date === date);
+
+      if (existingGroup) {
+        existingGroup.data.push(item); // Tambahkan transaksi ke bulan yang ada
+        existingGroup.totalPurchase += item.purchase; // Tambahkan purchase ke total untuk bulan ini
+      } else {
+        // Jika belum ada, buat grup baru untuk bulan ini
+        grouped.push({ date, data: [item], totalPurchase: item.purchase });
+      }
+    });
+
+    return grouped;
+  };
+
+  const groupedData = groupDataByMonth();
+
   useEffect(() => {
     fetchData();
   }, [fetchData]);
 
   return {
     data,
+    dataByMonth: groupedData,
     count,
     error,
     status,
