@@ -189,6 +189,11 @@ export default function Page() {
 
   const lastPurchaseDay = new Date(data[0]?.date).getTime();
   const firstPurchaseDay = new Date(data[data.length - 1]?.date).getTime();
+  const lastDateAfter1Year = new Date(
+    new Date(data[data.length - 1]?.date).setFullYear(
+      new Date(data[data.length - 1]?.date).getFullYear() + 1
+    )
+  ).toLocaleDateString("en-GB");
 
   const purchaseDays = (lastPurchaseDay - firstPurchaseDay) / 86400000;
 
@@ -224,6 +229,13 @@ export default function Page() {
     {
       title: "Buy Ratio",
       value: (totalPurchase / totalSell) * 100,
+      percent: 0,
+      active: false,
+    },
+    {
+      title: "Cash Needs",
+      value: totalPurchase * 0.9,
+      desc: `Until ${lastDateAfter1Year} `,
       percent: 0,
       active: false,
     },

@@ -59,6 +59,14 @@ export default function Page() {
     setLoading(false);
   };
 
+  const pureGoldPrice = data[0]?.price;
+
+  const pureGolds = [
+    { title: "Local Gold", desc: "", value: pureGoldPrice },
+    { title: "KKG Gold", desc: "From 05/12/24", value: 1340000 },
+    { title: "Current Gold - 16", value: pureGoldPrice - 16000 },
+  ];
+
   const goldRates = [
     { karat: 6, exchange: 35, melt: 28, color: "#D0A25C" },
     { karat: 8, exchange: 45, melt: 36, color: "#F1C14B" },
@@ -80,49 +88,29 @@ export default function Page() {
           </Button>
 
           <div className="w-full grid grid-cols-6 gap-5">
-            <Card className="col-start-2 col-span-2">
-              <CardHeader>
-                <CardTitle className="text-base flex items-center justify-between">
-                  <p style={{ color: "#FFD700" }}>
-                    24K <span className="text-white">Local Gold</span>{" "}
-                  </p>
-                  <Banknote className="size-7" style={{ color: "#FFD700" }} />
-                </CardTitle>
-                <div className="text-2xl font-bold">
-                  <FormattedNumber
-                    maximumFractionDigits={0}
-                    value={data[0]?.price}
-                    style="currency"
-                    currency="IDR"
-                  />
-                </div>
-                <CardDescription className="flex flex-col">
-                  +20.1% from last month
-                </CardDescription>
-              </CardHeader>
-            </Card>
-
-            <Card className="col-start-4 col-span-2">
-              <CardHeader>
-                <CardTitle className="text-base flex items-center justify-between">
-                  <p style={{ color: "#FFD700" }}>
-                    24K <span className="text-white">Current Gold</span>{" "}
-                  </p>
-                  <Banknote className="size-7" style={{ color: "#FFD700" }} />
-                </CardTitle>
-                <div className="text-2xl font-bold">
-                  <FormattedNumber
-                    maximumFractionDigits={0}
-                    value={data[0]?.price - 16000}
-                    style="currency"
-                    currency="IDR"
-                  />
-                </div>
-                <CardDescription className="flex flex-col">
-                  +20.1% from last month
-                </CardDescription>
-              </CardHeader>
-            </Card>
+            {pureGolds.map(({ title, value, desc }, i) => (
+              <Card className="col-span-2" key={i}>
+                <CardHeader>
+                  <CardTitle className="text-base flex items-center justify-between">
+                    <p style={{ color: "#FFD700" }}>
+                      24K <span className="text-white">{title}</span>{" "}
+                    </p>
+                    <Banknote className="size-7" style={{ color: "#FFD700" }} />
+                  </CardTitle>
+                  <div className="text-2xl font-bold">
+                    <FormattedNumber
+                      maximumFractionDigits={0}
+                      value={value}
+                      style="currency"
+                      currency="IDR"
+                    />
+                  </div>
+                  <CardDescription className="flex flex-col">
+                    {desc || "+20.1% from last month"}
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+            ))}
           </div>
 
           <div className="w-full grid grid-cols-4 gap-5">

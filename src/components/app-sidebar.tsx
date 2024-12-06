@@ -18,7 +18,11 @@ import { usePathname } from "next/navigation";
 const sidebarMenu = [
   {
     title: "Dashboard",
-    url: "#",
+    url: "/dashboard",
+  },
+  {
+    title: "Gold",
+    url: "/dashboard/gold-analytics",
     items: [
       {
         title: "Gold Analytics",
@@ -26,10 +30,21 @@ const sidebarMenu = [
         isActive: true,
       },
       {
+        title: "Gold Types",
+        url: "/dashboard/gold-types",
+        isActive: true,
+      },
+      {
         title: "Buyback Analytics",
         url: "/dashboard/buyback-analytics",
         isActive: true,
       },
+    ],
+  },
+  {
+    title: "Transactions",
+    url: "#",
+    items: [
       {
         title: "Capital Management",
         url: "/dashboard/capital-management",
@@ -44,36 +59,6 @@ const sidebarMenu = [
         title: "Tax Management",
         url: "/dashboard/tax-management",
         isActive: true,
-      },
-    ],
-  },
-  {
-    title: "Sales",
-    url: "#",
-    items: [
-      {
-        title: "List Sales",
-        url: "#",
-        isActive: true,
-      },
-      {
-        title: "Add Sales",
-        url: "#",
-      },
-    ],
-  },
-  {
-    title: "Transaction",
-    url: "#",
-    items: [
-      {
-        title: "List Transaction",
-        url: "#",
-        isActive: true,
-      },
-      {
-        title: "Add Transaction",
-        url: "#",
       },
     ],
   },
