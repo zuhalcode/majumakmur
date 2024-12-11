@@ -3,33 +3,33 @@ import { useCallback, useEffect, useState } from "react";
 
 const supabase = createClient();
 
-type DailyTransaction = {
-  id?: number;
-  buy_date: Date;
-  buy_price: number;
-  sell_date: Date;
-  sell_price: number;
-  profit?: number;
-  created_at?: Date;
-  updated_at?: Date;
+export type Product = {
+  code: string;
+  category_id?: string;
+  categories?: { name: string };
+  gold_type_id?: string;
+  gold_types?: { karat: number };
+  name: string;
+  desc: string;
+  weight: number;
 };
 
-export const useFetchDailyTransaction = () => {
-  const [data, setData] = useState<DailyTransaction[]>([]);
+export const useFetchProduct = () => {
+  const [data, setData] = useState<Product[]>([]);
   const [count, setCount] = useState<number | null>(null);
   const [statusText, setStatusText] = useState<string>("");
   const [status, setStatus] = useState<number>(0);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const table: string = "daily_transactions";
+  const table: string = "products";
 
   const fetchData = useCallback(async () => {
     setLoading(true);
+
     const { data, count, error, status, statusText } = await supabase
       .from(table)
-      .select("*")
-      .order("sell_date", { ascending: true });
+      .select("*, categories (name), gold_types(karat)");
 
     if (error) {
       setError(error.message);
@@ -42,11 +42,43 @@ export const useFetchDailyTransaction = () => {
     setLoading(false);
   }, []);
 
-  const insertData = useCallback(async (transaction: DailyTransaction) => {
+  const insertData = useCallback(async (product: Product) => {
     setLoading(true);
-    const { error } = await supabase.from(table).insert([transaction]);
 
-    if (error) setError(error.message);
+    const { code } = product;
+
+    const { data: latestProduct, error: latestProductError } = await supabase
+      .from(table)
+      .select()
+      .ilike("code", `${code}%`)
+      .order("code", { ascending: false })
+      .limit(1);
+
+    if (latestProductError) {
+      setError(latestProductError.message);
+      setLoading(false);
+      return;
+    }
+
+    let newCode = `${code}0001`;
+    if (latestProduct && latestProduct.length > 0) {
+      const latestCode = latestProduct[0].code;
+      const numericPartLatestCode = parseInt(latestCode.slice(2), 10);
+      newCode = `${code}${String(numericPartLatestCode + 1).padStart(4, "0")}`;
+    }
+
+    const newProduct = {
+      ...product,
+      code: newCode,
+      gold_type_id: 5,
+      status: "active",
+    };
+
+    const { error: insertError } = await supabase
+      .from(table)
+      .insert([newProduct]);
+
+    if (insertError) setError(insertError.message);
 
     setLoading(false);
   }, []);
@@ -67,6 +99,8 @@ export const useFetchDailyTransaction = () => {
       setError(error.message);
       fetchData();
     }
+
+    console.log("aman bolo");
 
     setLoading(false);
   }, []);

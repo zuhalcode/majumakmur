@@ -21,6 +21,18 @@ const sidebarMenu = [
     url: "/dashboard",
   },
   {
+    title: "Codes",
+    url: "/dashboard/codes",
+  },
+  {
+    title: "Categories",
+    url: "/dashboard/categories",
+  },
+  {
+    title: "Products",
+    url: "/dashboard/products",
+  },
+  {
     title: "Gold",
     url: "/dashboard/gold-analytics",
     items: [

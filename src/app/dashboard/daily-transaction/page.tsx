@@ -64,7 +64,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import CustomAlert from "@/components/custom-alert";
+import CustomAlert from "@/components/custom-alert-dialog";
 
 const formSchema = z.object({
   buy_date: z.string().min(1, { message: "Date is required" }),

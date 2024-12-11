@@ -5,7 +5,7 @@ import {
   AlertDialogTrigger,
 } from "./ui/alert-dialog";
 
-const CustomAlert = ({
+const CustomAlertDialog = ({
   children,
   trigger,
 }: {
@@ -20,4 +20,4 @@ const CustomAlert = ({
   );
 };
 
-export default CustomAlert;
+export default CustomAlertDialog;

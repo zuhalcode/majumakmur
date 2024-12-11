@@ -3,33 +3,26 @@ import { useCallback, useEffect, useState } from "react";
 
 const supabase = createClient();
 
-type DailyTransaction = {
+export type Category = {
   id?: number;
-  buy_date: Date;
-  buy_price: number;
-  sell_date: Date;
-  sell_price: number;
-  profit?: number;
-  created_at?: Date;
-  updated_at?: Date;
+  name: string;
 };
 
-export const useFetchDailyTransaction = () => {
-  const [data, setData] = useState<DailyTransaction[]>([]);
+export const useFetchCategory = () => {
+  const [data, setData] = useState<Category[]>([]);
   const [count, setCount] = useState<number | null>(null);
   const [statusText, setStatusText] = useState<string>("");
   const [status, setStatus] = useState<number>(0);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const table: string = "daily_transactions";
+  const table: string = "categories";
 
   const fetchData = useCallback(async () => {
     setLoading(true);
     const { data, count, error, status, statusText } = await supabase
       .from(table)
-      .select("*")
-      .order("sell_date", { ascending: true });
+      .select("*");
 
     if (error) {
       setError(error.message);
@@ -42,9 +35,9 @@ export const useFetchDailyTransaction = () => {
     setLoading(false);
   }, []);
 
-  const insertData = useCallback(async (transaction: DailyTransaction) => {
+  const insertData = useCallback(async (prefix: Category) => {
     setLoading(true);
-    const { error } = await supabase.from(table).insert([transaction]);
+    const { error } = await supabase.from(table).insert([prefix]);
 
     if (error) setError(error.message);
 
@@ -67,6 +60,8 @@ export const useFetchDailyTransaction = () => {
       setError(error.message);
       fetchData();
     }
+
+    console.log("aman bolo");
 
     setLoading(false);
   }, []);

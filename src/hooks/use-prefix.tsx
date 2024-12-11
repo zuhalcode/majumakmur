@@ -3,33 +3,28 @@ import { useCallback, useEffect, useState } from "react";
 
 const supabase = createClient();
 
-type DailyTransaction = {
+export type Prefix = {
   id?: number;
-  buy_date: Date;
-  buy_price: number;
-  sell_date: Date;
-  sell_price: number;
-  profit?: number;
+  code: string;
+  desc?: string;
   created_at?: Date;
-  updated_at?: Date;
 };
 
-export const useFetchDailyTransaction = () => {
-  const [data, setData] = useState<DailyTransaction[]>([]);
+export const useFetchPrefix = () => {
+  const [data, setData] = useState<Prefix[]>([]);
   const [count, setCount] = useState<number | null>(null);
   const [statusText, setStatusText] = useState<string>("");
   const [status, setStatus] = useState<number>(0);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const table: string = "daily_transactions";
+  const table: string = "prefixes";
 
   const fetchData = useCallback(async () => {
     setLoading(true);
     const { data, count, error, status, statusText } = await supabase
       .from(table)
-      .select("*")
-      .order("sell_date", { ascending: true });
+      .select("*");
 
     if (error) {
       setError(error.message);
@@ -42,13 +37,33 @@ export const useFetchDailyTransaction = () => {
     setLoading(false);
   }, []);
 
-  const insertData = useCallback(async (transaction: DailyTransaction) => {
+  const insertData = useCallback(async (prefix: Prefix) => {
     setLoading(true);
-    const { error } = await supabase.from(table).insert([transaction]);
+    const { error } = await supabase.from(table).insert([prefix]);
 
     if (error) setError(error.message);
 
     setLoading(false);
+  }, []);
+
+  const editData = useCallback(async (id: number, prefix: Prefix) => {
+    setLoading(true);
+
+    try {
+      const { error } = await supabase
+        .from(table)
+        .update({ code: prefix.code, desc: prefix.desc })
+        .eq("id", id);
+
+      if (error) {
+        setError(error.message);
+      }
+    } catch (err) {
+      console.error("Error updating data:", err);
+      setError("Something went wrong while updating the data");
+    } finally {
+      setLoading(false); // Menandakan bahwa operasi selesai
+    }
   }, []);
 
   const deleteData = useCallback(async (id: number) => {
@@ -68,6 +83,8 @@ export const useFetchDailyTransaction = () => {
       fetchData();
     }
 
+    console.log("aman bolo");
+
     setLoading(false);
   }, []);
 
@@ -83,6 +100,7 @@ export const useFetchDailyTransaction = () => {
     statusText,
     loading,
     insertData,
+    editData,
     deleteData,
     refetch: fetchData,
   };
