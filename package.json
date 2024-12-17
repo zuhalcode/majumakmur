@@ -1,6 +1,7 @@
 {
   "private": true,
   "scripts": {
+    "prebuild": "rmdir /s /q .next && rmdir /s /q node_modules\\.cache",
     "dev": "next dev",
     "build": "next build",
     "start": "next start"
