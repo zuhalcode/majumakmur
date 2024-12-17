@@ -95,6 +95,7 @@ export default function AppSidebar() {
   const pathname = usePathname();
 
   return (
+    // check if url is dashboard
     pathname.startsWith("/dashboard") && (
       <Sidebar>
         <SidebarHeader>
