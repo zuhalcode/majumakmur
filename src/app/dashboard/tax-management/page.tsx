@@ -107,16 +107,6 @@ export default function Page() {
     }
   });
 
-  const totalCashFlow = data.reduce(
-    (total, item) => total + (item.purchase - item.sell),
-    0
-  );
-
-  const lastPurchaseDay = new Date(data[0]?.date).getTime();
-  const firstPurchaseDay = new Date(data[data.length - 1]?.date).getTime();
-
-  const purchaseDays = (lastPurchaseDay - firstPurchaseDay) / 86400000;
-
   const totalTax = dataByMonth.reduce(
     (total, item) => total + (item.totalPurchase * 0.5) / 100,
     0
@@ -127,18 +117,20 @@ export default function Page() {
     0
   );
 
+  const monthLength = dataByMonth.length;
+
   const cardInfos: CardInfo[] = [
     {
       title: "Total Tax",
       value: totalTax,
-      desc: `From last ${dataByMonth.length} Months`,
+      desc: `From last ${monthLength} Months`,
       percent: 0,
       active: false,
     },
     {
       title: "Total Purchase",
       value: totalPurchase,
-      desc: `From last ${dataByMonth.length} Months`,
+      desc: `From last ${monthLength} Months`,
       percent: 0,
       active: false,
     },
@@ -205,107 +197,10 @@ export default function Page() {
 
         <Card className="w-full mx-auto">
           <CardHeader>
-            <CardTitle>Capital Management</CardTitle>
+            <CardTitle>Tax Management</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {/* Form */}
-              <Form {...form}>
-                <form
-                  onSubmit={handleOnSubmit}
-                  className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 items-end"
-                >
-                  <FormField
-                    control={control}
-                    name="date"
-                    render={({ field }) => {
-                      return (
-                        <FormItem className="space-y-2">
-                          <FormLabel>Date</FormLabel>
-                          <FormControl>
-                            <Input {...field} disabled={loading} type="date" />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      );
-                    }}
-                  />
-
-                  <FormField
-                    control={control}
-                    name="capital"
-                    render={({ field }) => {
-                      return (
-                        <FormItem className="space-y-2">
-                          <FormLabel>Capital</FormLabel>
-                          <FormControl>
-                            <Input
-                              {...field}
-                              disabled={loading}
-                              type="number"
-                              placeholder="Amount"
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      );
-                    }}
-                  />
-
-                  <FormField
-                    control={control}
-                    name="purchase"
-                    render={({ field }) => {
-                      return (
-                        <FormItem className="space-y-2">
-                          <FormLabel>Purchase</FormLabel>
-                          <FormControl>
-                            <Input
-                              {...field}
-                              disabled={loading}
-                              type="number"
-                              placeholder="Amount"
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      );
-                    }}
-                  />
-
-                  <FormField
-                    control={control}
-                    name="sell"
-                    render={({ field }) => {
-                      return (
-                        <FormItem className="space-y-2">
-                          <FormLabel>Sell</FormLabel>
-                          <FormControl>
-                            <Input
-                              {...field}
-                              disabled={loading}
-                              type="number"
-                              placeholder="Amount"
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      );
-                    }}
-                  />
-
-                  <Button className="w-32" disabled={loading}>
-                    <Plus className="w-4 h-4" />
-                    {loading ? (
-                      <Loader className="animate-spin" />
-                    ) : (
-                      "Insert Data"
-                    )}
-                  </Button>
-                </form>
-              </Form>
-              {/* Form */}
-
               <Table>
                 <TableHeader>
                   <TableRow>

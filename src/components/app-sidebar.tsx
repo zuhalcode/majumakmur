@@ -63,8 +63,8 @@ const sidebarMenu = [
         isActive: true,
       },
       {
-        title: "Daily Transaction",
-        url: "/dashboard/daily-transaction",
+        title: "Sell Transaction",
+        url: "/dashboard/sell-transaction",
         isActive: true,
       },
       {

@@ -65,6 +65,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import CustomAlert from "@/components/custom-alert-dialog";
+import { useEffect, useState } from "react";
 
 const formSchema = z.object({
   buy_date: z.string().min(1, { message: "Date is required" }),
@@ -94,12 +95,14 @@ export default function Page() {
   const { data, loading, refetch, insertData, deleteData } =
     useFetchDailyTransaction();
 
+  const today = new Date().toISOString().split("T")[0];
+
   const form = useForm<Form>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      buy_date: new Date().toISOString().split("T")[0],
+      buy_date: today,
       buy_price: "",
-      sell_date: new Date().toISOString().split("T")[0],
+      sell_date: today,
       sell_price: "",
     },
   });
@@ -137,53 +140,73 @@ export default function Page() {
     }
   };
 
-  const totalSellIncome = data.reduce(
-    (total, { sell_price, buy_price }) => total + (sell_price - buy_price),
-    0
-  );
+  const totalSurplusIncome = data.reduce((total, { sell_price, buy_price }) => {
+    const surplus = buy_price - sell_price;
+    return surplus > 0 ? total + surplus : total;
+  }, 0);
+
+  const totalDeficitIncome = data.reduce((total, { sell_price, buy_price }) => {
+    const deficit = sell_price - buy_price;
+    return deficit > 0 ? total + deficit : total;
+  }, 0);
+
+  const totalIncome = totalSurplusIncome - totalDeficitIncome;
 
   const firstDateSell = new Date(data[data.length - 1]?.sell_date).getTime();
   const lastDateSell = new Date(data[0]?.sell_date).getTime();
 
-  const firstDateBuy = new Date(data[data.length - 1]?.buy_date).getTime();
-  const lastDateBuy = new Date(data[0]?.buy_date).getTime();
-
-  const sellDays =
-    Math.ceil(firstDateSell - lastDateSell) / (1000 * 60 * 60 * 24);
+  const sellDays = Math.abs(
+    Math.ceil(firstDateSell - lastDateSell) / (1000 * 60 * 60 * 24)
+  );
 
   const cardInfos: CardInfo[] = [
     {
       title: "Total Sell Income",
-      value: totalSellIncome,
+      value: totalIncome,
       desc: `From last ${sellDays} days`,
-      percent: 0,
+      percent: Number(((totalIncome / totalSurplusIncome) * 100).toFixed(2)),
       active: true,
     },
     {
-      title: "Total Customer Purchase",
-      value: 0,
+      title: "Total Surplus",
+      value: totalSurplusIncome,
+      desc: `From last ${sellDays} days`,
       percent: 0,
       active: false,
     },
     {
-      title: "Total Customer Sell",
-      value: 0,
-      percent: 0,
-      active: false,
-    },
-    {
-      title: "Sell Ratio",
-      value: 0,
-      percent: 0,
-      active: false,
-    },
-    {
-      title: "Buy Ratio",
-      value: 0,
+      title: "Total Deficit",
+      value: totalDeficitIncome,
+      desc: `From last ${sellDays} days`,
       percent: 0,
       active: false,
     },
   ];
+
+  const [dateDifferences, setDateDifferences] = useState<number[]>([]);
+
+  useEffect(() => {
+    if (data && data.length > 0) {
+      const differences = data.map(({ sell_date, buy_date }) => {
+        const sellDate = new Date(sell_date);
+        const buyDate = new Date(buy_date);
+
+        // Pastikan kedua tanggal valid
+        if (isNaN(sellDate.getTime()) || isNaN(buyDate.getTime())) {
+          return 0; // Jika ada tanggal yang invalid, kembalikan 0
+        }
+
+        // Menghitung selisih dalam milidetik
+        const diffInMilliseconds = sellDate.getTime() - buyDate.getTime();
+
+        // Mengonversi milidetik menjadi hari
+        const diffInDays = diffInMilliseconds / (1000 * 60 * 60 * 24);
+
+        return diffInDays;
+      });
+      setDateDifferences(differences);
+    }
+  }, [data]); // Update saat data berubah
 
   return (
     <IntlProvider locale="id-ID">
@@ -228,12 +251,12 @@ export default function Page() {
                     (percent > 0 ? (
                       <p className="text-green-500 flex">
                         <MoveUp className="size-5 text-blue-500" />
-                        {percent}
+                        {percent} %
                       </p>
                     ) : (
                       <p className="flex items-center text-red-500">
                         <MoveDown className="size-5" />
-                        {percent}
+                        {percent} %
                       </p>
                     ))}
                 </CardDescription>
@@ -244,7 +267,7 @@ export default function Page() {
 
         <Card className="w-full mx-auto">
           <CardHeader>
-            <CardTitle>Daily Transaction</CardTitle>
+            <CardTitle>Sell Transaction</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
@@ -349,99 +372,128 @@ export default function Page() {
                     <TableHead>Buy Price</TableHead>
                     <TableHead>Sell Price</TableHead>
                     <TableHead>Income</TableHead>
+                    <TableHead>In Days</TableHead>
+                    <TableHead>Salary/mo</TableHead>
                     <TableHead>Action</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {data.map(
-                    ({ id, buy_date, sell_date, buy_price, sell_price }, i) => (
-                      <TableRow key={id}>
-                        <TableCell>{i + 1}</TableCell>
-                        <TableCell>
-                          <FormattedDate
-                            value={new Date(buy_date)}
-                            year="numeric"
-                            month="2-digit"
-                            day="2-digit"
-                          />
-                        </TableCell>
+                    ({ id, buy_date, sell_date, buy_price, sell_price }, i) => {
+                      const sellDate = new Date(sell_date);
+                      const buyDate = new Date(buy_date);
+                      return (
+                        <TableRow key={id}>
+                          <TableCell>{i + 1}</TableCell>
+                          <TableCell>
+                            <FormattedDate
+                              value={buyDate}
+                              year="numeric"
+                              month="2-digit"
+                              day="2-digit"
+                            />
+                          </TableCell>
 
-                        <TableCell>
-                          <FormattedDate
-                            value={new Date(sell_date)}
-                            year="numeric"
-                            month="2-digit"
-                            day="2-digit"
-                          />
-                        </TableCell>
+                          <TableCell>
+                            <FormattedDate
+                              value={sellDate}
+                              year="numeric"
+                              month="2-digit"
+                              day="2-digit"
+                            />
+                          </TableCell>
 
-                        <TableCell>
-                          <FormattedNumber
-                            value={buy_price}
-                            style="currency"
-                            currency="IDR"
-                            minimumFractionDigits={0}
-                          />
-                        </TableCell>
+                          <TableCell>
+                            <FormattedNumber
+                              value={buy_price}
+                              style="currency"
+                              currency="IDR"
+                              minimumFractionDigits={0}
+                            />
+                          </TableCell>
 
-                        <TableCell>
-                          <FormattedNumber
-                            value={sell_price}
-                            style="currency"
-                            currency="IDR"
-                            minimumFractionDigits={0}
-                          />
-                        </TableCell>
+                          <TableCell>
+                            <FormattedNumber
+                              value={sell_price}
+                              style="currency"
+                              currency="IDR"
+                              minimumFractionDigits={0}
+                            />
+                          </TableCell>
 
-                        <TableCell>
-                          <FormattedNumber
-                            value={buy_price - sell_price}
-                            style="currency"
-                            currency="IDR"
-                            minimumFractionDigits={0}
-                          />
-                        </TableCell>
+                          <TableCell>
+                            <FormattedNumber
+                              value={buy_price - sell_price}
+                              style="currency"
+                              currency="IDR"
+                              minimumFractionDigits={0}
+                            />
+                          </TableCell>
 
-                        <TableCell>
-                          <TooltipProvider>
-                            <div className="flex gap-2">
-                              <TableTooltip
-                                text="Edit Data"
-                                icon={<PencilLine />}
-                              />
+                          <TableCell>
+                            <FormattedNumber
+                              value={dateDifferences[i]}
+                              currency="IDR"
+                              minimumFractionDigits={0}
+                            />
+                          </TableCell>
 
-                              <CustomAlert
-                                trigger={
-                                  <TableTooltip
-                                    text="Delete Data"
-                                    icon={<Trash />}
-                                    variant="destructive"
-                                  />
-                                }
-                              >
-                                <AlertDialogHeader>
-                                  <AlertDialogTitle>
-                                    Are you absolutely sure?
-                                  </AlertDialogTitle>
-                                  <AlertDialogDescription>
-                                    This action cannot be undone. This will
-                                    permanently delete the data with id {id}.
-                                  </AlertDialogDescription>
-                                </AlertDialogHeader>
-                                <AlertDialogFooter>
-                                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                  <AlertDialogAction
-                                    onClick={() => handleOnDelete(id)}
-                                  >
-                                    Continue
-                                  </AlertDialogAction>
-                                </AlertDialogFooter>
-                              </CustomAlert>
-                            </div>
-                          </TooltipProvider>
-                        </TableCell>
-                      </TableRow>
-                    )
+                          <TableCell>
+                            <FormattedNumber
+                              value={Math.floor(
+                                ((buy_price - sell_price) /
+                                  dateDifferences[i]) *
+                                  12
+                              )}
+                              style="currency"
+                              currency="IDR"
+                              minimumFractionDigits={0}
+                            />
+                          </TableCell>
+
+                          <TableCell>
+                            <TooltipProvider>
+                              <div className="flex gap-2">
+                                <TableTooltip
+                                  text="Edit Data"
+                                  icon={<PencilLine />}
+                                />
+
+                                <CustomAlert
+                                  trigger={
+                                    <TableTooltip
+                                      text="Delete Data"
+                                      icon={<Trash />}
+                                      variant="destructive"
+                                    />
+                                  }
+                                >
+                                  <AlertDialogHeader>
+                                    <AlertDialogTitle>
+                                      Are you absolutely sure?
+                                    </AlertDialogTitle>
+                                    <AlertDialogDescription>
+                                      This action cannot be undone. This will
+                                      permanently delete the data with id {id}.
+                                    </AlertDialogDescription>
+                                  </AlertDialogHeader>
+                                  <AlertDialogFooter>
+                                    <AlertDialogCancel>
+                                      Cancel
+                                    </AlertDialogCancel>
+                                    <AlertDialogAction
+                                      onClick={() => handleOnDelete(id)}
+                                    >
+                                      Continue
+                                    </AlertDialogAction>
+                                  </AlertDialogFooter>
+                                </CustomAlert>
+                              </div>
+                            </TooltipProvider>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    }
                   )}
                 </TableBody>
               </Table>

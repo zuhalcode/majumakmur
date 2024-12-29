@@ -24,9 +24,6 @@ export const createClient = async () => {
           }
         },
       },
-      global: {
-        headers: { origin: "https://vcsh0szz-3000.asse.devtunnels.ms" },
-      },
     }
   );
 };

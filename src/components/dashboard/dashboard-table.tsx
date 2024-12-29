@@ -12,6 +12,7 @@ import { TooltipProvider } from "../ui/tooltip";
 import TableTooltip from "../table-tooltip";
 import { PencilLine, Trash } from "lucide-react";
 import ActionCell from "./action-cell";
+import { ScrollArea } from "../ui/scroll-area";
 
 type Column = {
   header: string; // Nama header kolom

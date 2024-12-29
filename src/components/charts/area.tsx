@@ -9,8 +9,8 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "../ui/chart";
-import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
-import { SVGProps } from "react";
+import { Area, AreaChart, Brush, CartesianGrid, XAxis } from "recharts";
+import { SVGProps, useState } from "react";
 
 type Props = {
   chartConfig: ChartConfig;
@@ -26,6 +26,8 @@ const CustomAreaChart = ({ chartConfig, areas, data, defs }: Props) => {
     const month = String(date.getMonth() + 1).padStart(2, "0");
     return `${day}/${month}`;
   };
+
+  const [brushDomain, setBrushDomain] = useState<[number, number]>([0, 7]); // Initial view of 7 days
 
   return (
     <ChartContainer
@@ -97,6 +99,14 @@ const CustomAreaChart = ({ chartConfig, areas, data, defs }: Props) => {
         ))}
 
         <ChartLegend content={<ChartLegendContent />} />
+        <Brush
+          dataKey="date"
+          height={30}
+          stroke="green"
+          startIndex={brushDomain[0]}
+          endIndex={brushDomain[1]}
+          onChange={(domain) => setBrushDomain(domain as [number, number])}
+        />
       </AreaChart>
     </ChartContainer>
   );

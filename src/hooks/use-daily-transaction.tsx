@@ -29,7 +29,7 @@ export const useFetchDailyTransaction = () => {
     const { data, count, error, status, statusText } = await supabase
       .from(table)
       .select("*")
-      .order("sell_date", { ascending: true });
+      .order("sell_date", { ascending: false });
 
     if (error) {
       setError(error.message);

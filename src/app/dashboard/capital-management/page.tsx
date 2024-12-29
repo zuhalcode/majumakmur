@@ -1,33 +1,8 @@
 "use client";
 
-import {
-  ChartConfig,
-  ChartContainer,
-  ChartLegend,
-  ChartLegendContent,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@/components/ui/chart";
+import { ChartConfig } from "@/components/ui/chart";
 
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-
-import { Area, AreaChart, Bar, BarChart, CartesianGrid, XAxis } from "recharts";
-import {
-  Banknote,
-  Loader,
-  MoveDown,
-  MoveUp,
-  PencilLine,
-  Plus,
-  Trash,
-} from "lucide-react";
+import { Banknote, Loader, MoveDown, MoveUp, Plus } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -38,8 +13,6 @@ import {
 import { FormattedNumber, IntlProvider } from "react-intl";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import TableTooltip from "@/components/table-tooltip";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -55,7 +28,8 @@ import { useFetchCapital } from "@/hooks/use-capital";
 import { cn } from "@/lib/utils";
 import { AreaConfig, BuyAndSell, CashFlow } from "@/types/chart";
 import CustomAreaChart from "@/components/charts/area";
-import { SVGProps } from "react";
+import DashboardTable from "@/components/dashboard/dashboard-table";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 const formSchema = z.object({
   date: z.string().min(1, { message: "Date is required" }),
@@ -144,10 +118,12 @@ export default function Page() {
     }))
     .reverse();
 
+  const today = new Date().toISOString().split("T")[0]; // Hitung di luar komponen
+
   const form = useForm<Form>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      date: new Date().toISOString().split("T")[0],
+      date: today,
       capital: "",
       purchase: "",
       sell: "",
@@ -241,10 +217,17 @@ export default function Page() {
     },
   ];
 
+  const columns = [
+    { header: "Date", accessor: "date" },
+    { header: "Capital", accessor: "capital" },
+    { header: "Purchase", accessor: "purchase" },
+    { header: "Sell", accessor: "sell" },
+  ];
+
   return (
     <IntlProvider locale="id-ID">
-      <div className="w-full flex flex-col gap-5 px-10 mt-5">
-        <div className="w-full grid grid-cols-3 gap-2">
+      <div className="w-full flex flex-col gap-5 px-5 lg:px-10 mt-5">
+        <div className="w-full grid lg:grid-cols-3 grid-cols-1 gap-2">
           {cardInfos.map(({ title, desc, value, percent, active }, i) => (
             <Card key={i}>
               <CardHeader>
@@ -309,30 +292,6 @@ export default function Page() {
             chartConfig={buyAndSellChartConfig}
             areas={buyAndSellAreas}
           />
-          {/* Bar Chart */}
-          {/* <ChartContainer
-            config={buyAndSellChartConfig}
-            className="aspect-auto h-screen w-full"
-          >
-            <BarChart accessibilityLayer data={chartData}>
-              <CartesianGrid vertical={false} />
-              <XAxis
-                dataKey="date"
-                tickLine={false}
-                tickMargin={10}
-                axisLine={false}
-                tickFormatter={tickFormatter}
-              />
-              <ChartTooltip
-                cursor={false}
-                content={<ChartTooltipContent indicator="dashed" />}
-              />
-              <Bar dataKey="buy" fill="hsl(var(--chart-1))" radius={4} />
-              <Bar dataKey="sell" fill="hsl(var(--chart-2))" radius={4} />
-              <ChartLegend content={<ChartLegendContent />} />
-            </BarChart>
-          </ChartContainer> */}
-          {/* Bar Chart */}
         </div>
 
         <Card className="w-full mx-auto">
@@ -438,80 +397,13 @@ export default function Page() {
               </Form>
               {/* Form */}
 
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>No</TableHead>
-                    <TableHead>Date</TableHead>
-                    <TableHead>Capital</TableHead>
-                    <TableHead>Purchase</TableHead>
-                    <TableHead>Sell</TableHead>
-                    <TableHead>Net Cash Flow</TableHead>
-                    <TableHead>Action</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {data.map(({ id, date, capital, purchase, sell }, i) => (
-                    <TableRow key={id}>
-                      <TableCell>{i + 1}</TableCell>
-                      <TableCell>{date.toString()}</TableCell>
-                      <TableCell>
-                        <FormattedNumber
-                          value={capital}
-                          style="currency"
-                          currency="IDR"
-                          minimumFractionDigits={0}
-                        />
-                      </TableCell>
-                      <TableCell>
-                        <FormattedNumber
-                          value={purchase}
-                          style="currency"
-                          currency="IDR"
-                          minimumFractionDigits={0}
-                        />
-                      </TableCell>
-                      <TableCell>
-                        <FormattedNumber
-                          value={sell}
-                          style="currency"
-                          currency="IDR"
-                          minimumFractionDigits={0}
-                        />
-                      </TableCell>
-                      <TableCell
-                        className={
-                          purchase - sell < 0
-                            ? "text-red-500"
-                            : "text-green-500"
-                        }
-                      >
-                        <FormattedNumber
-                          value={purchase - sell}
-                          style="currency"
-                          currency="IDR"
-                          minimumFractionDigits={0}
-                        />
-                      </TableCell>
-                      <TableCell>
-                        <TooltipProvider>
-                          <div className="flex gap-2">
-                            <TableTooltip
-                              text="Edit Data"
-                              icon={<PencilLine />}
-                            />
-                            <TableTooltip
-                              text="Delete Data"
-                              icon={<Trash />}
-                              variant="destructive"
-                            />
-                          </div>
-                        </TooltipProvider>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+              <ScrollArea>
+                <DashboardTable
+                  columns={columns}
+                  data={data}
+                  // handleOnDelete={handleOnDelete}
+                />
+              </ScrollArea>
             </div>
           </CardContent>
         </Card>
