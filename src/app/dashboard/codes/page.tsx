@@ -153,8 +153,8 @@ export default function Page() {
   }, [error, form]);
 
   const columns = [
-    { header: "Code", accessor: "code" },
-    { header: "Description", accessor: "desc" },
+    { header: "Code", accessor: "code", type: "text" },
+    { header: "Description", accessor: "desc", type: "text" },
   ];
 
   return (

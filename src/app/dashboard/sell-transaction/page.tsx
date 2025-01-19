@@ -1,15 +1,6 @@
 "use client";
 
 import {
-  ChartConfig,
-  ChartContainer,
-  ChartLegend,
-  ChartLegendContent,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@/components/ui/chart";
-
-import {
   Table,
   TableBody,
   TableCell,
@@ -18,7 +9,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import { Area, AreaChart, Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 import {
   Banknote,
   Loader,
@@ -28,6 +18,7 @@ import {
   Plus,
   Trash,
 } from "lucide-react";
+
 import {
   Card,
   CardContent,
@@ -35,6 +26,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+
 import { FormattedDate, FormattedNumber, IntlProvider } from "react-intl";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -54,15 +46,12 @@ import {
 import { cn } from "@/lib/utils";
 import { useFetchDailyTransaction } from "@/hooks/use-daily-transaction";
 import {
-  AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
-  AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import CustomAlert from "@/components/custom-alert-dialog";
 import { useEffect, useState } from "react";
@@ -206,7 +195,14 @@ export default function Page() {
       });
       setDateDifferences(differences);
     }
-  }, [data]); // Update saat data berubah
+  }, [data]);
+
+  const columns = [
+    { header: "Buy Date", accessor: "buy_date", type: "date" },
+    { header: "Sell Date", accessor: "sell_date", type: "date" },
+    { header: "Buy Price", accessor: "buy_price", type: "number" },
+    { header: "Sell Price", accessor: "sell_price", type: "number" },
+  ];
 
   return (
     <IntlProvider locale="id-ID">

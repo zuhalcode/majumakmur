@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 
 import {
@@ -8,31 +10,30 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { TooltipProvider } from "../ui/tooltip";
-import TableTooltip from "../table-tooltip";
-import { PencilLine, Trash } from "lucide-react";
 import ActionCell from "./action-cell";
-import { ScrollArea } from "../ui/scroll-area";
 
 type Column = {
-  header: string; // Nama header kolom
-  accessor: string; // Kunci data yang akan ditampilkan di kolom tersebut
+  header: string;
+  accessor: string;
+  type: string;
 };
 
 type RowData = {
-  [key: string]: any; // Data untuk tiap row, kunci akan sesuai dengan `accessor` di Column
+  [key: string]: any;
 };
 
 type DashboardTableProps = {
-  columns: Column[]; // Kolom yang akan digunakan di header tabel
-  data: RowData[]; // Data untuk baris tabel
-  handleOnDelete?: (id: number) => void; // Fungsi untuk delete
+  columns: Column[];
+  data: RowData[];
+  handleOnDelete?: (id: number) => void;
+  handleOnEdit?: (id: number, updatedData: Record<string, any>) => void;
 };
 
 const DashboardTable: React.FC<DashboardTableProps> = ({
   columns,
   data,
   handleOnDelete,
+  handleOnEdit,
 }) => {
   return (
     <Table>
@@ -56,7 +57,14 @@ const DashboardTable: React.FC<DashboardTableProps> = ({
             {columns.map((column, columnIndex) => (
               <TableCell key={columnIndex}>{row[column.accessor]}</TableCell>
             ))}
-            <ActionCell id={row.id} handleOnDelete={handleOnDelete!} />
+
+            <ActionCell
+              id={row.id}
+              editFormSchema={columns}
+              data={row}
+              handleOnDelete={handleOnDelete!}
+              handleOnEdit={handleOnEdit!}
+            />
           </TableRow>
         ))}
       </TableBody>

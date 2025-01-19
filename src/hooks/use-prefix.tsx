@@ -83,8 +83,6 @@ export const useFetchPrefix = () => {
       fetchData();
     }
 
-    console.log("aman bolo");
-
     setLoading(false);
   }, []);
 

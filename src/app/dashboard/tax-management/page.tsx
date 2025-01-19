@@ -136,6 +136,13 @@ export default function Page() {
     },
   ];
 
+  const calculateZakat = (value: number): number => {
+    const ppn = value * 0.01; // Menghitung ppn 1%
+    const bruto = value - ppn; // Total setelah ppn
+    const profit = (bruto * 9) / 100; // keuntungan 9%
+    return (profit * 3) / 100; // Zakat Bruto 3%
+  };
+
   return (
     <IntlProvider locale="id-ID">
       <div className="w-full flex flex-col gap-5 px-10 mt-5 pb-10">
@@ -207,7 +214,9 @@ export default function Page() {
                     <TableHead>No</TableHead>
                     <TableHead>Date</TableHead>
                     <TableHead>Purchase</TableHead>
-                    <TableHead>Tax</TableHead>
+                    <TableHead>PPh</TableHead>
+                    <TableHead>PPn 1%</TableHead>
+                    <TableHead>Zakat Bruto 3%</TableHead>
                     <TableHead>Action</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -232,6 +241,24 @@ export default function Page() {
                           style="currency"
                           currency="IDR"
                           minimumFractionDigits={0}
+                        />
+                      </TableCell>
+
+                      <TableCell>
+                        <FormattedNumber
+                          value={(totalPurchase * 1) / 100}
+                          style="currency"
+                          currency="IDR"
+                          minimumFractionDigits={0}
+                        />
+                      </TableCell>
+
+                      <TableCell>
+                        <FormattedNumber
+                          value={calculateZakat(totalPurchase)}
+                          style="currency"
+                          currency="IDR"
+                          maximumFractionDigits={0}
                         />
                       </TableCell>
 

@@ -1,31 +1,6 @@
 "use client";
 
-import {
-  ChartConfig,
-  ChartContainer,
-  ChartLegend,
-  ChartLegendContent,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@/components/ui/chart";
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { useState } from "react";
-import { Area, AreaChart, Bar, BarChart, CartesianGrid, XAxis } from "recharts";
-
-import { toast } from "sonner";
-
 import { Banknote } from "lucide-react";
-
-import { Separator } from "@/components/ui/separator";
-import { SidebarTrigger } from "@/components/ui/sidebar";
 import { useFetchGold } from "@/hooks/use-gold";
 import {
   Card,
@@ -33,49 +8,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  FormattedDate,
-  FormattedNumber,
-  FormattedTime,
-  IntlProvider,
-} from "react-intl";
+import { FormattedNumber, IntlProvider } from "react-intl";
 
 export default function Page() {
-  const { data, refetch } = useFetchGold();
-  const chartData = [
-    { month: "January", desktop: 186, mobile: 80 },
-    { month: "February", desktop: 305, mobile: 200 },
-    { month: "March", desktop: 237, mobile: 120 },
-    { month: "April", desktop: 73, mobile: 190 },
-    { month: "May", desktop: 209, mobile: 130 },
-    { month: "June", desktop: 214, mobile: 140 },
-  ];
-
-  const chartConfig = {
-    desktop: {
-      label: "Desktop",
-      color: "hsl(var(--chart-1))",
-    },
-    mobile: {
-      label: "Mobile",
-      color: "hsl(var(--chart-2))",
-    },
-  } satisfies ChartConfig;
-
-  const [loading, setLoading] = useState<boolean>(false);
-
-  const handleOnClick = async () => {
-    setLoading(true);
-
-    const scrapeResponse = await fetch("/api/scrape");
-    const scrapeResponseJSON = await scrapeResponse.json();
-
-    toast(scrapeResponseJSON.message, { duration: 1500 });
-
-    refetch();
-
-    setLoading(false);
-  };
+  const { data } = useFetchGold();
 
   const goldRates = [
     { karat: 6, exchange: 35, melt: 28, color: "#D0A25C" },
@@ -87,16 +23,7 @@ export default function Page() {
   return (
     <>
       <IntlProvider locale="id-ID">
-        <div className="w-full flex flex-col gap-5 px-10 mt-5">
-          {/* <Button
-          onClick={handleOnClick}
-          disabled={loading}
-          variant="outline"
-          className="mx-auto"
-        >
-          {loading ? <Loader className="animate-spin" /> : "Update Data"}
-        </Button> */}
-
+        <div className="w-full flex flex-col gap-5 p-10 ">
           <div className="w-full grid grid-cols-6 gap-5">
             <Card className="col-start-2 col-span-2">
               <CardHeader>
@@ -216,112 +143,6 @@ export default function Page() {
                 </CardHeader>
               </Card>
             ))}
-          </div>
-
-          <div className="flex gap-5">
-            <div className="w-full space-y-3">
-              <Table>
-                <TableCaption>A list of your gold price changing.</TableCaption>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Date</TableHead>
-                    <TableHead>Price</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {data.map((gold, i) => (
-                    <TableRow key={i}>
-                      <TableCell className="font-medium ">
-                        <FormattedDate
-                          value={gold.created_at}
-                          year="numeric"
-                          month="long"
-                          day="numeric"
-                        />{" "}
-                        <FormattedTime
-                          value={gold.created_at}
-                          hour="2-digit"
-                          minute="2-digit"
-                        />
-                      </TableCell>
-                      <TableCell>
-                        <FormattedNumber
-                          value={gold.price}
-                          style="currency"
-                          currency="IDR"
-                        />
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
-            <div className="w-full bg-red-500">zuhal</div>
-          </div>
-
-          <div className="flex">
-            <ChartContainer
-              config={chartConfig}
-              className="min-h-[200px] w-full"
-            >
-              <BarChart accessibilityLayer data={chartData}>
-                <CartesianGrid vertical={false} />
-                <XAxis
-                  dataKey="month"
-                  tickLine={false}
-                  tickMargin={10}
-                  axisLine={false}
-                  tickFormatter={(value) => value.slice(0, 3)}
-                />
-                <ChartTooltip content={<ChartTooltipContent />} />
-                <ChartLegend content={<ChartLegendContent />} />
-                <Bar dataKey="desktop" fill="var(--color-desktop)" radius={4} />
-                <Bar dataKey="mobile" fill="var(--color-mobile)" radius={4} />
-              </BarChart>
-            </ChartContainer>
-
-            <ChartContainer
-              config={chartConfig}
-              className="min-h-[200px] w-full"
-            >
-              <AreaChart
-                accessibilityLayer
-                data={chartData}
-                margin={{
-                  left: 12,
-                  right: 12,
-                }}
-              >
-                <CartesianGrid vertical={false} />
-                <XAxis
-                  dataKey="month"
-                  tickLine={false}
-                  axisLine={false}
-                  tickMargin={8}
-                  tickFormatter={(value) => value.slice(0, 3)}
-                />
-                <ChartTooltip
-                  cursor={false}
-                  content={<ChartTooltipContent indicator="dot" />}
-                />
-                <Area
-                  dataKey="mobile"
-                  type="natural"
-                  fill="var(--color-mobile)"
-                  fillOpacity={0.4}
-                  stroke="var(--color-mobile)"
-                  stackId="a"
-                />
-                <Area
-                  dataKey="desktop"
-                  type="natural"
-                  fill="var(--color-desktop)"
-                  fillOpacity={0.4}
-                  stroke="var(--color-desktop)"
-                  stackId="a"
-                />
-              </AreaChart>
-            </ChartContainer>
           </div>
         </div>
       </IntlProvider>

@@ -21,10 +21,12 @@ export const useFetchCapital = () => {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
+  const table = "capitals";
+
   const fetchData = useCallback(async () => {
     setLoading(true);
     const { data, count, error, status, statusText } = await supabase
-      .from("capitals")
+      .from(table)
       .select("*")
       .order("date", { ascending: false });
 
@@ -39,14 +41,63 @@ export const useFetchCapital = () => {
     setLoading(false);
   }, []);
 
-  const insertData = useCallback(async (transaction: Capital) => {
+  const insertData = useCallback(async (capital: Capital) => {
     setLoading(true);
-    const { error } = await supabase.from("capitals").insert([transaction]);
+    const { error } = await supabase.from(table).insert([capital]);
 
     if (error) setError(error.message);
 
     setLoading(false);
   }, []);
+
+  const editData = useCallback(
+    async (id: number, updatedData: Record<string, any>) => {
+      try {
+        setLoading(true);
+
+        // Memperbarui data berdasarkan ID
+        const { error } = await supabase
+          .from(table)
+          .update(updatedData) // Data yang ingin diperbarui
+          .eq("id", id); // Filter berdasarkan ID
+
+        if (error) {
+          throw new Error(error.message); // Lempar error jika terjadi kegagalan
+        }
+
+        console.log(`Data dengan ID ${id} berhasil diperbarui.`);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    },
+    []
+  );
+
+  const deleteData = useCallback(async (id: number) => {
+    if (!id) {
+      setError("ID tidak valid untuk penghapusan.");
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+
+    const { error } = await supabase.from(table).delete().eq("id", id);
+
+    if (error) {
+      console.log(error);
+      setError(error.message);
+      fetchData();
+    }
+
+    setLoading(false);
+  }, []);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   const groupDataByMonth = () => {
     const grouped: { date: string; data: Capital[]; totalPurchase: number }[] =
@@ -75,10 +126,6 @@ export const useFetchCapital = () => {
 
   const groupedData = groupDataByMonth();
 
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
-
   return {
     data,
     dataByMonth: groupedData,
@@ -88,6 +135,8 @@ export const useFetchCapital = () => {
     statusText,
     loading,
     insertData,
+    deleteData,
+    editData,
     refetch: fetchData,
   };
 };

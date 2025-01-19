@@ -42,6 +42,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Gold, useFetchGoldType } from "@/hooks/use-gold-type";
+import DashboardTable from "@/components/dashboard/dashboard-table";
 
 const formSchema = z.object({
   karat: z.string().min(0).optional(),
@@ -80,6 +81,12 @@ export default function Page() {
       console.error("Error inserting data:", error);
     }
   });
+
+  const columns = [
+    { header: "Karat", accessor: "karat" },
+    { header: "Exchange Percent", accessor: "exchange_percent" },
+    { header: "Melting Percent", accessor: "melting_percent" },
+  ];
 
   return (
     <IntlProvider locale="id-ID">
@@ -171,56 +178,11 @@ export default function Page() {
               </Form>
               {/* Form */}
 
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>No</TableHead>
-                    <TableHead>Karat</TableHead>
-                    <TableHead>Exchange Percent</TableHead>
-                    <TableHead>Melting Percent</TableHead>
-                    <TableHead>Action</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {data.map(
-                    ({ id, karat, exchange_percent, melting_percent }, i) => (
-                      <TableRow key={id}>
-                        <TableCell>{i + 1}</TableCell>
-                        <TableCell>{karat}</TableCell>
-                        <TableCell>
-                          <FormattedNumber
-                            value={exchange_percent}
-                            currency="IDR"
-                            minimumFractionDigits={0}
-                          />
-                        </TableCell>
-                        <TableCell>
-                          <FormattedNumber
-                            value={melting_percent}
-                            currency="IDR"
-                            minimumFractionDigits={0}
-                          />
-                        </TableCell>
-                        <TableCell>
-                          <TooltipProvider>
-                            <div className="flex gap-2">
-                              <TableTooltip
-                                text="Edit Data"
-                                icon={<PencilLine />}
-                              />
-                              <TableTooltip
-                                text="Delete Data"
-                                icon={<Trash />}
-                                variant="destructive"
-                              />
-                            </div>
-                          </TooltipProvider>
-                        </TableCell>
-                      </TableRow>
-                    )
-                  )}
-                </TableBody>
-              </Table>
+              <DashboardTable
+                columns={columns}
+                data={data}
+                // handleOnDelete={handleOnDelete}
+              />
             </div>
           </CardContent>
         </Card>

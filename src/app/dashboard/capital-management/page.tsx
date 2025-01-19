@@ -30,6 +30,7 @@ import { AreaConfig, BuyAndSell, CashFlow } from "@/types/chart";
 import CustomAreaChart from "@/components/charts/area";
 import DashboardTable from "@/components/dashboard/dashboard-table";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { toast } from "sonner";
 
 const formSchema = z.object({
   date: z.string().min(1, { message: "Date is required" }),
@@ -101,7 +102,8 @@ const cashFlowAreas: AreaConfig[] = [
 ];
 
 export default function Page() {
-  const { data, refetch, loading, insertData } = useFetchCapital();
+  const { data, refetch, loading, insertData, deleteData, editData } =
+    useFetchCapital();
 
   const buyAndSells: BuyAndSell[] = data
     .map(({ date, purchase, sell }) => ({
@@ -148,6 +150,30 @@ export default function Page() {
       console.error("Error inserting data:", error);
     }
   });
+
+  const handleOnDelete = async (id: number) => {
+    if (!id) {
+      console.error("ID is not Valid");
+      return;
+    }
+
+    try {
+      await deleteData(id);
+      refetch();
+    } catch (error) {
+      console.error("Error deleting data:", error);
+    }
+  };
+
+  const handleOnEdit = async (id: number, updatedData: Record<string, any>) => {
+    try {
+      await editData(id, updatedData);
+      alert(`Data dengan ID ${id} berhasil diperbarui.`);
+    } catch (error) {
+      console.error("Terjadi kesalahan saat mengedit data:", error);
+      alert("Gagal memperbarui data. Silakan coba lagi.");
+    }
+  };
 
   const { totalPurchase, totalSell } = data?.reduce(
     (totals, item) => {
@@ -218,10 +244,10 @@ export default function Page() {
   ];
 
   const columns = [
-    { header: "Date", accessor: "date" },
-    { header: "Capital", accessor: "capital" },
-    { header: "Purchase", accessor: "purchase" },
-    { header: "Sell", accessor: "sell" },
+    { header: "Date", accessor: "date", type: "date" },
+    { header: "Capital", accessor: "capital", type: "number" },
+    { header: "Purchase", accessor: "purchase", type: "number" },
+    { header: "Sell", accessor: "sell", type: "number" },
   ];
 
   return (
@@ -397,13 +423,12 @@ export default function Page() {
               </Form>
               {/* Form */}
 
-              <ScrollArea>
-                <DashboardTable
-                  columns={columns}
-                  data={data}
-                  // handleOnDelete={handleOnDelete}
-                />
-              </ScrollArea>
+              <DashboardTable
+                columns={columns}
+                data={data}
+                handleOnDelete={handleOnDelete}
+                handleOnEdit={handleOnEdit}
+              />
             </div>
           </CardContent>
         </Card>
