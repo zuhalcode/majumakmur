@@ -60,11 +60,14 @@ export default function Page() {
   };
 
   const pureGoldPrice = data[0]?.price;
+  const goldPriceReference = Math.floor(pureGoldPrice / 100000) * 100000;
 
   const pureGolds = [
-    { title: "Local Gold", desc: "", value: pureGoldPrice },
-    { title: "KKG Gold", desc: "From 05/12/24", value: 1340000 },
-    { title: "Current Gold - 16", value: pureGoldPrice - 16000 },
+    { title: "Emas Lokal", desc: "", value: pureGoldPrice },
+    {
+      title: "Harga Acuan",
+      value: goldPriceReference,
+    },
   ];
 
   const goldRates = [
@@ -87,7 +90,8 @@ export default function Page() {
             {loading ? <Loader className="animate-spin" /> : "Update Data"}
           </Button>
 
-          <div className="w-full grid grid-cols-6 gap-5">
+          {/* Local Gold */}
+          <div className="w-full grid grid-cols-4 gap-5">
             {pureGolds.map(({ title, value, desc }, i) => (
               <Card className="col-span-2" key={i}>
                 <CardHeader>
@@ -106,92 +110,183 @@ export default function Page() {
                     />
                   </div>
                   <CardDescription className="flex flex-col">
-                    {desc || "+20.1% from last month"}
+                    {desc || ""}
                   </CardDescription>
                 </CardHeader>
               </Card>
             ))}
           </div>
+          {/* Local Gold */}
 
+          {/* Grosir from local gold */}
           <div className="w-full grid grid-cols-4 gap-5">
             {goldRates.map(({ karat, exchange, color }, i) => (
               <Card key={i}>
                 <CardHeader>
                   <CardTitle className="text-base flex items-center justify-between">
                     <p style={{ color }}>
-                      {karat}K{" "}
-                      <span className="text-white">Gold Wholesale</span>{" "}
+                      {karat}K <span className="text-white">Harga Grosir</span>{" "}
                     </p>
                     <Banknote className="size-7" style={{ color }} />
                   </CardTitle>
                   <div className="text-2xl font-bold">
                     <FormattedNumber
                       maximumFractionDigits={0}
-                      value={(data[0]?.price * exchange) / 100}
+                      value={(pureGoldPrice * exchange) / 100}
                       style="currency"
                       currency="IDR"
                     />
                   </div>
                   <CardDescription className="flex flex-col">
-                    {exchange} % from 24K Gold
+                    {exchange}% dari Emas Lokal
                   </CardDescription>
                 </CardHeader>
               </Card>
             ))}
           </div>
+          {/* Grosir from local gold */}
 
+          {/* Melt from local gold */}
           <div className="w-full grid grid-cols-4 gap-5">
             {goldRates.map(({ karat, melt, color }, i) => (
               <Card key={i}>
                 <CardHeader>
                   <CardTitle className="text-base flex items-center justify-between">
                     <p style={{ color }}>
-                      {karat}K <span className="text-white">Gold Melt</span>{" "}
+                      {karat}K <span className="text-white">Emas Lebur</span>{" "}
                     </p>
                     <Banknote className="size-7" style={{ color }} />
                   </CardTitle>
                   <div className="text-2xl font-bold">
                     <FormattedNumber
                       maximumFractionDigits={0}
-                      value={(data[0]?.price * melt) / 100}
+                      value={(pureGoldPrice * melt) / 100}
                       style="currency"
                       currency="IDR"
                     />
                   </div>
                   <CardDescription className="flex flex-col">
-                    {melt} % from 24K Gold
+                    {melt}% dari 24 Karat
                   </CardDescription>
                 </CardHeader>
               </Card>
             ))}
           </div>
+          {/* Melt from local gold */}
 
+          {/* Sell Price */}
           <div className="w-full grid grid-cols-4 gap-5">
             {goldRates.map(({ karat, exchange, color }, i) => (
               <Card key={i}>
                 <CardHeader>
                   <CardTitle className="text-base flex items-center justify-between">
                     <p style={{ color }}>
-                      {karat}K{" "}
-                      <span className="text-white">Gold Sale Price</span>{" "}
+                      {karat}K <span className="text-white">Harga Jual</span>{" "}
                     </p>
                     <Banknote className="size-7" style={{ color }} />
                   </CardTitle>
                   <div className="text-2xl font-bold">
                     <FormattedNumber
-                      value={((data[0]?.price * exchange) / 100) * 1.1}
+                      value={((pureGoldPrice * exchange) / 100) * 1.1}
                       style="currency"
                       currency="IDR"
                       maximumFractionDigits={0}
                     />
                   </div>
                   <CardDescription className="flex flex-col">
-                    +20.1% from last month
+                    +10% dari grosir Lokal
                   </CardDescription>
                 </CardHeader>
               </Card>
             ))}
           </div>
+          {/* Sell Price */}
+
+          <Separator orientation="horizontal" className="bg-yellow-300" />
+
+          {/* Grosir from gold price reference */}
+          <div className="w-full grid grid-cols-4 gap-5">
+            {goldRates.map(({ karat, exchange, color }, i) => (
+              <Card key={i}>
+                <CardHeader>
+                  <CardTitle className="text-base flex items-center justify-between">
+                    <p style={{ color }}>
+                      {karat}K <span className="text-white">Harga Grosir</span>{" "}
+                    </p>
+                    <Banknote className="size-7" style={{ color }} />
+                  </CardTitle>
+                  <div className="text-2xl font-bold">
+                    <FormattedNumber
+                      maximumFractionDigits={0}
+                      value={(goldPriceReference * exchange) / 100}
+                      style="currency"
+                      currency="IDR"
+                    />
+                  </div>
+                  <CardDescription className="flex flex-col">
+                    {exchange}% dari Emas Lokal
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+            ))}
+          </div>
+          {/* Grosir from gold price reference */}
+
+          {/* Melt from gold price reference */}
+          <div className="w-full grid grid-cols-4 gap-5">
+            {goldRates.map(({ karat, melt, color }, i) => (
+              <Card key={i}>
+                <CardHeader>
+                  <CardTitle className="text-base flex items-center justify-between">
+                    <p style={{ color }}>
+                      {karat}K <span className="text-white">Emas Lebur</span>{" "}
+                    </p>
+                    <Banknote className="size-7" style={{ color }} />
+                  </CardTitle>
+                  <div className="text-2xl font-bold">
+                    <FormattedNumber
+                      maximumFractionDigits={0}
+                      value={(goldPriceReference * melt) / 100}
+                      style="currency"
+                      currency="IDR"
+                    />
+                  </div>
+                  <CardDescription className="flex flex-col">
+                    {melt}% dari 24 Karat
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+            ))}
+          </div>
+          {/* Melt from gold price reference */}
+
+          {/* Sell Price */}
+          <div className="w-full grid grid-cols-4 gap-5">
+            {goldRates.map(({ karat, exchange, color }, i) => (
+              <Card key={i}>
+                <CardHeader>
+                  <CardTitle className="text-base flex items-center justify-between">
+                    <p style={{ color }}>
+                      {karat}K <span className="text-white">Harga Jual</span>{" "}
+                    </p>
+                    <Banknote className="size-7" style={{ color }} />
+                  </CardTitle>
+                  <div className="text-2xl font-bold">
+                    <FormattedNumber
+                      value={((goldPriceReference * exchange) / 100) * 1.1}
+                      style="currency"
+                      currency="IDR"
+                      maximumFractionDigits={0}
+                    />
+                  </div>
+                  <CardDescription className="flex flex-col">
+                    +10% grosir harga acuan
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+            ))}
+          </div>
+          {/* Sell Price */}
         </div>
       </IntlProvider>
     </>
