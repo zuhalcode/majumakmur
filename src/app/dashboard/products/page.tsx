@@ -309,11 +309,11 @@ export default function Page() {
               </Form>
               {/* Form */}
 
-              <DashboardTable
+              {/* <DashboardTable
                 columns={columns}
                 data={dataRestructured}
                 handleOnDelete={handleOnDelete}
-              />
+              /> */}
             </div>
           </CardContent>
         </Card>
