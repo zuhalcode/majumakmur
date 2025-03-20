@@ -92,3 +92,16 @@
 .hidden-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
+/* Small scrollbar with a specific width */
+.sm-scrollbar::-webkit-scrollbar {
+  width: 7px; /* For Chrome, Safari, and Opera */
+}
+
+.sm-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #3b3b3b; /* Thumb color */
+}
+
+.sm-scrollbar::-webkit-scrollbar-track {
+  background-color: #f1f1f1; /* Track color */
+}

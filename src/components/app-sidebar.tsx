@@ -74,6 +74,7 @@ const sidebarMenu = [
       },
     ],
   },
+
   {
     title: "Customers",
     url: "#",
@@ -116,7 +117,7 @@ export default function AppSidebar() {
           </SidebarMenu>
         </SidebarHeader>
 
-        <SidebarContent className="hidden-scrollbar">
+        <SidebarContent className="sm-scrollbar">
           <SidebarGroup>
             <SidebarMenu>
               {sidebarMenu.map((item) => (

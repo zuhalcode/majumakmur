@@ -47,6 +47,16 @@ import {
 import { useFetchCapital } from "@/hooks/use-capital";
 import { cn } from "@/lib/utils";
 import { BuyAndSell } from "@/types/chart";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useEffect, useState } from "react";
 
 const formSchema = z.object({
   date: z.string().min(1, { message: "Date is required" }),
@@ -76,7 +86,7 @@ type CardInfo = {
 };
 
 export default function Page() {
-  const { data, dataByMonth, refetch, loading, insertData } = useFetchCapital();
+  const { refetch, insertData, dataByMonth } = useFetchCapital();
 
   const form = useForm<Form>({
     resolver: zodResolver(formSchema),
@@ -88,24 +98,9 @@ export default function Page() {
     },
   });
 
-  const { handleSubmit, control } = form;
+  const { handleSubmit } = form;
 
-  const handleOnSubmit = handleSubmit(async (values) => {
-    try {
-      const transactionData: Capital = {
-        capital: Number(values.capital),
-        purchase: Number(values.purchase),
-        sell: Number(values.sell),
-        date: new Date(values.date),
-      };
-
-      await insertData(transactionData);
-
-      refetch();
-    } catch (error) {
-      console.error("Error inserting data:", error);
-    }
-  });
+  const [selectedYear, setSelectedYear] = useState<string>(""); // State untuk menyimpan tahun yang dipilih
 
   const totalTax = dataByMonth.reduce(
     (total, item) => total + (item.totalPurchase * 0.5) / 100,
@@ -141,6 +136,11 @@ export default function Page() {
     const bruto = value - ppn; // Total setelah ppn
     const profit = (bruto * 9) / 100; // keuntungan 9%
     return (profit * 3) / 100; // Zakat Bruto 3%
+  };
+
+  const handleYearChange = (value: string) => {
+    const year = value;
+    setSelectedYear(year); // Mengupdate tahun yang dipilih
   };
 
   return (
@@ -200,7 +200,18 @@ export default function Page() {
           ))}
         </div>
 
-        <div className="flex gap-5 flex-col">{/* Bar Chart */}</div>
+        <Select value={selectedYear} onValueChange={handleYearChange}>
+          <SelectTrigger className="w-[180px] border-slate-800">
+            <SelectValue placeholder="Select year" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectLabel>Select year</SelectLabel>
+              <SelectItem value="2024">2024</SelectItem>
+              <SelectItem value="2025">2025</SelectItem>
+            </SelectGroup>
+          </SelectContent>
+        </Select>
 
         <Card className="w-full mx-auto">
           <CardHeader>
@@ -221,7 +232,7 @@ export default function Page() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {dataByMonth.map(({ date, data, totalPurchase }, i) => (
+                  {dataByMonth.map(({ date, totalPurchase }, i) => (
                     <TableRow key={i}>
                       <TableCell>{i + 1}</TableCell>
                       <TableCell>{date.toString()}</TableCell>

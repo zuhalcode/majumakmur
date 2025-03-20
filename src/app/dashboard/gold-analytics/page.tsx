@@ -118,6 +118,8 @@ export default function Page() {
           </div>
           {/* Local Gold */}
 
+          <Separator orientation="horizontal" className="bg-yellow-300" />
+
           {/* Grosir from local gold */}
           <div className="w-full grid grid-cols-4 gap-5">
             {goldRates.map(({ karat, exchange, color }, i) => (
@@ -202,7 +204,7 @@ export default function Page() {
           </div>
           {/* Sell Price */}
 
-          <Separator orientation="horizontal" className="bg-yellow-300" />
+          <Separator orientation="horizontal" className="bg-yellow-500" />
 
           {/* Grosir from gold price reference */}
           <div className="w-full grid grid-cols-4 gap-5">
@@ -224,7 +226,7 @@ export default function Page() {
                     />
                   </div>
                   <CardDescription className="flex flex-col">
-                    {exchange}% dari Emas Lokal
+                    {exchange}% dari harga acuan
                   </CardDescription>
                 </CardHeader>
               </Card>
@@ -252,7 +254,7 @@ export default function Page() {
                     />
                   </div>
                   <CardDescription className="flex flex-col">
-                    {melt}% dari 24 Karat
+                    {melt}% dari harga acuan
                   </CardDescription>
                 </CardHeader>
               </Card>

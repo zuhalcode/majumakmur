@@ -99,11 +99,18 @@ export const useFetchCapital = () => {
     fetchData();
   }, [fetchData]);
 
-  const groupDataByMonth = () => {
+  const groupDataByMonth = (year: string = "0000") => {
     const grouped: { date: string; data: Capital[]; totalPurchase: number }[] =
       [];
 
-    data.forEach((item) => {
+    const filteredData =
+      year === "0000"
+        ? data
+        : data.filter(
+            (item) => new Date(item.date).getFullYear().toString() === year
+          );
+
+    filteredData.forEach((item) => {
       const date = new Date(item.date).toLocaleString("default", {
         month: "2-digit",
         year: "2-digit",
@@ -138,5 +145,6 @@ export const useFetchCapital = () => {
     deleteData,
     editData,
     refetch: fetchData,
+    groupDataByMonth,
   };
 };
