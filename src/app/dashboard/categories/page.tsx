@@ -124,11 +124,11 @@ export default function Page() {
             </Form>
             {/* Form */}
 
-            <DashboardTable
+            {/* <DashboardTable
               columns={columns}
               data={data}
               handleOnDelete={handleOnDelete}
-            />
+            /> */}
           </div>
         </CardContent>
       </Card>

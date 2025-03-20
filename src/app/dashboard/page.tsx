@@ -80,7 +80,7 @@ export default function Page() {
               <CardHeader>
                 <CardTitle className="text-base flex items-center justify-between">
                   <p style={{ color: "#FFD700" }}>
-                    24K <span className="text-white">Current Gold</span>{" "}
+                    24K <span className="text-white">Emas Murni</span>{" "}
                   </p>
                   <Banknote className="size-7" style={{ color: "#FFD700" }} />
                 </CardTitle>
