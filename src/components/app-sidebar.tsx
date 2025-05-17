@@ -14,6 +14,7 @@ import {
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
 import { usePathname } from "next/navigation";
+import { createClient } from "@/app/utils/supabase/client";
 
 const sidebarMenu = [
   {
@@ -92,8 +93,16 @@ const sidebarMenu = [
   },
 ];
 
-export default function AppSidebar() {
+export default async function AppSidebar() {
   const pathname = usePathname();
+
+  const supabase = createClient();
+
+  const handleLogout = async () => {
+    supabase.auth.signOut();
+    // setelah logout, redirect ke halaman sign-in misal
+    window.location.href = "/sign-in";
+  };
 
   return (
     // check if url is dashboard
@@ -143,6 +152,17 @@ export default function AppSidebar() {
                   ) : null}
                 </SidebarMenuItem>
               ))}
+
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <a
+                    className="font-medium cursor-pointer"
+                    onClick={handleLogout}
+                  >
+                    Logout
+                  </a>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroup>
         </SidebarContent>

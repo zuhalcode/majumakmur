@@ -1,6 +1,6 @@
 "use server";
 
-import { headers } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { encodedRedirect } from "./utils/utils";
 import { createClient } from "./utils/supabase/server";
@@ -44,7 +44,7 @@ export const signInAction = async (formData: FormData) => {
   const password = formData.get("password") as string;
   const supabase = await createClient();
 
-  const { error } = await supabase.auth.signInWithPassword({
+  const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,
   });
@@ -53,7 +53,26 @@ export const signInAction = async (formData: FormData) => {
     return encodedRedirect("error", "/sign-in", error.message);
   }
 
-  return redirect("/dashboard/gold-analytics");
+  // Ambil token dari data.session.access_token
+  const accessToken = data.session?.access_token;
+
+  if (!accessToken) {
+    return encodedRedirect("error", "/sign-in", "Login failed");
+  }
+
+  const cookieStore = await cookies();
+
+  cookieStore.set({
+    name: "access_token",
+    value: accessToken,
+    httpOnly: true,
+    path: "/",
+    maxAge: 60 * 60 * 24 * 7, // 7 days
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+  });
+
+  return redirect("/dashboard");
 };
 
 export const forgotPasswordAction = async (formData: FormData) => {

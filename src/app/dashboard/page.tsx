@@ -2,12 +2,7 @@
 
 import { Banknote } from "lucide-react";
 import { useFetchGold } from "@/hooks/use-gold";
-import {
-  Card,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { FormattedNumber, IntlProvider } from "react-intl";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";

@@ -1,13 +1,24 @@
 import { signInAction } from "@/app/actions";
+import { createClient } from "@/app/utils/supabase/server";
 import { FormMessage, Message } from "@/components/form-message";
 import { SubmitButton } from "@/components/submit-button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 export default async function Login(props: { searchParams: Promise<Message> }) {
+  const supabase = await createClient();
+
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
+  if (session) redirect("/dashboard");
+
   const searchParams = await props.searchParams;
+
   return (
     <form className="flex-1 mx-auto mt-20 flex flex-col min-w-64">
       <h1 className="text-2xl font-medium">Sign in</h1>
