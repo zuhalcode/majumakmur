@@ -53,7 +53,6 @@ export const signInAction = async (formData: FormData) => {
     return encodedRedirect("error", "/sign-in", error.message);
   }
 
-  // Ambil token dari data.session.access_token
   const accessToken = data.session?.access_token;
 
   if (!accessToken) {
@@ -148,6 +147,19 @@ export const resetPasswordAction = async (formData: FormData) => {
 
 export const signOutAction = async () => {
   const supabase = await createClient();
+  const cookieStore = await cookies();
+
+  cookieStore.set({
+    name: "access_token",
+    value: "",
+    httpOnly: true,
+    path: "/",
+    maxAge: 60 * 60 * 24 * 7, // 7 days
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+  });
+
   await supabase.auth.signOut();
+
   return redirect("/sign-in");
 };
