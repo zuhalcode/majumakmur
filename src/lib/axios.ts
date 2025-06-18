@@ -1,11 +1,22 @@
+import env from "@/config/env";
 import axios from "axios";
 
-const instance = axios.create({
-  baseURL:
-    process.env.NEXT_PUBLIC_API_URL || "https://api.scrabber.co.id/api/v1",
-  headers: {
-    "Content-Type": "application/json",
-  },
+const headers = {
+  "Content-Type": "application/json",
+};
+
+const axiosInstance = axios.create({
+  baseURL: env.API_URL,
+  timeout: 60 * 1000,
+  withCredentials: true,
+  headers,
 });
 
-export default instance;
+axiosInstance.interceptors.response.use(
+  async (response) => {
+    return response;
+  },
+  (error) => Promise.reject(error)
+);
+
+export default axiosInstance;
