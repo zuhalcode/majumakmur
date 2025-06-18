@@ -233,8 +233,8 @@ export default function Page() {
                 </TableHeader>
                 <TableBody>
                   {dataByMonth.map(({ date, totalPurchase, totalSell }, i) => {
-                    const pph = (totalPurchase * 0.5) / 100;
-                    const ppn = (totalPurchase * 1) / 100;
+                    const pph = totalPurchase * 0.005;
+                    const ppn = totalPurchase * 0.01;
                     const zakat = calculateZakat(totalPurchase);
                     const calculation = totalPurchase - totalSell;
 
