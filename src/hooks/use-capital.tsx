@@ -99,9 +99,14 @@ export const useFetchCapital = () => {
     fetchData();
   }, [fetchData]);
 
-  const groupDataByMonth = (year: string = "0000") => {
-    const grouped: { date: string; data: Capital[]; totalPurchase: number }[] =
-      [];
+  const groupDataByMonth = (year: string = "2025") => {
+    // get only data year 2025
+    const grouped: {
+      date: string;
+      data: Capital[];
+      totalPurchase: number;
+      totalSell: number;
+    }[] = [];
 
     const filteredData =
       year === "0000"
@@ -122,9 +127,15 @@ export const useFetchCapital = () => {
       if (existingGroup) {
         existingGroup.data.push(item); // Tambahkan transaksi ke bulan yang ada
         existingGroup.totalPurchase += item.purchase; // Tambahkan purchase ke total untuk bulan ini
+        existingGroup.totalSell += item.sell; // Tambahkan purchase ke total untuk bulan ini
       } else {
         // Jika belum ada, buat grup baru untuk bulan ini
-        grouped.push({ date, data: [item], totalPurchase: item.purchase });
+        grouped.push({
+          date,
+          data: [item],
+          totalPurchase: item.purchase,
+          totalSell: item.sell,
+        });
       }
     });
 

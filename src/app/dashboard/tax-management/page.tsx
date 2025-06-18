@@ -86,7 +86,7 @@ type CardInfo = {
 };
 
 export default function Page() {
-  const { refetch, insertData, dataByMonth } = useFetchCapital();
+  const { dataByMonth } = useFetchCapital();
 
   const form = useForm<Form>({
     resolver: zodResolver(formSchema),
@@ -97,8 +97,6 @@ export default function Page() {
       sell: "",
     },
   });
-
-  const { handleSubmit } = form;
 
   const [selectedYear, setSelectedYear] = useState<string>(""); // State untuk menyimpan tahun yang dipilih
 
@@ -138,10 +136,10 @@ export default function Page() {
     return (profit * 3) / 100; // Zakat Bruto 3%
   };
 
-  const handleYearChange = (value: string) => {
-    const year = value;
-    setSelectedYear(year); // Mengupdate tahun yang dipilih
-  };
+  // const handleYearChange = (value: string) => {
+  //   const year = value;
+  //   setSelectedYear(year);
+  // };
 
   return (
     <IntlProvider locale="id-ID">
@@ -200,7 +198,7 @@ export default function Page() {
           ))}
         </div>
 
-        <Select value={selectedYear} onValueChange={handleYearChange}>
+        {/* <Select value={selectedYear} onValueChange={handleYearChange}>
           <SelectTrigger className="w-[180px] border-slate-800">
             <SelectValue placeholder="Select year" />
           </SelectTrigger>
@@ -211,7 +209,7 @@ export default function Page() {
               <SelectItem value="2025">2025</SelectItem>
             </SelectGroup>
           </SelectContent>
-        </Select>
+        </Select> */}
 
         <Card className="w-full mx-auto">
           <CardHeader>
@@ -225,71 +223,109 @@ export default function Page() {
                     <TableHead>No</TableHead>
                     <TableHead>Date</TableHead>
                     <TableHead>Purchase</TableHead>
+                    <TableHead>Sell</TableHead>
                     <TableHead>PPh</TableHead>
                     <TableHead>PPn 1%</TableHead>
                     <TableHead>Zakat Bruto 3%</TableHead>
+                    <TableHead>Invest</TableHead>
                     <TableHead>Action</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {dataByMonth.map(({ date, totalPurchase }, i) => (
-                    <TableRow key={i}>
-                      <TableCell>{i + 1}</TableCell>
-                      <TableCell>{date.toString()}</TableCell>
+                  {dataByMonth.map(({ date, totalPurchase, totalSell }, i) => {
+                    const pph = (totalPurchase * 0.5) / 100;
+                    const ppn = (totalPurchase * 1) / 100;
+                    const zakat = calculateZakat(totalPurchase);
+                    const calculation = totalPurchase - totalSell;
 
-                      <TableCell>
-                        <FormattedNumber
-                          value={totalPurchase}
-                          style="currency"
-                          currency="IDR"
-                          minimumFractionDigits={0}
-                        />
-                      </TableCell>
+                    const invest =
+                      calculation <= 0
+                        ? 0
+                        : (calculation - pph - ppn - zakat) * 0.01;
 
-                      <TableCell>
-                        <FormattedNumber
-                          value={(totalPurchase * 0.5) / 100}
-                          style="currency"
-                          currency="IDR"
-                          minimumFractionDigits={0}
-                        />
-                      </TableCell>
+                    return (
+                      <TableRow key={i}>
+                        <TableCell>{i + 1}</TableCell>
+                        <TableCell>{date.toString()}</TableCell>
 
-                      <TableCell>
-                        <FormattedNumber
-                          value={(totalPurchase * 1) / 100}
-                          style="currency"
-                          currency="IDR"
-                          minimumFractionDigits={0}
-                        />
-                      </TableCell>
+                        {/* Purchase */}
+                        <TableCell>
+                          <FormattedNumber
+                            value={totalPurchase}
+                            style="currency"
+                            currency="IDR"
+                            minimumFractionDigits={0}
+                          />
+                        </TableCell>
 
-                      <TableCell>
-                        <FormattedNumber
-                          value={calculateZakat(totalPurchase)}
-                          style="currency"
-                          currency="IDR"
-                          maximumFractionDigits={0}
-                        />
-                      </TableCell>
+                        {/* Sell */}
+                        <TableCell>
+                          <FormattedNumber
+                            value={totalSell}
+                            style="currency"
+                            currency="IDR"
+                            minimumFractionDigits={0}
+                          />
+                        </TableCell>
 
-                      <TableCell>
-                        <TooltipProvider>
-                          <div className="flex gap-2">
-                            <TableTooltip
-                              text="Edit Data"
-                              icon={<PencilLine />}
-                            />
-                            <TableTooltip
-                              text="Delete Data"
-                              icon={<Trash />}
-                              variant="destructive"
-                            />
-                          </div>
-                        </TooltipProvider>
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                        {/* PPh */}
+                        <TableCell>
+                          <FormattedNumber
+                            value={pph}
+                            style="currency"
+                            currency="IDR"
+                            minimumFractionDigits={0}
+                          />
+                        </TableCell>
+
+                        {/* PPn */}
+                        <TableCell>
+                          <FormattedNumber
+                            value={ppn}
+                            style="currency"
+                            currency="IDR"
+                            minimumFractionDigits={0}
+                          />
+                        </TableCell>
+
+                        {/* Zakat */}
+                        <TableCell>
+                          <FormattedNumber
+                            value={zakat}
+                            style="currency"
+                            currency="IDR"
+                            maximumFractionDigits={0}
+                          />
+                        </TableCell>
+
+                        {/* Invest */}
+                        <TableCell>
+                          <FormattedNumber
+                            value={invest}
+                            style="currency"
+                            currency="IDR"
+                            maximumFractionDigits={0}
+                          />
+                        </TableCell>
+
+                        <TableCell>
+                          <TooltipProvider>
+                            <div className="flex gap-2">
+                              <TableTooltip
+                                text="Edit Data"
+                                icon={<PencilLine />}
+                              />
+                              <TableTooltip
+                                text="Delete Data"
+                                icon={<Trash />}
+                                variant="destructive"
+                              />
+                            </div>
+                          </TooltipProvider>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
                 </TableBody>
               </Table>
             </div>
