@@ -93,14 +93,13 @@ const sidebarMenu = [
   },
 ];
 
-export default async function AppSidebar() {
+export default function AppSidebar() {
   const pathname = usePathname();
 
   const supabase = createClient();
 
   const handleLogout = async () => {
-    supabase.auth.signOut();
-    // setelah logout, redirect ke halaman sign-in misal
+    await supabase.auth.signOut();
     window.location.href = "/sign-in";
   };
 
