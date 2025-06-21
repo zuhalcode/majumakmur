@@ -1,8 +1,6 @@
 import { createClient } from "@/app/utils/supabase/client";
 import { useCallback, useEffect, useState } from "react";
 
-const supabase = createClient();
-
 type Gold = {
   id: number;
   name: string;
@@ -18,6 +16,7 @@ export const useFetchGold = () => {
   const [error, setError] = useState<string | null>(null);
 
   const fetchData = useCallback(async () => {
+    const supabase = createClient();
     const { data, count, error, status, statusText } = await supabase
       .from("global_golds")
       .select("*")

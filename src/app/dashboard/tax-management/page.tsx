@@ -215,7 +215,7 @@ export default function Page() {
 
         <Card className="w-full mx-auto">
           <CardHeader>
-            <CardTitle>Tax Management Zuhal Ganteng Pol Pol an 12345</CardTitle>
+            <CardTitle>Tax Management</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">

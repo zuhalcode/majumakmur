@@ -1,5 +1,4 @@
 import { createBrowserClient } from "@supabase/ssr";
-import { headers } from "next/headers";
 
 export const createClient = () =>
   createBrowserClient(

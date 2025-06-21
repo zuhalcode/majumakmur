@@ -1,7 +1,6 @@
 "use client";
 
 import { Banknote } from "lucide-react";
-import { useFetchGold } from "@/hooks/use-gold";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { FormattedNumber, IntlProvider } from "react-intl";
 import { Input } from "@/components/ui/input";
@@ -9,8 +8,6 @@ import { Button } from "@/components/ui/button";
 import React, { useState } from "react";
 
 export default function Page() {
-  const { data } = useFetchGold();
-
   const [state, setState] = useState<{ goldPrice: number }>({
     goldPrice: 1591000,
   });
