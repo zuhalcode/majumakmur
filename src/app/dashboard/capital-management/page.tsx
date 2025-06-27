@@ -31,6 +31,7 @@ import CustomAreaChart from "@/components/charts/area";
 import DashboardTable from "@/components/dashboard/dashboard-table";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { toast } from "sonner";
+import { useCapitalAPI } from "@/hooks/use-capital-api";
 
 const formSchema = z.object({
   date: z.string().min(1, { message: "Date is required" }),
@@ -104,6 +105,9 @@ const cashFlowAreas: AreaConfig[] = [
 export default function Page() {
   const { data, refetch, loading, insertData, deleteData, editData } =
     useFetchCapital();
+
+  const { data: capitalApiData } = useCapitalAPI();
+  console.log("Data from useCapitalAPI:", capitalApiData);
 
   const buyAndSells: BuyAndSell[] = data
     .map(({ date, purchase, sell }) => ({
