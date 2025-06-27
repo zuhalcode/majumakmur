@@ -114,15 +114,15 @@ export default function Page() {
 
   const cardInfos: CardInfo[] = [
     {
-      title: "Total Tax",
-      value: totalTax,
+      title: "Total Purchase",
+      value: totalPurchase,
       desc: `From last ${monthLength} Months`,
       percent: 0,
       active: false,
     },
     {
-      title: "Total Purchase",
-      value: totalPurchase,
+      title: "Total Tax PPh",
+      value: (totalPurchase - 500000000) * 0.005,
       desc: `From last ${monthLength} Months`,
       percent: 0,
       active: false,
@@ -130,10 +130,12 @@ export default function Page() {
   ];
 
   const calculateZakat = (value: number): number => {
+    if (value <= 0) return 0;
+
     const ppn = value * 0.01; // Menghitung ppn 1%
     const bruto = value - ppn; // Total setelah ppn
     const profit = (bruto * 9) / 100; // keuntungan 9%
-    return (profit * 3) / 100; // Zakat Bruto 3%
+    return (profit * 2.5) / 100; // Zakat Bruto 3%
   };
 
   // const handleYearChange = (value: string) => {
@@ -224,11 +226,11 @@ export default function Page() {
                     <TableHead>Date</TableHead>
                     <TableHead>Purchase</TableHead>
                     <TableHead>Sell</TableHead>
+                    <TableHead>Gross</TableHead>
                     <TableHead>PPh</TableHead>
                     <TableHead>PPn 1%</TableHead>
-                    <TableHead>Zakat Bruto 3%</TableHead>
+                    <TableHead>Zakat 2.5%</TableHead>
                     <TableHead>Invest</TableHead>
-                    <TableHead>Action</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -236,12 +238,12 @@ export default function Page() {
                     const pph = totalPurchase * 0.005;
                     const ppn = totalPurchase * 0.01;
                     const zakat = calculateZakat(totalPurchase);
-                    const calculation = totalPurchase - totalSell;
+                    const grossProfit = totalPurchase - totalSell;
 
                     const invest =
-                      calculation <= 0
+                      grossProfit <= 0
                         ? 0
-                        : (calculation - pph - ppn - zakat) * 0.01;
+                        : (grossProfit - pph - ppn - zakat) * 0.01;
 
                     return (
                       <TableRow key={i}>
@@ -262,6 +264,16 @@ export default function Page() {
                         <TableCell>
                           <FormattedNumber
                             value={totalSell}
+                            style="currency"
+                            currency="IDR"
+                            minimumFractionDigits={0}
+                          />
+                        </TableCell>
+
+                        {/* Sell */}
+                        <TableCell>
+                          <FormattedNumber
+                            value={grossProfit}
                             style="currency"
                             currency="IDR"
                             minimumFractionDigits={0}
@@ -307,21 +319,145 @@ export default function Page() {
                             maximumFractionDigits={0}
                           />
                         </TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            </div>
+          </CardContent>
+        </Card>
 
+        <Card className="w-full mx-auto">
+          <CardHeader>
+            <CardTitle>Tax Management Syariah</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Date</TableHead>
+                    <TableHead>Purchase</TableHead>
+                    <TableHead>Sell</TableHead>
+                    <TableHead>Gross</TableHead>
+                    <TableHead>PPn 1%</TableHead>
+                    <TableHead>Zakat 2.5%</TableHead>
+                    <TableHead>Netto</TableHead>
+                    <TableHead>Invest 1%</TableHead>
+                    <TableHead>Invest 10%</TableHead>
+                    <TableHead>Invest 20%</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {dataByMonth.map(({ date, totalPurchase, totalSell }, i) => {
+                    const ppn = totalPurchase * 0.01;
+                    const grossProfit = totalPurchase - totalSell;
+
+                    const zakat = calculateZakat(grossProfit);
+
+                    const netProfit =
+                      grossProfit <= 0 ? 0 : grossProfit - ppn - zakat;
+
+                    const invest =
+                      grossProfit <= 0 ? 0 : (grossProfit - ppn - zakat) * 0.01;
+                    const invest10 =
+                      grossProfit <= 0 ? 0 : (grossProfit - ppn - zakat) * 0.1;
+                    const invest20 =
+                      grossProfit <= 0 ? 0 : (grossProfit - ppn - zakat) * 0.2;
+
+                    return (
+                      <TableRow key={i}>
+                        <TableCell>{date.toString()}</TableCell>
+
+                        {/* Purchase */}
                         <TableCell>
-                          <TooltipProvider>
-                            <div className="flex gap-2">
-                              <TableTooltip
-                                text="Edit Data"
-                                icon={<PencilLine />}
-                              />
-                              <TableTooltip
-                                text="Delete Data"
-                                icon={<Trash />}
-                                variant="destructive"
-                              />
-                            </div>
-                          </TooltipProvider>
+                          <FormattedNumber
+                            value={totalPurchase}
+                            style="currency"
+                            currency="IDR"
+                            minimumFractionDigits={0}
+                          />
+                        </TableCell>
+
+                        {/* Sell */}
+                        <TableCell>
+                          <FormattedNumber
+                            value={totalSell}
+                            style="currency"
+                            currency="IDR"
+                            minimumFractionDigits={0}
+                          />
+                        </TableCell>
+
+                        {/* Gross Profit */}
+                        <TableCell>
+                          <FormattedNumber
+                            value={grossProfit}
+                            style="currency"
+                            currency="IDR"
+                            minimumFractionDigits={0}
+                          />
+                        </TableCell>
+
+                        {/* PPn */}
+                        <TableCell>
+                          <FormattedNumber
+                            value={ppn}
+                            style="currency"
+                            currency="IDR"
+                            minimumFractionDigits={0}
+                          />
+                        </TableCell>
+
+                        {/* Zakat */}
+                        <TableCell>
+                          <FormattedNumber
+                            value={zakat}
+                            style="currency"
+                            currency="IDR"
+                            maximumFractionDigits={0}
+                          />
+                        </TableCell>
+
+                        {/* Net Profit */}
+                        <TableCell>
+                          <FormattedNumber
+                            value={netProfit}
+                            style="currency"
+                            currency="IDR"
+                            maximumFractionDigits={0}
+                          />
+                        </TableCell>
+
+                        {/* Invest */}
+                        <TableCell>
+                          <FormattedNumber
+                            value={invest}
+                            style="currency"
+                            currency="IDR"
+                            maximumFractionDigits={0}
+                          />
+                        </TableCell>
+
+                        {/* Invest 10% */}
+                        <TableCell>
+                          <FormattedNumber
+                            value={invest10}
+                            style="currency"
+                            currency="IDR"
+                            maximumFractionDigits={0}
+                          />
+                        </TableCell>
+
+                        {/* Invest 20% */}
+                        <TableCell>
+                          <FormattedNumber
+                            value={invest20}
+                            style="currency"
+                            currency="IDR"
+                            maximumFractionDigits={0}
+                          />
                         </TableCell>
                       </TableRow>
                     );
