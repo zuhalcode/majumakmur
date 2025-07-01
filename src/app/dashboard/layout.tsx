@@ -22,6 +22,7 @@ export default async function RootLayout({
       <AppSidebar />
       <SidebarInset>
         <DashboardHeader />
+
         {children}
       </SidebarInset>
     </SidebarProvider>

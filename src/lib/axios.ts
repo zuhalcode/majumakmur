@@ -1,3 +1,4 @@
+import { getAccessToken } from "@/app/utils/supabase/session";
 import env from "@/config/env";
 import axios from "axios";
 
@@ -11,6 +12,20 @@ const api = axios.create({
   withCredentials: true,
   headers,
 });
+
+// Add a request interceptor to include the access token in the Authorization header
+api.interceptors.request.use(
+  async (config) => {
+    const token = await getAccessToken();
+
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
 
 api.interceptors.response.use(
   async (response) => {

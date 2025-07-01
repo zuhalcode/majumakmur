@@ -59,18 +59,6 @@ export const signInAction = async (formData: FormData) => {
     return encodedRedirect("error", "/sign-in", "Login failed");
   }
 
-  const cookieStore = await cookies();
-
-  cookieStore.set({
-    name: "access_token",
-    value: accessToken,
-    httpOnly: true,
-    path: "/",
-    maxAge: 60 * 60 * 24 * 7, // 7 days
-    sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
-  });
-
   return redirect("/dashboard");
 };
 

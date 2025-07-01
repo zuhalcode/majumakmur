@@ -13,7 +13,6 @@ import {
 import { FormattedNumber, IntlProvider } from "react-intl";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -26,39 +25,14 @@ import {
 } from "@/components/ui/form";
 import { useFetchCapital } from "@/hooks/use-capital";
 import { cn } from "@/lib/utils";
-import { AreaConfig, BuyAndSell, CashFlow } from "@/types/chart";
 import CustomAreaChart from "@/components/charts/area";
 import DashboardTable from "@/components/dashboard/dashboard-table";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { toast } from "sonner";
 import { useCapitalAPI } from "@/hooks/use-capital-api";
-
-const formSchema = z.object({
-  date: z.string().min(1, { message: "Date is required" }),
-  capital: z.string().min(0).optional(),
-  purchase: z.string().min(0).optional(),
-  sell: z.string().min(0).optional(),
-});
-
-type Form = z.infer<typeof formSchema>;
-
-type Capital = {
-  id?: number;
-  capital: number;
-  purchase: number;
-  sell: number;
-  date: Date;
-  created_at?: Date;
-  updated_at?: Date;
-};
-
-type CardInfo = {
-  title: string;
-  value: number;
-  desc?: string;
-  percent: number;
-  active: boolean;
-};
+import { CapitalForm, capitalFormSchema } from "@/schemas/capital.schema";
+import { Capital } from "@/types/dashboard";
+import { AreaConfig, BuyAndSell, CardInfo, CashFlow } from "@/types/ui/chart";
 
 const buyAndSellChartConfig = {
   buy: {
@@ -107,6 +81,7 @@ export default function Page() {
     useFetchCapital();
 
   const { data: capitalApiData } = useCapitalAPI();
+
   console.log("Data from useCapitalAPI:", capitalApiData);
 
   const buyAndSells: BuyAndSell[] = data
@@ -126,8 +101,8 @@ export default function Page() {
 
   const today = new Date().toISOString().split("T")[0]; // Hitung di luar komponen
 
-  const form = useForm<Form>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<CapitalForm>({
+    resolver: zodResolver(capitalFormSchema),
     defaultValues: {
       date: today,
       capital: "",
