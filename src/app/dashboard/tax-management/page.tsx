@@ -46,7 +46,7 @@ import {
 } from "@/components/ui/form";
 import { useFetchCapital } from "@/hooks/use-capital";
 import { cn } from "@/lib/utils";
-import { BuyAndSell } from "@/types/chart";
+
 import {
   Select,
   SelectContent,
