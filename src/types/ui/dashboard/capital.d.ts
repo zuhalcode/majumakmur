@@ -24,4 +24,10 @@ interface AreaConfig {
   fill?: string;
 }
 
-export type { CardInfo, CashFlow, BuyAndSell, AreaConfig };
+interface ColumnConfig {
+  header: string;
+  accessor: string;
+  type: "date" | "number" | "string";
+}
+
+export type { CardInfo, CashFlow, BuyAndSell, AreaConfig, ColumnConfig };
