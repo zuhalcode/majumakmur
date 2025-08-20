@@ -1,7 +1,4 @@
 "use client";
-
-import { ChartConfig } from "@/components/ui/chart";
-
 import { Banknote, Loader, MoveDown, MoveUp, Plus } from "lucide-react";
 import {
   Card,
@@ -23,13 +20,12 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useFetchCapital } from "@/hooks/use-capital";
+
 import { cn } from "@/lib/utils";
-import CustomAreaChart from "@/components/charts/area";
+
 import DashboardTable from "@/components/dashboard/dashboard-table";
 import { CapitalForm, capitalFormSchema } from "@/schemas/capital.schema";
-import { Capital } from "@/types/dashboard";
-import { CardInfo, ColumnConfig } from "@/types/ui/dashboard/capital";
+import { Capital, CardInfo, ColumnConfig } from "@/types/ui/dashboard/capital";
 
 export default function CapitalManagementPage({
   data,

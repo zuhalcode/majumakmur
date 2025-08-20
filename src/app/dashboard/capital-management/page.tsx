@@ -1,9 +1,9 @@
 "use client";
 
 import { useCapitalAPI } from "@/hooks/use-capital-api";
-import { CardInfo, ColumnConfig } from "@/types/ui/dashboard/capital";
 import CapitalManagementPage from "@/components/pages/capital-page";
 import { capitalSummary } from "@/utils/capital.util";
+import { CardInfo, ColumnConfig } from "@/types/ui/dashboard/capital";
 
 export default function Page() {
   const { data, createData, refetch, loading, deleteData } = useCapitalAPI();

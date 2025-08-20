@@ -1,6 +1,5 @@
 "use client";
 
-import { AreaConfig } from "@/types/chart";
 import {
   ChartConfig,
   ChartContainer,
