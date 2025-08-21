@@ -1,5 +1,6 @@
 import { capitalService } from "@/app/services/capital.service";
-import { Capital } from "@/types/ui/dashboard/capital";
+import { Capital } from "@/types/data/capital";
+
 import { useCallback, useEffect, useState } from "react";
 
 export function useCapitalAPI() {
