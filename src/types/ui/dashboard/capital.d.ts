@@ -1,13 +1,3 @@
-interface Capital {
-  id?: number;
-  capital: number;
-  purchase: number;
-  sell: number;
-  date: Date;
-  created_at?: Date;
-  updated_at?: Date;
-}
-
 interface CardInfo {
   title: string;
   value: number;
@@ -33,11 +23,4 @@ interface ColumnConfig {
   type: "date" | "number" | "string";
 }
 
-export type {
-  CardInfo,
-  CashFlow,
-  BuyAndSell,
-  AreaConfig,
-  ColumnConfig,
-  Capital,
-};
+export type { CardInfo, CashFlow, BuyAndSell, AreaConfig, ColumnConfig };

@@ -1,5 +1,5 @@
 import api from "@/lib/axios";
-import { Capital } from "@/types/dashboard";
+import { Capital } from "@/types/data/capital";
 
 export const capitalService = {
   async findAll(): Promise<{ data: Capital[] }> {
