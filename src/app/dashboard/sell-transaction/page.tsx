@@ -368,8 +368,6 @@ export default function Page() {
                     <TableHead>Buy Price</TableHead>
                     <TableHead>Sell Price</TableHead>
                     <TableHead>Income</TableHead>
-                    <TableHead>In Days</TableHead>
-                    <TableHead>Salary/mo</TableHead>
                     <TableHead>Action</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -420,27 +418,6 @@ export default function Page() {
                           <TableCell>
                             <FormattedNumber
                               value={buy_price - sell_price}
-                              style="currency"
-                              currency="IDR"
-                              minimumFractionDigits={0}
-                            />
-                          </TableCell>
-
-                          <TableCell>
-                            <FormattedNumber
-                              value={dateDifferences[i]}
-                              currency="IDR"
-                              minimumFractionDigits={0}
-                            />
-                          </TableCell>
-
-                          <TableCell>
-                            <FormattedNumber
-                              value={Math.floor(
-                                ((buy_price - sell_price) /
-                                  dateDifferences[i]) *
-                                  12
-                              )}
                               style="currency"
                               currency="IDR"
                               minimumFractionDigits={0}
