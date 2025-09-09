@@ -25,7 +25,8 @@ import { cn } from "@/lib/utils";
 
 import DashboardTable from "@/components/dashboard/dashboard-table";
 import { CapitalForm, capitalFormSchema } from "@/schemas/capital.schema";
-import { Capital, CardInfo, ColumnConfig } from "@/types/ui/dashboard/capital";
+import { Capital } from "@/types/data/capital";
+import { CardInfo, ColumnConfig } from "@/types/ui/dashboard/capital";
 
 export default function CapitalManagementPage({
   data,
