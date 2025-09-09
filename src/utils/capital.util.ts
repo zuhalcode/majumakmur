@@ -1,4 +1,4 @@
-import { Capital } from "@/types/dashboard";
+import { Capital } from "@/types/data/capital";
 
 interface CapitalSummary {
   totalPurchase: number;
