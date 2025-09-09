@@ -313,14 +313,18 @@ export default function Page() {
                     const ppn = totalPurchase * 0.01;
                     const grossProfit = totalPurchase - totalSell;
 
+                    const grossAfterPPN = grossProfit - ppn;
+
                     const zakat =
-                      grossProfit > 0 ? ((grossProfit - ppn) * 2.5) / 100 : 0;
+                      grossAfterPPN > 0 ? ((grossProfit - ppn) * 2.5) / 100 : 0;
 
                     const netProfit =
-                      grossProfit <= 0 ? 0 : grossProfit - ppn - zakat;
+                      grossAfterPPN <= 0 ? 0 : grossProfit - ppn - zakat;
 
                     const invest20 =
-                      grossProfit <= 0 ? 0 : (grossProfit - ppn - zakat) * 0.2;
+                      grossAfterPPN <= 0
+                        ? 0
+                        : (grossProfit - ppn - zakat) * 0.2;
 
                     const allPrice = [
                       totalPurchase,
