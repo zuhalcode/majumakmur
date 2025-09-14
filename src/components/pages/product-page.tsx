@@ -2,7 +2,13 @@
 
 import React from "react";
 import { IntlProvider } from "react-intl";
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "../ui/card";
 import {
   Form,
   FormControl,
@@ -30,6 +36,9 @@ import { Product } from "@/types/data/product";
 import { Button } from "../ui/button";
 import { Loader, Plus } from "lucide-react";
 
+import DashboardTable from "../dashboard/dashboard-table";
+import { productService } from "@/services/product.service";
+
 const ProductManagementPage = ({
   data,
   loading,
@@ -43,6 +52,18 @@ const ProductManagementPage = ({
   goldTypes: Gold[];
   data: Product[];
 }) => {
+  const fileSchema = z
+    .instanceof(File)
+    .refine((file) => file.size <= 5 * 1024 * 1024, {
+      message: "Max file size is 5MB.",
+    })
+    .refine(
+      (file) => ["image/jpeg", "image/png", "image/webp"].includes(file.type),
+      {
+        message: "Only .jpg, .png, .webp formats are supported.",
+      }
+    );
+
   const formSchema = z.object({
     code: z.string(),
     category: z.string(),
@@ -50,6 +71,7 @@ const ProductManagementPage = ({
     name: z.string().min(1),
     desc: z.string().min(1).optional(),
     weight: z.string(),
+    image: fileSchema,
     status: z.string(),
   });
 
@@ -64,26 +86,30 @@ const ProductManagementPage = ({
       name: "",
       desc: "",
       weight: "",
+      image: undefined,
       status: "active",
     },
   });
 
   const { handleSubmit, control } = form;
 
-  const handleOnSubmit = handleSubmit(async ({ code, name, desc, weight }) => {
+  const handleOnSubmit = handleSubmit(async (data: Form) => {
+    const formData = new FormData();
+
+    formData.append("code", data.code);
+    formData.append("category_id", data.category);
+    formData.append("gold_type_id", data.gold_type);
+    formData.append("name", data.name);
+    formData.append("desc", data.desc || "");
+    formData.append("weight", data.weight);
+    formData.append("status", data.status);
+
+    if (data.image) formData.append("image", data.image);
+    console.log("INI data mentah : ", formData);
+
     try {
-      const productData: Product = {
-        code,
-        name,
-        desc: desc!,
-        category_id: "2",
-        gold_type_id: "5",
-        weight: Number(weight),
-      };
-
-      //   await insertData(productData);
-
-      //   refetch();
+      const res = await productService.create(formData);
+      console.log("Response: ", res);
     } catch (error) {
       console.error("Error inserting data:", error);
     }
@@ -127,22 +153,23 @@ const ProductManagementPage = ({
       <div className="w-full flex flex-col gap-5 px-10 mt-5 pb-10">
         <Card className="w-full mx-auto">
           <CardHeader>
-            <CardTitle>List Products</CardTitle>
+            <CardTitle>List Productssss</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
+            <div className="space-y-3">
               {/* Form */}
               <Form {...form}>
                 <form
                   onSubmit={handleOnSubmit}
                   className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 items-end"
                 >
+                  {/* Code */}
                   <FormField
                     control={control}
                     name="code"
                     render={({ field }) => {
                       return (
-                        <FormItem className="space-y-2">
+                        <FormItem className="space-y-2 ">
                           <FormLabel>Code</FormLabel>
                           <FormControl>
                             <Select
@@ -172,6 +199,7 @@ const ProductManagementPage = ({
                     }}
                   />
 
+                  {/* Category */}
                   <FormField
                     control={control}
                     name="category"
@@ -207,6 +235,7 @@ const ProductManagementPage = ({
                     }}
                   />
 
+                  {/* Gold Type */}
                   <FormField
                     control={control}
                     name="gold_type"
@@ -242,6 +271,7 @@ const ProductManagementPage = ({
                     }}
                   />
 
+                  {/* Name */}
                   <FormField
                     control={control}
                     name="name"
@@ -262,6 +292,7 @@ const ProductManagementPage = ({
                     }}
                   />
 
+                  {/* Description */}
                   <FormField
                     control={control}
                     name="desc"
@@ -282,12 +313,13 @@ const ProductManagementPage = ({
                     }}
                   />
 
+                  {/* Weight */}
                   <FormField
                     control={control}
                     name="weight"
                     render={({ field }) => {
                       return (
-                        <FormItem className="space-y-2">
+                        <FormItem className="">
                           <FormLabel>Weight</FormLabel>
                           <FormControl>
                             <Input
@@ -295,6 +327,34 @@ const ProductManagementPage = ({
                               disabled={loading}
                               type="number"
                               placeholder="Amount"
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      );
+                    }}
+                  />
+
+                  {/* Image */}
+                  <FormField
+                    control={control}
+                    name="image"
+                    render={({ field }) => {
+                      return (
+                        <FormItem>
+                          <FormLabel>Image</FormLabel>
+
+                          <FormControl className="cursor-pointer">
+                            <Input
+                              onChange={(e) => {
+                                if (e.target.files) {
+                                  field.onChange(e.target.files[0]);
+                                }
+                              }}
+                              accept="image/*"
+                              disabled={loading}
+                              type="file"
+                              placeholder="Image"
                             />
                           </FormControl>
                           <FormMessage />
