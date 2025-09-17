@@ -2,13 +2,10 @@
 
 import CustomImage from "@/components/custom-image";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
 } from "@/components/ui/carousel";
 import {
   Sheet,
@@ -21,7 +18,6 @@ import {
 import { lato, libreBaskerville } from "@/fonts";
 import { cn } from "@/lib/utils";
 import { Menu, ShoppingBag } from "lucide-react";
-import Image from "next/image";
 
 const banners = [
   {

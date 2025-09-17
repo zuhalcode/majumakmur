@@ -1,17 +1,35 @@
-import { Capital, capitalService } from "@/app/services/capital.service";
+import { capitalService } from "@/services/capital.service";
+import { Capital } from "@/types/data/capital";
+
 import { useCallback, useEffect, useState } from "react";
 
 export function useCapitalAPI() {
   const [data, setData] = useState<Capital[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
-      const res = await capitalService.findAll();
-      setData(res);
+      setLoading(true);
+      const { data } = await capitalService.findAll();
+      setData(data);
     } catch (err: any) {
       console.log(err);
+    } finally {
+      setLoading(false);
     }
-  };
+  }, []);
+
+  const createData = useCallback(async (capital: Capital) => {
+    setLoading(true);
+    await capitalService.create(capital);
+    setLoading(false);
+  }, []);
+
+  const deleteData = useCallback(async (id: number) => {
+    setLoading(true);
+    await capitalService.remove(id);
+    setLoading(false);
+  }, []);
 
   useEffect(() => {
     fetchData();
@@ -19,7 +37,9 @@ export function useCapitalAPI() {
 
   return {
     data,
-    // loading,
-    // error,
+    refetch: fetchData,
+    createData,
+    deleteData,
+    loading,
   };
 }

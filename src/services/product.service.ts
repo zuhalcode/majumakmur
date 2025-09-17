@@ -1,23 +1,26 @@
 import api from "@/lib/axios";
+import { Product } from "@/types/data/product";
 
 export const productService = {
-  findAll: async () => {
-    try {
-      const res = await api.get("/products");
-      return res.data;
-    } catch (error) {
-      console.error("Error fetching products:", error);
-      throw error;
-    }
+  async findAll(): Promise<{ data: Product[] }> {
+    const res = await api.get("/products");
+    return res.data;
   },
 
-  findById: async (id: string) => {
-    try {
-      const res = await api.get(`/products/${id}`);
-      return res.data;
-    } catch (error) {
-      console.error("Error fetching product by ID:", error);
-      throw error;
-    }
+  async create(data: FormData): Promise<Product> {
+    const res = await api.post("/products", data, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    return res.data;
+  },
+
+  async update(id: number, updatedData: Partial<Product>) {
+    const res = await api.put(`/products/${id}`, updatedData);
+    return res.data;
+  },
+
+  async remove(id: number) {
+    const res = await api.delete(`/products/${id}`);
+    return res.data;
   },
 };

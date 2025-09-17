@@ -3,6 +3,7 @@ import { ThemeProvider } from "next-themes";
 import "./globals.css";
 
 import { Toaster } from "@/components/ui/sonner";
+import { Provider } from "react-redux";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -22,6 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={GeistSans.className} suppressHydrationWarning>
       <body className="bg-background text-foreground">
+        {/* <Provider store={store}> */}
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -36,6 +38,7 @@ export default function RootLayout({
             </div>
           </main>
         </ThemeProvider>
+        {/* </Provider> */}
       </body>
     </html>
   );

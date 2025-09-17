@@ -1,22 +1,13 @@
 import api from "@/lib/axios";
-
-export type Capital = {
-  id?: number;
-  capital: number;
-  purchase: number;
-  sell: number;
-  date: Date;
-  created_at?: Date;
-  updated_at?: Date;
-};
+import { Capital } from "@/types/data/capital";
 
 export const capitalService = {
-  async findAll() {
+  async findAll(): Promise<{ data: Capital[] }> {
     const res = await api.get("/capitals");
     return res.data;
   },
 
-  async insert(data: Capital) {
+  async create(data: Capital): Promise<Capital> {
     const res = await api.post("/capitals", data);
     return res.data;
   },
