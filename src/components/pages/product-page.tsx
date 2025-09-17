@@ -45,12 +45,14 @@ const ProductManagementPage = ({
   prefixes,
   categories,
   goldTypes,
+  createData,
 }: {
   loading: boolean;
   categories: Category[];
   prefixes: Prefix[];
   goldTypes: Gold[];
   data: Product[];
+  createData: (formData: FormData) => Promise<any>;
 }) => {
   const fileSchema = z
     .instanceof(File)
@@ -66,7 +68,6 @@ const ProductManagementPage = ({
 
   const formSchema = z.object({
     code: z.string(),
-    category: z.string(),
     gold_type: z.string().min(1),
     name: z.string().min(1),
     desc: z.string().min(1).optional(),
@@ -81,7 +82,6 @@ const ProductManagementPage = ({
     resolver: zodResolver(formSchema),
     defaultValues: {
       code: "CC",
-      category: "",
       gold_type: "",
       name: "",
       desc: "",
@@ -97,7 +97,6 @@ const ProductManagementPage = ({
     const formData = new FormData();
 
     formData.append("code", data.code);
-    formData.append("category_id", data.category);
     formData.append("gold_type_id", data.gold_type);
     formData.append("name", data.name);
     formData.append("desc", data.desc || "");
@@ -108,7 +107,7 @@ const ProductManagementPage = ({
     console.log("INI data mentah : ", formData);
 
     try {
-      const res = await productService.create(formData);
+      const res = await createData(formData);
       console.log("Response: ", res);
     } catch (error) {
       console.error("Error inserting data:", error);
@@ -130,7 +129,7 @@ const ProductManagementPage = ({
   };
 
   const dataRestructured = data.map(
-    ({ category_id, categories, gold_types, gold_type_id, ...rest }) => ({
+    ({ category_id, categories, gold_types, ...rest }) => ({
       ...rest,
       category: categories?.name,
       karat: `${gold_types?.karat}K`,
@@ -139,7 +138,6 @@ const ProductManagementPage = ({
 
   const columns = [
     { header: "Code", accessor: "code" },
-    { header: "Category", accessor: "category" },
     { header: "Name", accessor: "name" },
     { header: "Karat", accessor: "karat" },
     { header: "Weight", accessor: "weight" },
@@ -153,7 +151,7 @@ const ProductManagementPage = ({
       <div className="w-full flex flex-col gap-5 px-10 mt-5 pb-10">
         <Card className="w-full mx-auto">
           <CardHeader>
-            <CardTitle>List Productssss</CardTitle>
+            <CardTitle>List Products</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
@@ -188,42 +186,6 @@ const ProductManagementPage = ({
                                     className="capitalize"
                                   >
                                     {code}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      );
-                    }}
-                  />
-
-                  {/* Category */}
-                  <FormField
-                    control={control}
-                    name="category"
-                    render={({ field }) => {
-                      return (
-                        <FormItem className="space-y-2">
-                          <FormLabel>Category</FormLabel>
-                          <FormControl>
-                            <Select
-                              onValueChange={field.onChange}
-                              value={field.value}
-                              disabled={loading}
-                            >
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select category" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                {categories.map(({ id, name }) => (
-                                  <SelectItem
-                                    key={id}
-                                    value={id!.toString()}
-                                    className="capitalize"
-                                  >
-                                    {name}
                                   </SelectItem>
                                 ))}
                               </SelectContent>
@@ -375,11 +337,11 @@ const ProductManagementPage = ({
               </Form>
               {/* Form */}
 
-              {/* <DashboardTable
+              <DashboardTable
                 columns={columns}
                 data={dataRestructured}
                 handleOnDelete={handleOnDelete}
-              /> */}
+              />
             </div>
           </CardContent>
         </Card>
