@@ -137,13 +137,13 @@ const ProductManagementPage = ({
   );
 
   const columns = [
-    { header: "Code", accessor: "code" },
-    { header: "Name", accessor: "name" },
-    { header: "Karat", accessor: "karat" },
-    { header: "Weight", accessor: "weight" },
-    { header: "Description", accessor: "desc" },
-    { header: "Profit", accessor: "profit" },
-    { header: "Status", accessor: "status" },
+    { header: "Code", accessor: "code", type: "text" },
+    { header: "Name", accessor: "name", type: "text" },
+    { header: "Karat", accessor: "karat", type: "number" },
+    { header: "Weight", accessor: "weight", type: "number" },
+    { header: "Description", accessor: "desc", type: "text" },
+    { header: "Profit", accessor: "profit", type: "number" },
+    { header: "Status", accessor: "status", type: "text" },
   ];
 
   return (
