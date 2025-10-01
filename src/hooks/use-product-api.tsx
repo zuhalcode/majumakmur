@@ -23,7 +23,6 @@ export const useProductAPI = () => {
   }, []);
 
   const createData = useCallback(async (formData: FormData) => {
-    setLoading(true);
     setError(null);
 
     try {
@@ -32,8 +31,6 @@ export const useProductAPI = () => {
       return res;
     } catch (err: any) {
       setError(err.response?.data?.message || err.message);
-    } finally {
-      setLoading(false);
     }
   }, []);
 

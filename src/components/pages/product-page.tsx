@@ -1,14 +1,9 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
+
 import { IntlProvider } from "react-intl";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "../ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import {
   Form,
   FormControl,
@@ -25,7 +20,6 @@ import {
   SelectValue,
 } from "../ui/select";
 import { Input } from "../ui/input";
-import { Category } from "@/types/data/category";
 import { Prefix } from "@/types/data/prefix";
 import { Gold } from "@/types/data/gold";
 
@@ -37,23 +31,25 @@ import { Button } from "../ui/button";
 import { Loader, Plus } from "lucide-react";
 
 import DashboardTable from "../dashboard/dashboard-table";
-import { productService } from "@/services/product.service";
+import api from "@/lib/axios";
+import axios from "axios";
+import env from "@/config/env";
 
 const ProductManagementPage = ({
   data,
-  loading,
   prefixes,
-  categories,
   goldTypes,
   createData,
+  refetch,
 }: {
-  loading: boolean;
-  categories: Category[];
   prefixes: Prefix[];
   goldTypes: Gold[];
   data: Product[];
   createData: (formData: FormData) => Promise<any>;
+  refetch: () => void;
 }) => {
+  const [loading, setLoading] = useState<boolean>(false);
+
   const fileSchema = z
     .instanceof(File)
     .refine((file) => file.size <= 5 * 1024 * 1024, {
@@ -94,23 +90,55 @@ const ProductManagementPage = ({
   const { handleSubmit, control } = form;
 
   const handleOnSubmit = handleSubmit(async (data: Form) => {
+    setLoading(true);
+    if (!data.image) return;
+
+    const { code, gold_type, name, desc, weight, status } = data;
+
+    const imagekitUploadEndpoint =
+      "https://upload.imagekit.io/api/v1/files/upload";
+
+    const imagekitPublicKey = env.IMAGEKIT_PUBLIC_KEY;
+
+    const uploadFormData = new FormData();
     const formData = new FormData();
 
-    formData.append("code", data.code);
-    formData.append("gold_type_id", data.gold_type);
-    formData.append("name", data.name);
-    formData.append("desc", data.desc || "");
-    formData.append("weight", data.weight);
-    formData.append("status", data.status);
-
-    if (data.image) formData.append("image", data.image);
-    console.log("INI data mentah : ", formData);
+    formData.append("code", code);
+    formData.append("gold_type_id", gold_type);
+    formData.append("name", name);
+    formData.append("desc", desc || "");
+    formData.append("weight", weight);
+    formData.append("status", status);
 
     try {
-      const res = await createData(formData);
-      console.log("Response: ", res);
+      const { data: auth } = await api.get("/imagekit-auth");
+      const { signature, token, expire } = auth;
+
+      uploadFormData.append("file", data.image); // file dari input
+      uploadFormData.append("fileName", data.image.name); // wajib ada
+      uploadFormData.append("publicKey", imagekitPublicKey); // wajib ada
+      uploadFormData.append("signature", signature);
+      uploadFormData.append("token", token);
+      uploadFormData.append("expire", expire);
+
+      const uploadRes = await axios.post(
+        imagekitUploadEndpoint,
+        uploadFormData,
+        {
+          withCredentials: false,
+        }
+      );
+
+      const { url } = uploadRes.data;
+
+      formData.append("image_url", url || "");
+
+      const res: Product = await createData(formData);
+      if (res) refetch();
     } catch (error) {
       console.error("Error inserting data:", error);
+    } finally {
+      setLoading(false);
     }
   });
 
