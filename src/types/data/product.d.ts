@@ -1,12 +1,12 @@
 interface Product {
+  id?: number;
   code: string;
   name: string;
   weight: number;
-  category_id?: string;
-  categories?: { name: string };
-  gold_type_id?: string;
-  gold_types?: { karat: number };
-  desc?: string;
+  gold_types: { karat: number } | null;
+  desc: string;
+  profit?: number;
+  status?: string;
   image_url?: string;
 }
 

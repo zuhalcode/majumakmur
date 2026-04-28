@@ -34,6 +34,7 @@ import DashboardTable from "../dashboard/dashboard-table";
 import api from "@/lib/axios";
 import axios from "axios";
 import env from "@/config/env";
+import { ProductForm, productFormSchema } from "@/schemas/product.schema";
 
 const ProductManagementPage = ({
   data,
@@ -50,32 +51,8 @@ const ProductManagementPage = ({
 }) => {
   const [loading, setLoading] = useState<boolean>(false);
 
-  const fileSchema = z
-    .instanceof(File)
-    .refine((file) => file.size <= 5 * 1024 * 1024, {
-      message: "Max file size is 5MB.",
-    })
-    .refine(
-      (file) => ["image/jpeg", "image/png", "image/webp"].includes(file.type),
-      {
-        message: "Only .jpg, .png, .webp formats are supported.",
-      }
-    );
-
-  const formSchema = z.object({
-    code: z.string(),
-    gold_type: z.string().min(1),
-    name: z.string().min(1),
-    desc: z.string().min(1).optional(),
-    weight: z.string(),
-    image: fileSchema,
-    status: z.string(),
-  });
-
-  type Form = z.infer<typeof formSchema>;
-
-  const form = useForm<Form>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<ProductForm>({
+    resolver: zodResolver(productFormSchema),
     defaultValues: {
       code: "CC",
       gold_type: "",
@@ -89,7 +66,7 @@ const ProductManagementPage = ({
 
   const { handleSubmit, control } = form;
 
-  const handleOnSubmit = handleSubmit(async (data: Form) => {
+  const handleOnSubmit = handleSubmit(async (data: ProductForm) => {
     setLoading(true);
     if (!data.image) return;
 
@@ -156,13 +133,10 @@ const ProductManagementPage = ({
     }
   };
 
-  const dataRestructured = data.map(
-    ({ category_id, categories, gold_types, ...rest }) => ({
-      ...rest,
-      category: categories?.name,
-      karat: `${gold_types?.karat}K`,
-    })
-  );
+  const dataResructured = data.map(({ gold_types, ...item }) => ({
+    ...item,
+    karat: gold_types?.karat || 0,
+  }));
 
   const columns = [
     { header: "Code", accessor: "code", type: "text" },
@@ -367,7 +341,7 @@ const ProductManagementPage = ({
 
               <DashboardTable
                 columns={columns}
-                data={dataRestructured}
+                data={dataResructured}
                 handleOnDelete={handleOnDelete}
               />
             </div>
