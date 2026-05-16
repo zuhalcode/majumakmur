@@ -102,12 +102,12 @@ export default function Page() {
 
   const totalTax = dataByMonth.reduce(
     (total, item) => total + (item.totalPurchase * 0.5) / 100,
-    0
+    0,
   );
 
   const totalPurchase = dataByMonth.reduce(
     (total, item) => total + item.totalPurchase,
-    0
+    0,
   );
 
   const monthLength = dataByMonth.length;
@@ -122,7 +122,8 @@ export default function Page() {
     },
     {
       title: "Total Tax PPh",
-      value: (totalPurchase - 500000000) * 0.005,
+      value:
+        totalPurchase > 1000000000 ? (totalPurchase - 500000000) * 0.005 : 0,
       desc: `From last ${monthLength} Months`,
       percent: 0,
       active: false,

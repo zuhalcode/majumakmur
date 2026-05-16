@@ -1,6 +1,16 @@
 "use client";
 
-import { Banknote, Loader, MoveDown, MoveUp, Plus } from "lucide-react";
+import { useState } from "react";
+
+import {
+  Banknote,
+  Loader,
+  MoveDown,
+  MoveUp,
+  Plus,
+  RefreshCcw,
+} from "lucide-react";
+
 import {
   Card,
   CardContent,
@@ -8,6 +18,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+
 import { FormattedNumber, IntlProvider } from "react-intl";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -28,12 +39,21 @@ import DashboardTable from "@/components/dashboard/dashboard-table";
 import { CapitalForm, capitalFormSchema } from "@/schemas/capital.schema";
 import { Capital } from "@/types/data/capital";
 import { CardInfo, ColumnConfig } from "@/types/ui/dashboard/capital";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 
 export default function CapitalManagementPage({
   data,
   cardInfos,
   columns,
   refetch,
+  fetchData,
   createData,
   deleteData,
   loading,
@@ -44,6 +64,13 @@ export default function CapitalManagementPage({
   refetch: () => Promise<void>;
   createData: (capital: Capital) => Promise<void>;
   deleteData: (id: number) => Promise<void>;
+  fetchData: ({
+    year,
+    month,
+  }: {
+    year?: string;
+    month?: string;
+  }) => Promise<void>;
   loading: boolean;
 }) {
   const today = new Date().toISOString().split("T")[0]; // Hitung di luar komponen
@@ -89,6 +116,31 @@ export default function CapitalManagementPage({
     } catch (error) {
       console.error("Error deleting data:", error);
     }
+  };
+
+  const [year, setYear] = useState<string>("year");
+  const [month, setMonth] = useState<string>("month");
+
+  const handleYearOnValueChange = (value: string) => setYear(value);
+  const handleMonthOnValueChange = (value: string) => setMonth(value);
+
+  const disabledInvalidFiltering =
+    year === "year" || month === "month" ? true : false;
+
+  const handleFilterOnClick = async () => {
+    if (year === "year" || month === "month") return;
+
+    await fetchData({
+      year,
+      month,
+    });
+  };
+
+  const handleRefresh = async () => {
+    setYear("year");
+    setMonth("month");
+
+    await refetch();
   };
 
   return (
@@ -148,18 +200,57 @@ export default function CapitalManagementPage({
           ))}
         </div>
 
-        {/* <div className="flex gap-5 flex-col">
-          <CustomAreaChart
-            data={cashFlows}
-            chartConfig={cashFlowChartConfig}
-            areas={cashFlowAreas}
-          />
-          <CustomAreaChart
-            data={buyAndSells}
-            chartConfig={buyAndSellChartConfig}
-            areas={buyAndSellAreas}
-          />
-        </div> */}
+        <div className="flex gap-2">
+          <Select value={year} onValueChange={handleYearOnValueChange}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Year" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectItem value="year">Year</SelectItem>
+                <SelectItem value="2026">2026</SelectItem>
+                <SelectItem value="2025">2025</SelectItem>
+                <SelectItem value="2024">2024</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+
+          <Select value={month} onValueChange={handleMonthOnValueChange}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Month" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectItem value="month">Month</SelectItem>
+                <SelectItem value="1">January</SelectItem>
+                <SelectItem value="2">February</SelectItem>
+                <SelectItem value="3">March</SelectItem>
+                <SelectItem value="4">April</SelectItem>
+                <SelectItem value="5">May</SelectItem>
+                <SelectItem value="6">June</SelectItem>
+                <SelectItem value="7">July</SelectItem>
+                <SelectItem value="8">August</SelectItem>
+                <SelectItem value="9">September</SelectItem>
+                <SelectItem value="10">October</SelectItem>
+                <SelectItem value="11">November</SelectItem>
+                <SelectItem value="12">December</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+
+          <div className="flex flex-wrap items-center gap-2 md:flex-row">
+            <Button variant="outline" size="icon" onClick={handleRefresh}>
+              <RefreshCcw />
+            </Button>
+            <Button
+              variant="outline"
+              onClick={handleFilterOnClick}
+              disabled={disabledInvalidFiltering}
+            >
+              {loading ? <Loader /> : "Filter"}
+            </Button>
+          </div>
+        </div>
 
         <Card className="w-full mx-auto">
           <CardHeader>

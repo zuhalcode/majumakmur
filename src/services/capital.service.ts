@@ -2,8 +2,11 @@ import api from "@/lib/axios";
 import { Capital } from "@/types/data/capital";
 
 export const capitalService = {
-  async findAll(): Promise<{ data: Capital[] }> {
-    const res = await api.get("/capitals");
+  async findAll(filters?: {
+    year?: string;
+    month?: string;
+  }): Promise<{ data: Capital[] }> {
+    const res = await api.get("/capitals", { params: filters });
     return res.data;
   },
 

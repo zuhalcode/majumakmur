@@ -8,4 +8,9 @@ interface Capital {
   updated_at?: Date;
 }
 
-export type { Capital };
+interface CapitalFilters {
+  year?: string;
+  month?: string;
+}
+
+export type { Capital, CapitalFilters };

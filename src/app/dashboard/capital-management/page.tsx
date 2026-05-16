@@ -6,8 +6,9 @@ import { capitalSummary } from "@/utils/capital.util";
 import { CardInfo, ColumnConfig } from "@/types/ui/dashboard/capital";
 
 export default function Page() {
-  const { data, createData, refetch, loading, deleteData } = useCapitalAPI();
-  const displayedData = data.slice(0, 10);
+  const { data, createData, refetch, loading, deleteData, fetchData } =
+    useCapitalAPI();
+  const displayedData = data.slice(0, 50);
 
   const {
     totalPurchase,
@@ -62,6 +63,7 @@ export default function Page() {
       columns={columns}
       createData={createData}
       refetch={refetch}
+      fetchData={fetchData}
       deleteData={deleteData}
       loading={loading}
     />

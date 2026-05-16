@@ -99,7 +99,7 @@ export const useFetchCapital = () => {
     fetchData();
   }, [fetchData]);
 
-  const groupDataByMonth = (year: string = "2025") => {
+  const groupDataByMonth = (year: string = "2026") => {
     // get only data year 2025
     const grouped: {
       date: string;
