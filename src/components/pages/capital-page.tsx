@@ -37,7 +37,7 @@ import { cn } from "@/lib/utils";
 
 import DashboardTable from "@/components/dashboard/dashboard-table";
 import { CapitalForm, capitalFormSchema } from "@/schemas/capital.schema";
-import { Capital } from "@/types/data/capital";
+import { Capital, CapitalFilters } from "@/types/data/capital";
 import { CardInfo, ColumnConfig } from "@/types/ui/dashboard/capital";
 import {
   Select,
@@ -64,13 +64,7 @@ export default function CapitalManagementPage({
   refetch: () => Promise<void>;
   createData: (capital: Capital) => Promise<void>;
   deleteData: (id: number) => Promise<void>;
-  fetchData: ({
-    year,
-    month,
-  }: {
-    year?: string;
-    month?: string;
-  }) => Promise<void>;
+  fetchData: (filters?: CapitalFilters) => Promise<void>;
   loading: boolean;
 }) {
   const today = new Date().toISOString().split("T")[0]; // Hitung di luar komponen
@@ -130,10 +124,7 @@ export default function CapitalManagementPage({
   const handleFilterOnClick = async () => {
     if (year === "year" || month === "month") return;
 
-    await fetchData({
-      year,
-      month,
-    });
+    await fetchData({ year, month });
   };
 
   const handleRefresh = async () => {
