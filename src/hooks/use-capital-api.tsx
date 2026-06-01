@@ -1,17 +1,39 @@
 import { capitalService } from "@/services/capital.service";
 import { Capital, CapitalFilters } from "@/types/data/capital";
-
 import { useCallback, useEffect, useState } from "react";
 
 export function useCapitalAPI() {
   const [data, setData] = useState<Capital[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [filters, setFilters] = useState<CapitalFilters>({
+    year: 0,
+    month: 0,
+  });
+
+  const resetFilters = () => {
+    setFilters({ year: 0, month: 0 });
+  };
 
   const fetchData = useCallback(async (filters?: CapitalFilters) => {
     try {
       setLoading(true);
-      const { data } = await capitalService.findAll(filters);
+
+      const payload: CapitalFilters = {};
+
+      if (filters?.year && filters?.year !== 0) {
+        payload.year = filters.year;
+      }
+
+      if (filters?.month && filters?.month !== 0) {
+        payload.month = filters.month;
+      }
+
+      console.log(`payload : ${payload.year} | ${payload.month}`);
+
+      const { data } = await capitalService.findAll(payload);
+
       setData(data);
+      console.log(data);
     } catch (err: any) {
       console.log(err);
     } finally {
@@ -22,6 +44,8 @@ export function useCapitalAPI() {
   const createData = useCallback(async (capital: Capital) => {
     setLoading(true);
     await capitalService.create(capital);
+
+    resetFilters();
     setLoading(false);
   }, []);
 
@@ -31,8 +55,7 @@ export function useCapitalAPI() {
     setLoading(false);
   }, []);
 
-  const groupDataByMonth = (year: string = "2026") => {
-    // get only data year 2025
+  const groupDataByMonth = (year: string = "2025") => {
     const grouped: {
       date: string;
       data: Capital[];
@@ -83,8 +106,9 @@ export function useCapitalAPI() {
   return {
     data,
     dataByMonth: groupedData,
-    refetch: fetchData,
     fetchData,
+    setFilters,
+    filters,
     createData,
     deleteData,
     loading,

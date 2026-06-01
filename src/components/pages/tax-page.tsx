@@ -1,26 +1,15 @@
 "use client";
 
-import { ChartConfig } from "@/components/ui/chart";
-
 import {
   Table,
   TableBody,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
 
-import {
-  Banknote,
-  Loader,
-  MoveDown,
-  MoveUp,
-  PencilLine,
-  Plus,
-  Trash,
-} from "lucide-react";
+import { Banknote, Loader, MoveDown, MoveUp, RefreshCcw } from "lucide-react";
 
 import {
   Card,
@@ -29,27 +18,24 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+
 import { FormattedNumber, IntlProvider } from "react-intl";
-import { Input } from "@/components/ui/input";
+
 import { Button } from "@/components/ui/button";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import TableTooltip from "@/components/table-tooltip";
-import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { useFetchCapital } from "@/hooks/use-capital";
 import { cn } from "@/lib/utils";
 
 import { Tax } from "@/types/data/tax";
 import { CardInfo, ColumnConfig } from "@/types/ui/dashboard/capital";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+
+import { useState } from "react";
 
 export default function TaxManagementPage({
   data,
@@ -62,6 +48,22 @@ export default function TaxManagementPage({
   columns: ColumnConfig[];
   loading: boolean;
 }) {
+  const [year, setYear] = useState<string>("year");
+
+  const handleYearOnValueChange = (value: string) => setYear(value);
+  const disabledInvalidFiltering = year === "year" ? true : false;
+
+  const handleFilterOnClick = async () => {
+    console.log(data);
+    // if (year === "year" ) return;
+    // await fetchData({ year });
+  };
+
+  // const handleRefresh = async () => {
+  //   setYear("year");
+  //   await refetch();
+  // };
+
   const calculateZakat = (value: number): number => {
     if (value <= 0) return 0;
 
@@ -128,18 +130,34 @@ export default function TaxManagementPage({
           ))}
         </div>
 
-        {/* <Select value={selectedYear} onValueChange={handleYearChange}>
-          <SelectTrigger className="w-[180px] border-slate-800">
-            <SelectValue placeholder="Select year" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectLabel>Select year</SelectLabel>
-              <SelectItem value="2024">2024</SelectItem>
-              <SelectItem value="2025">2025</SelectItem>
-            </SelectGroup>
-          </SelectContent>
-        </Select> */}
+        <div className="flex gap-2">
+          <Select value={year} onValueChange={handleYearOnValueChange}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Year" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectItem value="year">Year</SelectItem>
+                <SelectItem value="2026">2026</SelectItem>
+                <SelectItem value="2025">2025</SelectItem>
+                <SelectItem value="2024">2024</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+
+          <div className="flex flex-wrap items-center gap-2 md:flex-row">
+            <Button variant="outline" size="icon">
+              <RefreshCcw />
+            </Button>
+            <Button
+              variant="outline"
+              onClick={handleFilterOnClick}
+              disabled={disabledInvalidFiltering}
+            >
+              {loading ? <Loader /> : "Filter"}
+            </Button>
+          </div>
+        </div>
 
         <Card className="w-full mx-auto">
           <CardHeader>

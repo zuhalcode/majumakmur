@@ -1,6 +1,8 @@
 "use client";
 
-import { useState } from "react";
+//#region Imports
+
+import { Dispatch, SetStateAction } from "react";
 
 import {
   Banknote,
@@ -24,6 +26,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+
 import {
   Form,
   FormControl,
@@ -39,6 +42,7 @@ import DashboardTable from "@/components/dashboard/dashboard-table";
 import { CapitalForm, capitalFormSchema } from "@/schemas/capital.schema";
 import { Capital, CapitalFilters } from "@/types/data/capital";
 import { CardInfo, ColumnConfig } from "@/types/ui/dashboard/capital";
+
 import {
   Select,
   SelectContent,
@@ -48,12 +52,15 @@ import {
   SelectValue,
 } from "../ui/select";
 
+//#endregion
+
 export default function CapitalManagementPage({
   data,
   cardInfos,
   columns,
-  refetch,
   fetchData,
+  setFilters,
+  filters,
   createData,
   deleteData,
   loading,
@@ -61,13 +68,17 @@ export default function CapitalManagementPage({
   data: Capital[];
   cardInfos: CardInfo[];
   columns: ColumnConfig[];
-  refetch: () => Promise<void>;
   createData: (capital: Capital) => Promise<void>;
   deleteData: (id: number) => Promise<void>;
   fetchData: (filters?: CapitalFilters) => Promise<void>;
+  setFilters: Dispatch<SetStateAction<CapitalFilters>>;
+  filters: CapitalFilters;
   loading: boolean;
 }) {
   const today = new Date().toISOString().split("T")[0]; // Hitung di luar komponen
+
+  const { year, month } = filters;
+  console.log(`UI : ${year} ${month}`);
 
   const form = useForm<CapitalForm>({
     resolver: zodResolver(capitalFormSchema),
@@ -92,7 +103,7 @@ export default function CapitalManagementPage({
 
       await createData(transactionData);
 
-      refetch();
+      fetchData();
     } catch (error) {
       console.error("Error inserting data:", error);
     }
@@ -106,32 +117,38 @@ export default function CapitalManagementPage({
 
     try {
       await deleteData(id);
-      refetch();
+      fetchData();
     } catch (error) {
       console.error("Error deleting data:", error);
     }
   };
 
-  const [year, setYear] = useState<string>("year");
-  const [month, setMonth] = useState<string>("month");
+  const handleYearOnValueChange = (value: string) => {
+    setFilters((prev) => ({
+      ...prev,
+      year: Number(value),
+    }));
+  };
 
-  const handleYearOnValueChange = (value: string) => setYear(value);
-  const handleMonthOnValueChange = (value: string) => setMonth(value);
+  const handleMonthOnValueChange = (value: string) => {
+    setFilters((prev) => ({
+      ...prev,
+      month: Number(value),
+    }));
+  };
 
-  const disabledInvalidFiltering =
-    year === "year" || month === "month" ? true : false;
+  const disabledInvalidFiltering = !filters.year || !filters.month;
 
   const handleFilterOnClick = async () => {
-    if (year === "year" || month === "month") return;
+    if (!filters.year || !filters.month) return;
 
-    await fetchData({ year, month });
+    await fetchData(filters);
   };
 
   const handleRefresh = async () => {
-    setYear("year");
-    setMonth("month");
+    setFilters({ year: 0, month: 0 });
 
-    await refetch();
+    await fetchData();
   };
 
   return (
@@ -192,13 +209,16 @@ export default function CapitalManagementPage({
         </div>
 
         <div className="flex gap-2">
-          <Select value={year} onValueChange={handleYearOnValueChange}>
+          <Select
+            value={year?.toString() ?? ""}
+            onValueChange={handleYearOnValueChange}
+          >
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Year" />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectItem value="year">Year</SelectItem>
+                <SelectItem value="0">Year</SelectItem>
                 <SelectItem value="2026">2026</SelectItem>
                 <SelectItem value="2025">2025</SelectItem>
                 <SelectItem value="2024">2024</SelectItem>
@@ -206,13 +226,16 @@ export default function CapitalManagementPage({
             </SelectContent>
           </Select>
 
-          <Select value={month} onValueChange={handleMonthOnValueChange}>
+          <Select
+            value={month?.toString() ?? ""}
+            onValueChange={handleMonthOnValueChange}
+          >
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Month" />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectItem value="month">Month</SelectItem>
+                <SelectItem value="0">Month</SelectItem>
                 <SelectItem value="1">January</SelectItem>
                 <SelectItem value="2">February</SelectItem>
                 <SelectItem value="3">March</SelectItem>

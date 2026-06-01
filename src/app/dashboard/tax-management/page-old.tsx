@@ -88,16 +88,6 @@ type CardInfo = {
 export default function Page() {
   const { dataByMonth } = useFetchCapital();
 
-  const form = useForm<Form>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      date: new Date().toISOString().split("T")[0],
-      capital: "",
-      purchase: "",
-      sell: "",
-    },
-  });
-
   const totalTax = dataByMonth.reduce(
     (total, item) => total + (item.totalPurchase * 0.5) / 100,
     0,

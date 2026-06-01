@@ -6,8 +6,15 @@ import { capitalSummary } from "@/utils/capital.util";
 import { CardInfo, ColumnConfig } from "@/types/ui/dashboard/capital";
 
 export default function Page() {
-  const { data, createData, refetch, loading, deleteData, fetchData } =
-    useCapitalAPI();
+  const {
+    data,
+    createData,
+    loading,
+    deleteData,
+    fetchData,
+    setFilters,
+    filters,
+  } = useCapitalAPI();
   const displayedData = data.slice(0, 50);
 
   const {
@@ -59,11 +66,12 @@ export default function Page() {
   return (
     <CapitalManagementPage
       data={displayedData}
+      filters={filters}
       cardInfos={cardInfos}
       columns={columns}
       createData={createData}
-      refetch={refetch}
       fetchData={fetchData}
+      setFilters={setFilters}
       deleteData={deleteData}
       loading={loading}
     />

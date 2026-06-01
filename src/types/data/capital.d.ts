@@ -9,8 +9,8 @@ interface Capital {
 }
 
 interface CapitalFilters {
-  year?: string;
-  month?: string;
+  year?: number;
+  month?: number;
 }
 
 export type { Capital, CapitalFilters };
