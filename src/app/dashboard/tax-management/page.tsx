@@ -1,11 +1,12 @@
 "use client";
-
+//#regionimports
 import { useCapitalAPI } from "@/hooks/use-capital-api";
 import TaxManagementPage from "@/components/pages/tax-page";
 import { CardInfo, ColumnConfig } from "@/types/ui/dashboard/capital";
 import { useMemo, useState } from "react";
 
 import { buildTaxReport, buildTaxSummary } from "@/utils/tax.util";
+//#endregion
 
 export default function Page() {
   const { data, loading } = useCapitalAPI();
@@ -38,19 +39,12 @@ export default function Page() {
     },
   ];
 
-  const columns: ColumnConfig[] = [
-    { header: "Date", accessor: "date", type: "date", format: "MM/YY" },
-    { header: "Purchase", accessor: "purchase", type: "number" },
-    { header: "Sell", accessor: "sell", type: "number" },
-    { header: "Gross", accessor: "gross", type: "number" },
-  ];
-
   return (
     <TaxManagementPage
-      data={reports}
       cardInfos={cardInfos}
-      columns={columns}
-      loading={loading}
+      year={year}
+      data={reports}
+      setYear={setYear}
     />
   );
 }

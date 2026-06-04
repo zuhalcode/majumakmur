@@ -36,42 +36,27 @@ import {
   SelectValue,
 } from "../ui/select";
 
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 
 //#endregion
 
 export default function TaxManagementPage({
   data,
   cardInfos,
-  columns,
-  loading,
+  year,
+  setYear,
 }: {
   data: TaxReport[];
   cardInfos: CardInfo[];
-  columns: ColumnConfig[];
-  loading: boolean;
+  year: number;
+  setYear: Dispatch<SetStateAction<number>>;
 }) {
-  // const handleYearOnValueChange = (value: string) => setYear(value);
-  // const disabledInvalidFiltering = year === 0 ? true : false;
+  const YEARS = [2026, 2025, 2024];
 
-  const handleFilterOnClick = async () => {
-    console.log(data);
-    // if (year === "year" ) return;
-    // await fetchData({ year });
-  };
+  const handleYearOnValueChange = (value: string) => setYear(Number(value));
 
-  // const handleRefresh = async () => {
-  //   setYear("year");
-  //   await refetch();
-  // };
-
-  const calculateZakat = (value: number): number => {
-    if (value <= 0) return 0;
-
-    const ppn = value * 0.01; // Menghitung ppn 1%
-    const bruto = value - ppn; // Total setelah ppn
-    const profit = (bruto * 9) / 100; // keuntungan 9%
-    return (profit * 2.5) / 100; // Zakat Bruto 3%
+  const handleRefreshOnClick = async () => {
+    setYear(0);
   };
 
   const CurrencyCell = ({ value }: { value: number }) => (
@@ -145,32 +130,31 @@ export default function TaxManagementPage({
 
         <div className="flex gap-2">
           <Select
-          // value={year.toString()}
-          // onValueChange={handleYearOnValueChange}
+            value={year.toString()}
+            onValueChange={handleYearOnValueChange}
           >
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Year" />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectItem value="year">Year</SelectItem>
-                <SelectItem value="2026">2026</SelectItem>
-                <SelectItem value="2025">2025</SelectItem>
-                <SelectItem value="2024">2024</SelectItem>
+                <SelectItem value="0">Year</SelectItem>
+                {YEARS.map((year) => (
+                  <SelectItem key={year} value={year.toString()}>
+                    {year}
+                  </SelectItem>
+                ))}
               </SelectGroup>
             </SelectContent>
           </Select>
 
           <div className="flex flex-wrap items-center gap-2 md:flex-row">
-            <Button variant="outline" size="icon">
-              <RefreshCcw />
-            </Button>
             <Button
               variant="outline"
-              onClick={handleFilterOnClick}
-              // disabled={disabledInvalidFiltering}
+              size="icon"
+              onClick={handleRefreshOnClick}
             >
-              {loading ? <Loader /> : "Filter"}
+              <RefreshCcw />
             </Button>
           </div>
         </div>
