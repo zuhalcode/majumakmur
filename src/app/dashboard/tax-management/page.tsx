@@ -3,16 +3,20 @@
 import { useCapitalAPI } from "@/hooks/use-capital-api";
 import TaxManagementPage from "@/components/pages/tax-page";
 import { CardInfo, ColumnConfig } from "@/types/ui/dashboard/capital";
+import { useMemo, useState } from "react";
+
+import { buildTaxReport, buildTaxSummary } from "@/utils/tax.util";
 
 export default function Page() {
-  const { dataByMonth, loading } = useCapitalAPI();
+  const { data, loading } = useCapitalAPI();
 
-  const monthLength = dataByMonth.length;
+  const [year, setYear] = useState<number>(0);
 
-  const totalPurchase = dataByMonth.reduce(
-    (total, item) => total + item.totalPurchase,
-    0,
-  );
+  const reports = useMemo(() => buildTaxReport(data, year), [data, year]);
+
+  const summary = useMemo(() => buildTaxSummary(reports), [reports]);
+
+  const { totalPurchase, totalTaxPPh, monthLength } = summary;
 
   const cardInfos: CardInfo[] = [
     {
@@ -24,8 +28,10 @@ export default function Page() {
     },
     {
       title: "Total Tax PPh",
-      value:
-        totalPurchase > 1000000000 ? (totalPurchase - 500000000) * 0.005 : 0,
+      value: totalTaxPPh,
+
+      // totalPurchase > 1000000000 ? (totalPurchase - 500000000) * 0.005 : 0,
+
       desc: `From last ${monthLength} Months`,
       percent: 0,
       active: false,
@@ -41,7 +47,7 @@ export default function Page() {
 
   return (
     <TaxManagementPage
-      data={dataByMonth}
+      data={reports}
       cardInfos={cardInfos}
       columns={columns}
       loading={loading}

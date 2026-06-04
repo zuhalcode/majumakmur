@@ -1,12 +1,4 @@
-import { Capital } from "@/types/data/capital";
-
-interface CapitalSummary {
-  totalPurchase: number;
-  totalSell: number;
-  totalCashFlow: number;
-  purchaseDays: number;
-  lastDateAfter1Year: string;
-}
+import { Capital, CapitalSummary } from "@/types/data/capital";
 
 export function capitalSummary(data: Capital[]): CapitalSummary {
   if (!data || data.length === 0) {
@@ -25,12 +17,12 @@ export function capitalSummary(data: Capital[]): CapitalSummary {
       totals.totalSell += item.sell;
       return totals;
     },
-    { totalPurchase: 0, totalSell: 0 }
+    { totalPurchase: 0, totalSell: 0 },
   );
 
   const totalCashFlow = data.reduce(
     (total, item) => total + (item.purchase - item.sell),
-    0
+    0,
   );
 
   const DAY = 1000 * 60 * 60 * 24;
@@ -41,8 +33,8 @@ export function capitalSummary(data: Capital[]): CapitalSummary {
 
   const lastDateAfter1Year = new Date(
     new Date(data[data.length - 1]?.date).setFullYear(
-      new Date(data[data.length - 1]?.date).getFullYear() + 1
-    )
+      new Date(data[data.length - 1]?.date).getFullYear() + 1,
+    ),
   ).toLocaleDateString("en-GB");
 
   return {

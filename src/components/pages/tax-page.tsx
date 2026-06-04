@@ -1,5 +1,6 @@
 "use client";
 
+//#regionimports
 import {
   Table,
   TableBody,
@@ -24,7 +25,7 @@ import { FormattedNumber, IntlProvider } from "react-intl";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-import { Tax } from "@/types/data/tax";
+import { TaxReport } from "@/types/data/tax";
 import { CardInfo, ColumnConfig } from "@/types/ui/dashboard/capital";
 import {
   Select,
@@ -37,21 +38,21 @@ import {
 
 import { useState } from "react";
 
+//#endregion
+
 export default function TaxManagementPage({
   data,
   cardInfos,
   columns,
   loading,
 }: {
-  data: Tax[];
+  data: TaxReport[];
   cardInfos: CardInfo[];
   columns: ColumnConfig[];
   loading: boolean;
 }) {
-  const [year, setYear] = useState<string>("year");
-
-  const handleYearOnValueChange = (value: string) => setYear(value);
-  const disabledInvalidFiltering = year === "year" ? true : false;
+  // const handleYearOnValueChange = (value: string) => setYear(value);
+  // const disabledInvalidFiltering = year === 0 ? true : false;
 
   const handleFilterOnClick = async () => {
     console.log(data);
@@ -72,6 +73,18 @@ export default function TaxManagementPage({
     const profit = (bruto * 9) / 100; // keuntungan 9%
     return (profit * 2.5) / 100; // Zakat Bruto 3%
   };
+
+  const CurrencyCell = ({ value }: { value: number }) => (
+    <TableCell>
+      <FormattedNumber
+        value={value}
+        style="currency"
+        currency="IDR"
+        minimumFractionDigits={0}
+        maximumFractionDigits={0}
+      />
+    </TableCell>
+  );
 
   return (
     <IntlProvider locale="id-ID">
@@ -131,7 +144,10 @@ export default function TaxManagementPage({
         </div>
 
         <div className="flex gap-2">
-          <Select value={year} onValueChange={handleYearOnValueChange}>
+          <Select
+          // value={year.toString()}
+          // onValueChange={handleYearOnValueChange}
+          >
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Year" />
             </SelectTrigger>
@@ -152,7 +168,7 @@ export default function TaxManagementPage({
             <Button
               variant="outline"
               onClick={handleFilterOnClick}
-              disabled={disabledInvalidFiltering}
+              // disabled={disabledInvalidFiltering}
             >
               {loading ? <Loader /> : "Filter"}
             </Button>
@@ -174,119 +190,23 @@ export default function TaxManagementPage({
                     <TableHead>Gross</TableHead>
                     <TableHead>PPh</TableHead>
                     <TableHead>PPn 1%</TableHead>
-                    <TableHead>Zakat 2.5%</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {data.map(({ date, totalPurchase, totalSell }, i) => {
-                    const pph = totalPurchase * 0.005;
-                    const ppn = totalPurchase * 0.01;
-                    const zakat = calculateZakat(totalPurchase);
-                    const grossProfit = totalPurchase - totalSell;
-
-                    const invest =
-                      grossProfit <= 0
-                        ? 0
-                        : (grossProfit - pph - ppn - zakat) * 0.01;
-
-                    const allPrice = [
-                      totalPurchase,
-                      totalSell,
-                      grossProfit,
-                      pph,
-                      ppn,
-                      zakat,
-                    ];
-
-                    return (
-                      <TableRow key={i}>
-                        <TableCell>{date.toString()}</TableCell>
-
-                        {allPrice.map((price, i) => (
-                          <TableCell key={i}>
-                            <FormattedNumber
-                              value={price}
-                              style="currency"
-                              currency="IDR"
-                              minimumFractionDigits={0}
-                              maximumFractionDigits={0}
-                            />
-                          </TableCell>
-                        ))}
-                      </TableRow>
-                    );
-                  })}
-                </TableBody>
-              </Table>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="w-full mx-auto">
-          <CardHeader>
-            <CardTitle>Tax Management Syariah</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Date</TableHead>
-                    <TableHead>Purchase</TableHead>
-                    <TableHead>Sell</TableHead>
-                    <TableHead>Gross</TableHead>
-                    <TableHead>PPn 1%</TableHead>
-                    <TableHead>Zakat 2.5%</TableHead>
-                    <TableHead>Netto</TableHead>
                     <TableHead>Invest 20%</TableHead>
+                    <TableHead>Zakat 2.5%</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {data.map(({ date, totalPurchase, totalSell }, i) => {
-                    const ppn = totalPurchase * 0.01;
-                    const grossProfit = totalPurchase - totalSell;
-
-                    const grossAfterPPN = grossProfit - ppn;
-
-                    const zakat =
-                      grossAfterPPN > 0 ? ((grossProfit - ppn) * 2.5) / 100 : 0;
-
-                    const netProfit =
-                      grossAfterPPN <= 0 ? 0 : grossProfit - ppn - zakat;
-
-                    const invest20 =
-                      grossAfterPPN <= 0
-                        ? 0
-                        : (grossProfit - ppn - zakat) * 0.2;
-
-                    const allPrice = [
-                      totalPurchase,
-                      totalSell,
-                      grossProfit,
-                      ppn,
-                      zakat,
-                      netProfit,
-                      invest20,
-                    ];
-
-                    return (
-                      <TableRow key={i}>
-                        <TableCell>{date.toString()}</TableCell>
-
-                        {allPrice.map((price, i) => (
-                          <TableCell key={i}>
-                            <FormattedNumber
-                              value={price}
-                              style="currency"
-                              currency="IDR"
-                              minimumFractionDigits={0}
-                              maximumFractionDigits={0}
-                            />
-                          </TableCell>
-                        ))}
-                      </TableRow>
-                    );
-                  })}
+                  {data.map((row) => (
+                    <TableRow key={row.date}>
+                      <TableCell>{row.date}</TableCell>
+                      <CurrencyCell value={row.totalPurchase} />
+                      <CurrencyCell value={row.totalSell} />
+                      <CurrencyCell value={row.grossProfit} />
+                      <CurrencyCell value={row.pph} />
+                      <CurrencyCell value={row.ppn} />
+                      <CurrencyCell value={row.invest20} />
+                      <CurrencyCell value={row.zakat} />
+                    </TableRow>
+                  ))}
                 </TableBody>
               </Table>
             </div>

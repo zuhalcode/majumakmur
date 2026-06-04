@@ -13,4 +13,12 @@ interface CapitalFilters {
   month?: number;
 }
 
-export type { Capital, CapitalFilters };
+interface CapitalSummary {
+  totalPurchase: number;
+  totalSell: number;
+  totalCashFlow: number;
+  purchaseDays: number;
+  lastDateAfter1Year: string;
+}
+
+export type { Capital, CapitalFilters, CapitalSummary };

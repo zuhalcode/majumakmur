@@ -5,14 +5,6 @@ import { useCallback, useEffect, useState } from "react";
 export function useCapitalAPI() {
   const [data, setData] = useState<Capital[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const [filters, setFilters] = useState<CapitalFilters>({
-    year: 0,
-    month: 0,
-  });
-
-  const resetFilters = () => {
-    setFilters({ year: 0, month: 0 });
-  };
 
   const fetchData = useCallback(async (filters?: CapitalFilters) => {
     try {
@@ -33,7 +25,7 @@ export function useCapitalAPI() {
       const { data } = await capitalService.findAll(payload);
 
       setData(data);
-      console.log(data);
+      // console.log(data);
     } catch (err: any) {
       console.log(err);
     } finally {
@@ -44,8 +36,6 @@ export function useCapitalAPI() {
   const createData = useCallback(async (capital: Capital) => {
     setLoading(true);
     await capitalService.create(capital);
-
-    resetFilters();
     setLoading(false);
   }, []);
 
@@ -55,60 +45,13 @@ export function useCapitalAPI() {
     setLoading(false);
   }, []);
 
-  const groupDataByMonth = (year: string = "2025") => {
-    const grouped: {
-      date: string;
-      data: Capital[];
-      totalPurchase: number;
-      totalSell: number;
-    }[] = [];
-
-    const filteredData =
-      year === "0000"
-        ? data
-        : data.filter(
-            (item) => new Date(item.date).getFullYear().toString() === year,
-          );
-
-    filteredData.forEach((item) => {
-      const date = new Date(item.date).toLocaleString("default", {
-        month: "2-digit",
-        year: "2-digit",
-      });
-
-      // Cek apakah bulan sudah ada dalam grouped
-      const existingGroup = grouped.find((group) => group.date === date);
-
-      if (existingGroup) {
-        existingGroup.data.push(item); // Tambahkan transaksi ke bulan yang ada
-        existingGroup.totalPurchase += item.purchase; // Tambahkan purchase ke total untuk bulan ini
-        existingGroup.totalSell += item.sell; // Tambahkan purchase ke total untuk bulan ini
-      } else {
-        // Jika belum ada, buat grup baru untuk bulan ini
-        grouped.push({
-          date,
-          data: [item],
-          totalPurchase: item.purchase,
-          totalSell: item.sell,
-        });
-      }
-    });
-
-    return grouped;
-  };
-
-  const groupedData = groupDataByMonth();
-
   useEffect(() => {
     fetchData();
   }, [fetchData]);
 
   return {
     data,
-    dataByMonth: groupedData,
     fetchData,
-    setFilters,
-    filters,
     createData,
     deleteData,
     loading,
