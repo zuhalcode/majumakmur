@@ -39,7 +39,7 @@ export const GOLD_RATES: GoldRate[] = [
 
 export const SECTIONS = [
   {
-    title: "Selling Price",
+    title: "Harga Jual",
     field: "sellingPrice",
   },
   {
@@ -47,15 +47,15 @@ export const SECTIONS = [
     field: "exchangePrice",
   },
   {
-    title: "Buyback Good",
+    title: "Buyback Bagus",
     field: "buybackGood",
   },
   {
-    title: "Buyback Repair",
+    title: "Buyback Servis",
     field: "buybackRepair",
   },
   {
-    title: "Buyback Scrap",
+    title: "Buyback Lebur",
     field: "buybackScrap",
   },
 ] as const;
