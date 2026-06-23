@@ -32,24 +32,26 @@ const sidebarMenu = [
   {
     title: "Products",
     url: "/dashboard/products",
-  },
-  {
-    title: "Gold",
-    url: "/dashboard/gold-analytics",
     items: [
       {
-        title: "Gold Analytics",
-        url: "/dashboard/gold-analytics",
+        title: "Transactions",
+        url: "/dashboard/asset-transaction",
         isActive: true,
       },
       {
-        title: "Gold Types",
-        url: "/dashboard/gold-types",
+        title: "Images",
+        url: "/dashboard/asset-transaction-images",
         isActive: true,
       },
+    ],
+  },
+  {
+    title: "Assets",
+    url: "/dashboard/products",
+    items: [
       {
-        title: "Buyback Analytics",
-        url: "/dashboard/buyback-analytics",
+        title: "Transactions",
+        url: "/dashboard/asset-transaction",
         isActive: true,
       },
     ],

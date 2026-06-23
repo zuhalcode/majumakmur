@@ -1,4 +1,5 @@
 "use client";
+
 //#region-imports
 
 import { Banknote } from "lucide-react";
