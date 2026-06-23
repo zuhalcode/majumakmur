@@ -8,4 +8,17 @@ interface Capital {
   updated_at?: Date;
 }
 
-export type { Capital };
+interface CapitalFilters {
+  year?: number;
+  month?: number;
+}
+
+interface CapitalSummary {
+  totalPurchase: number;
+  totalSell: number;
+  totalCashFlow: number;
+  purchaseDays: number;
+  lastDateAfter1Year: string;
+}
+
+export type { Capital, CapitalFilters, CapitalSummary };

@@ -21,6 +21,7 @@ interface ColumnConfig {
   header: string;
   accessor: string;
   type: "date" | "number" | "string";
+  format?: "MM/YY" | "DD/MM/YYYY";
 }
 
 export type { CardInfo, CashFlow, BuyAndSell, AreaConfig, ColumnConfig };

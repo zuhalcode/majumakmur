@@ -1,13 +1,24 @@
 "use client";
 
+//#region Imports
+
 import { useCapitalAPI } from "@/hooks/use-capital-api";
 import CapitalManagementPage from "@/components/pages/capital-page";
 import { capitalSummary } from "@/utils/capital.util";
 import { CardInfo, ColumnConfig } from "@/types/ui/dashboard/capital";
+import { useMemo, useState } from "react";
+import { DEFAULT_CAPITAL_FILTERS } from "@/constants/capital.constant";
+
+//#endregion
 
 export default function Page() {
-  const { data, createData, refetch, loading, deleteData } = useCapitalAPI();
-  const displayedData = data.slice(0, 10);
+  const { data, loading, createData, deleteData, fetchData } = useCapitalAPI();
+
+  const [filters, setFilters] = useState(DEFAULT_CAPITAL_FILTERS);
+
+  const displayedData = useMemo(() => data.slice(0, 50), [data]);
+
+  const summary = useMemo(() => capitalSummary(data), [data]);
 
   const {
     totalPurchase,
@@ -15,38 +26,41 @@ export default function Page() {
     totalCashFlow,
     purchaseDays,
     lastDateAfter1Year,
-  } = capitalSummary(data);
+  } = summary;
 
-  const cardInfos: CardInfo[] = [
-    {
-      title: "Cash Flow",
-      value: totalCashFlow,
-      desc: `From last ${purchaseDays} days`,
-      percent: 0,
-      active: false,
-    },
-    {
-      title: "Total Customer Purchase",
-      value: totalPurchase,
-      desc: `From last ${purchaseDays} days`,
-      percent: 0,
-      active: false,
-    },
-    {
-      title: "Total Customer Sell",
-      value: totalSell,
-      desc: `From last ${purchaseDays} days`,
-      percent: 0,
-      active: false,
-    },
-    {
-      title: "Cash Needs",
-      value: totalPurchase * 0.9,
-      desc: `Until ${lastDateAfter1Year} `,
-      percent: 0,
-      active: false,
-    },
-  ];
+  const cardInfos = useMemo<CardInfo[]>(
+    () => [
+      {
+        title: "Cash Flow",
+        value: totalCashFlow,
+        desc: `From last ${purchaseDays} days`,
+        percent: 0,
+        active: false,
+      },
+      {
+        title: "Total Customer Purchase",
+        value: totalPurchase,
+        desc: `From last ${purchaseDays} days`,
+        percent: 0,
+        active: false,
+      },
+      {
+        title: "Total Customer Sell",
+        value: totalSell,
+        desc: `From last ${purchaseDays} days`,
+        percent: 0,
+        active: false,
+      },
+      {
+        title: "Cash Needs",
+        value: totalPurchase * 0.9,
+        desc: `Until ${lastDateAfter1Year} `,
+        percent: 0,
+        active: false,
+      },
+    ],
+    [totalCashFlow, totalPurchase, totalSell, purchaseDays, lastDateAfter1Year],
+  );
 
   const columns: ColumnConfig[] = [
     { header: "Date", accessor: "date", type: "date" },
@@ -60,10 +74,12 @@ export default function Page() {
       data={displayedData}
       cardInfos={cardInfos}
       columns={columns}
-      createData={createData}
-      refetch={refetch}
-      deleteData={deleteData}
       loading={loading}
+      filters={filters}
+      setFilters={setFilters}
+      createData={createData}
+      fetchData={fetchData}
+      deleteData={deleteData}
     />
   );
 }

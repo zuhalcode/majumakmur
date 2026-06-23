@@ -1,6 +1,18 @@
 "use client";
 
-import { Banknote, Loader, MoveDown, MoveUp, Plus } from "lucide-react";
+//#region Imports
+
+import { Dispatch, SetStateAction } from "react";
+
+import {
+  Banknote,
+  Loader,
+  MoveDown,
+  MoveUp,
+  Plus,
+  RefreshCcw,
+} from "lucide-react";
+
 import {
   Card,
   CardContent,
@@ -8,11 +20,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+
 import { FormattedNumber, IntlProvider } from "react-intl";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+
 import {
   Form,
   FormControl,
@@ -26,32 +40,55 @@ import { cn } from "@/lib/utils";
 
 import DashboardTable from "@/components/dashboard/dashboard-table";
 import { CapitalForm, capitalFormSchema } from "@/schemas/capital.schema";
-import { Capital } from "@/types/data/capital";
+import { Capital, CapitalFilters } from "@/types/data/capital";
 import { CardInfo, ColumnConfig } from "@/types/ui/dashboard/capital";
+
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import {
+  DEFAULT_CAPITAL_FILTERS,
+  MONTHS,
+  TODAY,
+  YEARS,
+} from "@/constants/capital.constant";
+
+//#endregion
 
 export default function CapitalManagementPage({
   data,
   cardInfos,
   columns,
-  refetch,
+  loading,
+  filters,
+  setFilters,
   createData,
   deleteData,
-  loading,
+  fetchData,
 }: {
   data: Capital[];
   cardInfos: CardInfo[];
   columns: ColumnConfig[];
-  refetch: () => Promise<void>;
+  loading: boolean;
+  filters: CapitalFilters;
+  setFilters: Dispatch<SetStateAction<CapitalFilters>>;
   createData: (capital: Capital) => Promise<void>;
   deleteData: (id: number) => Promise<void>;
-  loading: boolean;
+  fetchData: (filters: CapitalFilters) => Promise<void>;
 }) {
-  const today = new Date().toISOString().split("T")[0]; // Hitung di luar komponen
+  const { month, year } = filters;
+
+  const resetFilters = () => setFilters(DEFAULT_CAPITAL_FILTERS);
 
   const form = useForm<CapitalForm>({
     resolver: zodResolver(capitalFormSchema),
     defaultValues: {
-      date: today,
+      date: TODAY,
       capital: "",
       purchase: "",
       sell: "",
@@ -70,10 +107,11 @@ export default function CapitalManagementPage({
       };
 
       await createData(transactionData);
-
-      refetch();
     } catch (error) {
       console.error("Error inserting data:", error);
+    } finally {
+      resetFilters();
+      await fetchData(DEFAULT_CAPITAL_FILTERS);
     }
   });
 
@@ -85,10 +123,30 @@ export default function CapitalManagementPage({
 
     try {
       await deleteData(id);
-      refetch();
     } catch (error) {
       console.error("Error deleting data:", error);
+    } finally {
+      resetFilters();
+      await fetchData(DEFAULT_CAPITAL_FILTERS);
     }
+  };
+
+  const handleFilterChange = (key: keyof CapitalFilters) => (value: string) => {
+    setFilters((prev) => ({ ...prev, [key]: Number(value) }));
+  };
+
+  const disabledInvalidFiltering =
+    year === DEFAULT_CAPITAL_FILTERS.year ||
+    month === DEFAULT_CAPITAL_FILTERS.month;
+
+  const handleFilterOnClick = async () => {
+    if (year === 0 || month === 0) return;
+    await fetchData(filters);
+  };
+
+  const handleRefresh = async () => {
+    resetFilters();
+    await fetchData(DEFAULT_CAPITAL_FILTERS);
   };
 
   return (
@@ -148,18 +206,62 @@ export default function CapitalManagementPage({
           ))}
         </div>
 
-        {/* <div className="flex gap-5 flex-col">
-          <CustomAreaChart
-            data={cashFlows}
-            chartConfig={cashFlowChartConfig}
-            areas={cashFlowAreas}
-          />
-          <CustomAreaChart
-            data={buyAndSells}
-            chartConfig={buyAndSellChartConfig}
-            areas={buyAndSellAreas}
-          />
-        </div> */}
+        <div className="flex gap-2">
+          <Select
+            value={year?.toString()}
+            onValueChange={handleFilterChange("year")}
+          >
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Year" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectItem value="0">Year</SelectItem>
+                {YEARS.map((year) => (
+                  <SelectItem key={year} value={year.toString()}>
+                    {year}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+
+          <Select
+            value={month?.toString()}
+            onValueChange={handleFilterChange("month")}
+          >
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Month" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectItem value="0">Month</SelectItem>
+                {MONTHS.map(({ value, label }) => (
+                  <SelectItem
+                    className="capitalize"
+                    key={value}
+                    value={value.toString()}
+                  >
+                    {label}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+
+          <div className="flex flex-wrap items-center gap-2 md:flex-row">
+            <Button variant="outline" size="icon" onClick={handleRefresh}>
+              <RefreshCcw />
+            </Button>
+            <Button
+              variant="outline"
+              onClick={handleFilterOnClick}
+              disabled={disabledInvalidFiltering}
+            >
+              {loading ? <Loader className="animate-spin" /> : "Filter"}
+            </Button>
+          </div>
+        </div>
 
         <Card className="w-full mx-auto">
           <CardHeader>

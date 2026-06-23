@@ -1,17 +1,31 @@
 import { capitalService } from "@/services/capital.service";
-import { Capital } from "@/types/data/capital";
-
+import { Capital, CapitalFilters } from "@/types/data/capital";
 import { useCallback, useEffect, useState } from "react";
 
 export function useCapitalAPI() {
   const [data, setData] = useState<Capital[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const fetchData = useCallback(async () => {
+  const fetchData = useCallback(async (filters?: CapitalFilters) => {
     try {
       setLoading(true);
-      const { data } = await capitalService.findAll();
+
+      const payload: CapitalFilters = {};
+
+      if (filters?.year && filters?.year !== 0) {
+        payload.year = filters.year;
+      }
+
+      if (filters?.month && filters?.month !== 0) {
+        payload.month = filters.month;
+      }
+
+      console.log(`payload : ${payload.year} | ${payload.month}`);
+
+      const { data } = await capitalService.findAll(payload);
+
       setData(data);
+      // console.log(data);
     } catch (err: any) {
       console.log(err);
     } finally {
@@ -37,7 +51,7 @@ export function useCapitalAPI() {
 
   return {
     data,
-    refetch: fetchData,
+    fetchData,
     createData,
     deleteData,
     loading,
