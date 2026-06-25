@@ -13,97 +13,25 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { createClient } from "@/app/utils/supabase/client";
-
-const sidebarMenu = [
-  {
-    title: "Dashboard",
-    url: "/dashboard",
-  },
-  {
-    title: "Codes",
-    url: "/dashboard/codes",
-  },
-  {
-    title: "Categories",
-    url: "/dashboard/categories",
-  },
-  {
-    title: "Products",
-    url: "/dashboard/products",
-    items: [
-      {
-        title: "Transactions",
-        url: "/dashboard/asset-transaction",
-        isActive: true,
-      },
-      {
-        title: "Images",
-        url: "/dashboard/asset-transaction-images",
-        isActive: true,
-      },
-    ],
-  },
-  {
-    title: "Assets",
-    url: "/dashboard/products",
-    items: [
-      {
-        title: "Transactions",
-        url: "/dashboard/asset-transaction",
-        isActive: true,
-      },
-    ],
-  },
-  {
-    title: "Transactions",
-    url: "#",
-    items: [
-      {
-        title: "Capital Management",
-        url: "/dashboard/capital-management",
-        isActive: true,
-      },
-      {
-        title: "Sell Transaction",
-        url: "/dashboard/sell-transaction",
-        isActive: true,
-      },
-      {
-        title: "Tax Management",
-        url: "/dashboard/tax-management",
-        isActive: true,
-      },
-    ],
-  },
-
-  {
-    title: "Customers",
-    url: "#",
-    items: [
-      {
-        title: "List Customer",
-        url: "#",
-        isActive: true,
-      },
-      {
-        title: "Add Customer",
-        url: "#",
-      },
-    ],
-  },
-];
+import { SIDEBAR_MENU } from "@/constants/components.constant";
 
 export default function AppSidebar() {
   const pathname = usePathname();
-
+  const router = useRouter();
   const supabase = createClient();
+
+  const isDashboard = pathname.startsWith("/dashboard");
+  const isActive = (url: string) =>
+    pathname === url || pathname.startsWith(url + "/");
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    window.location.href = "/sign-in";
+    router.replace("/sign-in");
   };
+
+  if (!isDashboard) return null;
 
   return (
     // check if url is dashboard
@@ -130,20 +58,20 @@ export default function AppSidebar() {
         <SidebarContent className="sm-scrollbar">
           <SidebarGroup>
             <SidebarMenu>
-              {sidebarMenu.map((item) => (
-                <SidebarMenuItem key={item.title}>
+              {SIDEBAR_MENU.map((menu) => (
+                <SidebarMenuItem key={menu.title}>
                   <SidebarMenuButton asChild>
-                    <a href={item.url} className="font-medium">
-                      {item.title}
+                    <a href={menu.url} className="font-medium">
+                      {menu.title}
                     </a>
                   </SidebarMenuButton>
-                  {item.items?.length ? (
+                  {menu.items?.length ? (
                     <SidebarMenuSub>
-                      {item.items.map((item) => (
+                      {menu.items.map((item) => (
                         <SidebarMenuSubItem key={item.title}>
                           <SidebarMenuSubButton
                             asChild
-                            isActive={pathname === item.url}
+                            isActive={isActive(item.url)}
                           >
                             <a href={item.url}>{item.title}</a>
                           </SidebarMenuSubButton>
