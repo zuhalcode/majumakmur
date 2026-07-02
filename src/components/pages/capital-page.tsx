@@ -41,7 +41,7 @@ import { cn } from "@/lib/utils";
 import DashboardTable from "@/components/dashboard/dashboard-table";
 import { CapitalForm, capitalFormSchema } from "@/schemas/capital.schema";
 import { Capital, CapitalFilters } from "@/types/data/capital";
-import { CardInfo, ColumnConfig } from "@/types/ui/dashboard/capital";
+import { CapitalCardInfo, ColumnConfig } from "@/types/ui/dashboard/capital";
 
 import {
   Select,
@@ -72,7 +72,7 @@ export default function CapitalManagementPage({
   fetchData,
 }: {
   data: Capital[];
-  cardInfos: CardInfo[];
+  cardInfos: CapitalCardInfo[];
   columns: ColumnConfig[];
   loading: boolean;
   filters: CapitalFilters;

@@ -1,4 +1,4 @@
-interface CardInfo {
+interface CapitalCardInfo {
   title: string;
   value: number;
   desc?: string;
@@ -24,4 +24,4 @@ interface ColumnConfig {
   format?: "MM/YY" | "DD/MM/YYYY";
 }
 
-export type { CardInfo, CashFlow, BuyAndSell, AreaConfig, ColumnConfig };
+export type { CapitalCardInfo, CashFlow, BuyAndSell, AreaConfig, ColumnConfig };
