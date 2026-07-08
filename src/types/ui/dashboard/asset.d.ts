@@ -24,6 +24,7 @@ interface AssetPageProps {
 
   fetchAssetTransaction: () => Promise<void>;
   createAssetTransaction: (assetTransaction: AssetTransaction) => Promise<void>;
+  deleteAssetTransaction: (id: string) => Promise<void>;
 }
 
 export type { AssetCardInfo, AssetPageProps };

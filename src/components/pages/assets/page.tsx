@@ -36,14 +36,15 @@ export default function AssetsPage(props: AssetPageProps) {
     cardInfos,
     columns,
     loading,
+
     fetchAsset,
     createAsset,
     deleteAsset,
+
     fetchAssetTransaction,
     createAssetTransaction,
+    deleteAssetTransaction,
   } = props;
-
-  console.log("cardinfos : ", cardInfos);
 
   const handleCreateAsset = async (asset: Asset) => {
     await createAsset(asset);
@@ -59,6 +60,11 @@ export default function AssetsPage(props: AssetPageProps) {
     assetTransaction: AssetTransaction,
   ) => {
     await createAssetTransaction(assetTransaction);
+    await fetchAssetTransaction();
+  };
+
+  const handleDeleteAssetTransaction = async (id: string) => {
+    await deleteAssetTransaction(id);
     await fetchAssetTransaction();
   };
 
@@ -116,6 +122,7 @@ export default function AssetsPage(props: AssetPageProps) {
           assets={assets}
           assetTransactions={assetTransactions}
           handleCreateAssetTransaction={handleCreateAssetTransaction}
+          handleDeleteAssetTransaction={handleDeleteAssetTransaction}
         />
         {/* Asset Transactions */}
       </div>

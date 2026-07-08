@@ -14,12 +14,12 @@ export const assetTransactionService = {
   },
 
   async update(id: number, updatedData: Partial<Asset>) {
-    const res = await api.put(`/assets/${id}`, updatedData);
+    const res = await api.put(`/asset-transactions/${id}`, updatedData);
     return res.data;
   },
 
   async softDelete(id: string) {
-    const res = await api.delete(`/assets/${id}`);
+    const res = await api.delete(`/asset-transactions/${id}`);
     return res.data;
   },
 };

@@ -28,11 +28,10 @@ export default function Page() {
     data: assetTransactionData,
     fetchData: fetchAssetTransaction,
     createData: createAssetTransaction,
+    deleteData: deleteAssetTransaction,
   } = useAssetTransactionAPI();
 
   const { data: assetBalances } = useAssetBalanceAPI();
-
-  console.log("asset Balance : ", assetBalances);
 
   const columns: ColumnConfig[] = [
     { header: "Date", accessor: "date", type: "date" },
@@ -65,8 +64,9 @@ export default function Page() {
       fetchAsset={fetchAsset}
       createAsset={createAsset}
       deleteAsset={deleteAsset}
-      fetchAssetTransaction={fetchAsset}
+      fetchAssetTransaction={fetchAssetTransaction}
       createAssetTransaction={createAssetTransaction}
+      deleteAssetTransaction={deleteAssetTransaction}
     />
   );
 }

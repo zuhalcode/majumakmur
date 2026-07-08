@@ -7,4 +7,3 @@ interface AssetBalance {
 }
 
 export type { AssetBalance };
-s;

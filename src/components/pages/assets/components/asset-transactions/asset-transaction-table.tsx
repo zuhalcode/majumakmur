@@ -1,3 +1,4 @@
+import ActionCell from "@/components/dashboard/action-cell";
 import {
   Table,
   TableBody,
@@ -8,11 +9,14 @@ import {
 } from "@/components/ui/table";
 import { AssetTransaction } from "@/types/data/asset-transaction";
 import React from "react";
+import AssetTransactionDeleteDialog from "./asset-transaction-delete-dialog";
 
 export default function AssetTransactionTable({
   transactions,
+  handleDeleteAssetTransaction,
 }: {
   transactions: AssetTransaction[];
+  handleDeleteAssetTransaction: (id: string) => Promise<void>;
 }) {
   return (
     <Table>
@@ -45,6 +49,12 @@ export default function AssetTransactionTable({
             </TableCell>
 
             <TableCell>{data.description ?? "-"}</TableCell>
+            <TableCell>
+              <AssetTransactionDeleteDialog
+                id={data.id}
+                onDelete={handleDeleteAssetTransaction}
+              />
+            </TableCell>
           </TableRow>
         ))}
       </TableBody>

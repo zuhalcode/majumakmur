@@ -1,5 +1,5 @@
 interface AssetTransaction {
-  id?: string;
+  id: string;
   source_asset_id: string;
   source_quantity: number;
   source_asset?: { name: string; unit: string };

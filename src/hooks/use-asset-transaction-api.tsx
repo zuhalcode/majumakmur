@@ -30,7 +30,7 @@ export function useAssetTransactionAPI() {
 
   const deleteData = useCallback(async (id: string) => {
     setLoading(true);
-    await assetService.softDelete(id);
+    await assetTransactionService.softDelete(id);
     setLoading(false);
   }, []);
 

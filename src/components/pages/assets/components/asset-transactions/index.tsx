@@ -9,6 +9,7 @@ export default function AssetTransactions({
   assets,
   assetTransactions,
   handleCreateAssetTransaction,
+  handleDeleteAssetTransaction,
 }: {
   assets?: Asset[];
   assetTransactions?: AssetTransaction[];
@@ -16,32 +17,9 @@ export default function AssetTransactions({
   handleCreateAssetTransaction: (
     assetTransaction: AssetTransaction,
   ) => Promise<void>;
+
+  handleDeleteAssetTransaction: (id: string) => Promise<void>;
 }) {
-  const columns = [
-    {
-      header: "Source Asset",
-      accessor: "source_asset",
-      type: "string",
-    },
-    {
-      header: "Qty",
-      accessor: "source_quantity",
-      type: "number",
-    },
-    {
-      header: "Destination Asset",
-      accessor: "destination_asset",
-      type: "string",
-    },
-    {
-      header: "Qty",
-      accessor: "destination_quantity",
-      type: "number",
-    },
-  ];
-
-  console.log(assetTransactions);
-
   return (
     <Card className="w-full mx-auto">
       <CardHeader className="flex-row flex justify-between items-center">
@@ -52,7 +30,10 @@ export default function AssetTransactions({
         />
       </CardHeader>
       <CardContent>
-        <AssetTransactionTable transactions={assetTransactions ?? []} />
+        <AssetTransactionTable
+          transactions={assetTransactions ?? []}
+          handleDeleteAssetTransaction={handleDeleteAssetTransaction}
+        />
       </CardContent>
     </Card>
   );
