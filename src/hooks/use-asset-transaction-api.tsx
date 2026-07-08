@@ -1,17 +1,18 @@
+import { assetTransactionService } from "@/services/asset-transaction.service";
 import { assetService } from "@/services/asset.service";
-import { capitalService } from "@/services/capital.service";
 import { Asset } from "@/types/data/asset";
+import { AssetTransaction } from "@/types/data/asset-transaction";
 import { useCallback, useEffect, useState } from "react";
 
-export function useAssetAPI() {
-  const [data, setData] = useState<Asset[]>([]);
+export function useAssetTransactionAPI() {
+  const [data, setData] = useState<AssetTransaction[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
   const fetchData = useCallback(async () => {
     try {
       setLoading(true);
 
-      const { data } = await assetService.findAll();
+      const { data } = await assetTransactionService.findAll();
 
       setData(data);
     } catch (err: any) {
@@ -21,9 +22,9 @@ export function useAssetAPI() {
     }
   }, []);
 
-  const createData = useCallback(async (asset: Asset) => {
+  const createData = useCallback(async (assetTransaction: AssetTransaction) => {
     setLoading(true);
-    await assetService.create(asset);
+    await assetTransactionService.create(assetTransaction);
     setLoading(false);
   }, []);
 

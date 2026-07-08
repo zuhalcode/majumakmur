@@ -1,4 +1,5 @@
 interface Asset {
+  id?: string;
   name: string;
   description?: string;
   unit: string;

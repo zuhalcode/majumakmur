@@ -10,13 +10,29 @@ import { DEFAULT_CAPITAL_FILTERS } from "@/constants/capital.constant";
 import { useAssetAPI } from "@/hooks/use-asset-api";
 import { assetSummary } from "@/utils/asset.util";
 import AssetsPage from "@/components/pages/assets/page";
+import { useAssetTransactionAPI } from "@/hooks/use-asset-transaction-api";
+import { useAssetBalanceAPI } from "@/hooks/use-asset-balance-api";
 
 //#endregion
 
 export default function Page() {
-  const { data, loading, fetchData, createData } = useAssetAPI();
+  const {
+    data: assetData,
+    loading,
+    fetchData: fetchAsset,
+    createData: createAsset,
+    deleteData: deleteAsset,
+  } = useAssetAPI();
 
-  const displayedData = useMemo(() => data.slice(0, 50), [data]);
+  const {
+    data: assetTransactionData,
+    fetchData: fetchAssetTransaction,
+    createData: createAssetTransaction,
+  } = useAssetTransactionAPI();
+
+  const { data: assetBalances } = useAssetBalanceAPI();
+
+  console.log("asset Balance : ", assetBalances);
 
   const columns: ColumnConfig[] = [
     { header: "Date", accessor: "date", type: "date" },
@@ -27,25 +43,30 @@ export default function Page() {
 
   const cardInfos = useMemo(
     () =>
-      displayedData.map(({ name, description, unit }) => ({
-        title: name,
-        value: 0,
-        desc: description,
+      assetBalances.map(({ id, name, description, unit, value }) => ({
+        id,
+        name,
+        description,
+        value,
+        unit,
+        active: true,
         percent: 0,
-        active: false,
-        unit: unit,
       })),
-    [displayedData],
+    [assetBalances],
   );
 
   return (
     <AssetsPage
-      data={displayedData}
+      assets={assetData}
+      assetTransactions={assetTransactionData}
       cardInfos={cardInfos}
       columns={columns}
       loading={loading}
-      fetchData={fetchData}
-      createData={createData}
+      fetchAsset={fetchAsset}
+      createAsset={createAsset}
+      deleteAsset={deleteAsset}
+      fetchAssetTransaction={fetchAsset}
+      createAssetTransaction={createAssetTransaction}
     />
   );
 }

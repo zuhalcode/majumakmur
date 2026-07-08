@@ -1,14 +1,15 @@
 import api from "@/lib/axios";
 import { Asset } from "@/types/data/asset";
+import { AssetTransaction } from "@/types/data/asset-transaction";
 
-export const assetService = {
-  async findAll(): Promise<{ data: Asset[] }> {
-    const res = await api.get("/assets");
+export const assetTransactionService = {
+  async findAll(): Promise<{ data: AssetTransaction[] }> {
+    const res = await api.get("/asset-transactions");
     return res.data;
   },
 
-  async create(data: Asset): Promise<Asset> {
-    const res = await api.post("/assets", data);
+  async create(data: AssetTransaction): Promise<AssetTransaction> {
+    const res = await api.post("/asset-transactions", data);
     return res.data;
   },
 
