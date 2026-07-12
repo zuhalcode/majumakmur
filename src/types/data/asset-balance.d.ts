@@ -2,7 +2,7 @@ interface AssetBalance {
   id: string;
   name: string;
   description?: string;
-  value: numbers;
+  value: number;
   unit: string;
 }
 

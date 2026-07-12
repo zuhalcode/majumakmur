@@ -2,13 +2,9 @@
 
 //#region Imports
 
-import { useCapitalAPI } from "@/hooks/use-capital-api";
-import { capitalSummary } from "@/utils/capital.util";
 import { ColumnConfig } from "@/types/ui/dashboard/capital";
 import { useMemo, useState } from "react";
-import { DEFAULT_CAPITAL_FILTERS } from "@/constants/capital.constant";
 import { useAssetAPI } from "@/hooks/use-asset-api";
-import { assetSummary } from "@/utils/asset.util";
 import AssetsPage from "@/components/pages/assets/page";
 import { useAssetTransactionAPI } from "@/hooks/use-asset-transaction-api";
 import { useAssetBalanceAPI } from "@/hooks/use-asset-balance-api";
@@ -31,7 +27,8 @@ export default function Page() {
     deleteData: deleteAssetTransaction,
   } = useAssetTransactionAPI();
 
-  const { data: assetBalances } = useAssetBalanceAPI();
+  const { data: assetBalances, fetchData: fetchAssetBalance } =
+    useAssetBalanceAPI();
 
   const columns: ColumnConfig[] = [
     { header: "Date", accessor: "date", type: "date" },
@@ -61,6 +58,7 @@ export default function Page() {
       cardInfos={cardInfos}
       columns={columns}
       loading={loading}
+      fetchAssetBalance={fetchAssetBalance}
       fetchAsset={fetchAsset}
       createAsset={createAsset}
       deleteAsset={deleteAsset}

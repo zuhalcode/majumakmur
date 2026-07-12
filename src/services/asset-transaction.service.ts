@@ -2,11 +2,12 @@ import api from "@/lib/axios";
 import { Asset } from "@/types/data/asset";
 import {
   AssetTransaction,
+  AssetTransactionResponse,
   CreateAssetTransactionDTO,
-} from "@/types/dto/asset-transaction/asset-transaction";
+} from "@/types/dto/asset-transaction/asset-transaction.dto";
 
 export const assetTransactionService = {
-  async findAll(): Promise<{ data: AssetTransaction[] }> {
+  async findAll(): Promise<{ data: AssetTransactionResponse[] }> {
     const res = await api.get("/asset-transactions");
     return res.data;
   },

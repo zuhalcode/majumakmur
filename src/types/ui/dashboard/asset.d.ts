@@ -21,6 +21,8 @@ interface AssetPageProps {
   columns: ColumnConfig[];
   loading: boolean;
 
+  fetchAssetBalance: () => Promise<void>;
+
   fetchAsset: () => Promise<void>;
   createAsset: (asset: Asset) => Promise<void>;
   deleteAsset: (id: string) => Promise<void>;

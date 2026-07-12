@@ -1,14 +1,16 @@
+//#region-imports
 import { assetTransactionService } from "@/services/asset-transaction.service";
-import { assetService } from "@/services/asset.service";
-import { Asset } from "@/types/data/asset";
 import {
-  AssetTransaction,
+  AssetTransactionResponse,
   CreateAssetTransactionDTO,
-} from "@/types/dto/asset-transaction/asset-transaction";
+} from "@/types/dto/asset-transaction/asset-transaction.dto";
+
+//#endregion
+
 import { useCallback, useEffect, useState } from "react";
 
 export function useAssetTransactionAPI() {
-  const [data, setData] = useState<AssetTransaction[]>([]);
+  const [data, setData] = useState<AssetTransactionResponse[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
   const fetchData = useCallback(async () => {

@@ -1,11 +1,16 @@
+//#region-imports
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   AssetTransaction,
   CreateAssetTransactionDTO,
-} from "@/types/dto/asset-transaction/asset-transaction";
+} from "@/types/dto/asset-transaction/asset-transaction.dto";
+
 import AssetTransactionCreateDialog from "./asset-transaction-create-dialog";
 import { Asset } from "@/types/data/asset";
 import AssetTransactionTable from "./asset-transaction-table";
+
+//#endregion
 
 export default function AssetTransactions({
   assets,

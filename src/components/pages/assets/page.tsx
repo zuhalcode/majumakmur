@@ -28,7 +28,7 @@ import AssetTransactions from "./components/asset-transactions";
 import {
   AssetTransaction,
   CreateAssetTransactionDTO,
-} from "@/types/dto/asset-transaction/asset-transaction";
+} from "@/types/dto/asset-transaction/asset-transaction.dto";
 
 //#endregion
 
@@ -39,6 +39,8 @@ export default function AssetsPage(props: AssetPageProps) {
     cardInfos,
     columns,
     loading,
+
+    fetchAssetBalance,
 
     fetchAsset,
     createAsset,
@@ -52,11 +54,13 @@ export default function AssetsPage(props: AssetPageProps) {
   const handleCreateAsset = async (asset: Asset) => {
     await createAsset(asset);
     await fetchAsset();
+    await fetchAssetBalance();
   };
 
   const handleDeleteAsset = async (id: string) => {
     await deleteAsset(id);
     await fetchAsset();
+    await fetchAssetBalance();
   };
 
   const handleCreateAssetTransaction = async (
@@ -64,11 +68,13 @@ export default function AssetsPage(props: AssetPageProps) {
   ) => {
     await createAssetTransaction(assetTransaction);
     await fetchAssetTransaction();
+    await fetchAssetBalance();
   };
 
   const handleDeleteAssetTransaction = async (id: string) => {
     await deleteAssetTransaction(id);
     await fetchAssetTransaction();
+    await fetchAssetBalance();
   };
 
   return (
@@ -124,8 +130,8 @@ export default function AssetsPage(props: AssetPageProps) {
         <AssetTransactions
           assets={assets}
           assetTransactions={assetTransactions}
-          handleCreateAssetTransaction={handleCreateAssetTransaction}
           handleDeleteAssetTransaction={handleDeleteAssetTransaction}
+          handleCreateAssetTransaction={handleCreateAssetTransaction}
         />
         {/* Asset Transactions */}
       </div>
