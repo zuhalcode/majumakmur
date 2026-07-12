@@ -1,5 +1,8 @@
 import { Asset } from "@/types/data/asset";
-import { AssetTransaction } from "@/types/data/asset-transaction";
+import {
+  AssetTransaction,
+  CreateAssetTransactionDTO,
+} from "@/types/dto/asset-transaction/asset-transaction";
 
 interface AssetCardInfo {
   id: string;
@@ -23,7 +26,9 @@ interface AssetPageProps {
   deleteAsset: (id: string) => Promise<void>;
 
   fetchAssetTransaction: () => Promise<void>;
-  createAssetTransaction: (assetTransaction: AssetTransaction) => Promise<void>;
+  createAssetTransaction: (
+    assetTransaction: CreateAssetTransactionDTO,
+  ) => Promise<void>;
   deleteAssetTransaction: (id: string) => Promise<void>;
 }
 

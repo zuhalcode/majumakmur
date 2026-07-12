@@ -12,14 +12,11 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
-import { Field, FieldGroup } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Plus } from "lucide-react";
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AssetForm, assetFormSchema } from "@/schemas/asset.schema";
 import {
   Form,
   FormControl,
@@ -30,12 +27,11 @@ import {
 } from "@/components/ui/form";
 import { Asset } from "@/types/data/asset";
 import { useState } from "react";
-import { CardTitle } from "@/components/ui/card";
 import {
   AssetTransactionForm,
   assetTransactionFormSchema,
 } from "@/schemas/asset-transaction.schema";
-import { AssetTransaction } from "@/types/data/asset-transaction";
+
 import {
   Select,
   SelectContent,
@@ -43,6 +39,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { CreateAssetTransactionDTO } from "@/types/dto/asset-transaction/asset-transaction.dto";
 
 //#endregion
 
@@ -51,18 +48,19 @@ export default function AssetTransactionCreateDialog({
   assets,
 }: {
   assets?: Asset[];
-  onCreate: (transaction: AssetTransaction) => Promise<void>;
+  onCreate: (transaction: CreateAssetTransactionDTO) => Promise<void>;
 }) {
   const [open, setOpen] = useState<boolean>(false);
 
   const form = useForm<AssetTransactionForm>({
     resolver: zodResolver(assetTransactionFormSchema),
     defaultValues: {
-      source_asset_id: "",
-      source_quantity: "",
-      destination_asset_id: "",
-      destination_quantity: "",
+      source_asset_id: "none",
+      source_quantity: "0",
+      destination_asset_id: "none",
+      destination_quantity: "0",
       description: "",
+      date: new Date().toISOString().split("T")[0],
     },
   });
 
@@ -75,15 +73,19 @@ export default function AssetTransactionCreateDialog({
       destination_asset_id,
       destination_quantity,
       description,
+      date,
     } = values;
 
     try {
-      const assetTransactionData: AssetTransaction = {
-        source_asset_id: source_asset_id ?? null,
-        destination_asset_id: destination_asset_id ?? null,
+      const assetTransactionData: CreateAssetTransactionDTO = {
+        source_asset_id:
+          source_asset_id === "none" ? undefined : source_asset_id,
+        destination_asset_id:
+          destination_asset_id === "none" ? undefined : destination_asset_id,
         source_quantity: Number(source_quantity),
         destination_quantity: Number(destination_quantity),
         description,
+        date,
       };
 
       await onCreate(assetTransactionData);
@@ -107,49 +109,71 @@ export default function AssetTransactionCreateDialog({
         <DialogHeader>
           <DialogTitle>Add New Asset Transaction</DialogTitle>
           <DialogDescription>
-            Add a new asset's transaction to your dashboard. Fill in the
-            required information below.
+            Fill in the required information below.
           </DialogDescription>
         </DialogHeader>
 
         <Form {...form}>
-          <form onSubmit={handleOnSubmit} className="space-y-3">
+          <form onSubmit={handleOnSubmit} className="space-y-1">
+            {/* DATE */}
             <FormField
               control={control}
-              name="source_asset_id"
+              name="date"
               render={({ field }) => {
                 return (
-                  <FormItem className="space-y-2">
-                    <FormLabel>Source Asset *</FormLabel>
-
-                    <Select value={field.value} onValueChange={field.onChange}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select Source Asset" />
-                        </SelectTrigger>
-                      </FormControl>
-
-                      <SelectContent>
-                        {assets?.map((asset) => (
-                          <SelectItem key={asset.id} value={String(asset.id)}>
-                            {asset.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                  <FormItem className="space-y-1">
+                    <FormLabel className="text-xs">Date *</FormLabel>
+                    <FormControl>
+                      <Input {...field} type="date" className="h-8 text-xs" />
+                    </FormControl>
+                    <FormMessage />
                   </FormItem>
                 );
               }}
             />
 
+            {/* SOURCE ASSET */}
+            <FormField
+              control={control}
+              name="source_asset_id"
+              render={({ field }) => {
+                return (
+                  <FormItem className="space-y-1">
+                    <FormLabel className="text-xs">Source Asset *</FormLabel>
+
+                    <Select value={field.value} onValueChange={field.onChange}>
+                      <FormControl>
+                        <SelectTrigger className="text-xs ">
+                          <SelectValue placeholder="Select Source Asset" />
+                        </SelectTrigger>
+                      </FormControl>
+
+                      <SelectContent>
+                        <SelectItem value="none">
+                          <span className="text-xs">None</span>
+                        </SelectItem>
+                        {assets?.map((asset) => (
+                          <SelectItem key={asset.id} value={String(asset.id)}>
+                            <span className="text-xs">{asset.name}</span>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                );
+              }}
+            />
+
+            {/* SOURCE QUANTITY */}
             <FormField
               control={control}
               name="source_quantity"
               render={({ field }) => {
                 return (
-                  <FormItem className="space-y-2">
-                    <FormLabel>Source Quantity</FormLabel>
-                    <FormControl>
+                  <FormItem className="space-y-1">
+                    <FormLabel className="text-xs">Source Quantity</FormLabel>
+                    <FormControl className="text-xs h-8 placeholder:text-xs">
                       <Input
                         {...field}
                         type="number"
@@ -162,40 +186,51 @@ export default function AssetTransactionCreateDialog({
               }}
             />
 
+            {/* DESTINATION ASSET */}
             <FormField
               control={control}
               name="destination_asset_id"
               render={({ field }) => {
                 return (
-                  <FormItem className="space-y-2">
-                    <FormLabel>Destination Asset *</FormLabel>
+                  <FormItem className="space-y-1">
+                    <FormLabel className="text-xs">
+                      Destination Asset *
+                    </FormLabel>
                     <Select value={field.value} onValueChange={field.onChange}>
                       <FormControl>
-                        <SelectTrigger>
+                        <SelectTrigger className="text-xs placeholder:text-xs">
                           <SelectValue placeholder="Select Destination Asset" />
                         </SelectTrigger>
                       </FormControl>
 
                       <SelectContent>
+                        <SelectItem value="none">
+                          <span className="text-xs">None</span>
+                        </SelectItem>
                         {assets?.map((asset) => (
                           <SelectItem key={asset.id} value={String(asset.id)}>
-                            {asset.name}
+                            <span className="text-xs">{asset.name}</span>
                           </SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
+                    <FormMessage />
                   </FormItem>
                 );
               }}
             />
+
+            {/* DESTINATION QUANTITY */}
             <FormField
               control={control}
               name="destination_quantity"
               render={({ field }) => {
                 return (
-                  <FormItem className="space-y-2">
-                    <FormLabel>Destination Quantity *</FormLabel>
-                    <FormControl>
+                  <FormItem className="space-y-1">
+                    <FormLabel className="text-xs">
+                      Destination Quantity *
+                    </FormLabel>
+                    <FormControl className="text-xs h-8 placeholder:text-xs">
                       <Input
                         {...field}
                         type="number"
@@ -207,14 +242,16 @@ export default function AssetTransactionCreateDialog({
                 );
               }}
             />
+
+            {/* DESCRIPTION */}
             <FormField
               control={control}
               name="description"
               render={({ field }) => {
                 return (
-                  <FormItem className="space-y-2">
-                    <FormLabel>Description</FormLabel>
-                    <FormControl>
+                  <FormItem className="space-y-1">
+                    <FormLabel className="text-xs">Description</FormLabel>
+                    <FormControl className="text-xs h-8 placeholder:text-xs">
                       <Input {...field} type="text" placeholder="Description" />
                     </FormControl>
                     <FormMessage />
@@ -223,11 +260,15 @@ export default function AssetTransactionCreateDialog({
               }}
             />
 
-            <DialogFooter className="pt-2">
+            <DialogFooter className="pt-1">
               <DialogClose asChild>
-                <Button variant="outline">Cancel</Button>
+                <Button variant="outline" size="sm">
+                  Cancel
+                </Button>
               </DialogClose>
-              <Button type="submit">Submit</Button>
+              <Button type="submit" size="sm">
+                Submit
+              </Button>
             </DialogFooter>
           </form>
         </Form>

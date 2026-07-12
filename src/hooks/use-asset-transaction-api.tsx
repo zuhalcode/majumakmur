@@ -1,7 +1,10 @@
 import { assetTransactionService } from "@/services/asset-transaction.service";
 import { assetService } from "@/services/asset.service";
 import { Asset } from "@/types/data/asset";
-import { AssetTransaction } from "@/types/data/asset-transaction";
+import {
+  AssetTransaction,
+  CreateAssetTransactionDTO,
+} from "@/types/dto/asset-transaction/asset-transaction";
 import { useCallback, useEffect, useState } from "react";
 
 export function useAssetTransactionAPI() {
@@ -22,11 +25,14 @@ export function useAssetTransactionAPI() {
     }
   }, []);
 
-  const createData = useCallback(async (assetTransaction: AssetTransaction) => {
-    setLoading(true);
-    await assetTransactionService.create(assetTransaction);
-    setLoading(false);
-  }, []);
+  const createData = useCallback(
+    async (assetTransaction: CreateAssetTransactionDTO) => {
+      setLoading(true);
+      await assetTransactionService.create(assetTransaction);
+      setLoading(false);
+    },
+    [],
+  );
 
   const deleteData = useCallback(async (id: string) => {
     setLoading(true);

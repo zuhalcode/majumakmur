@@ -1,6 +1,8 @@
-import DashboardTable from "@/components/dashboard/dashboard-table";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { AssetTransaction } from "@/types/data/asset-transaction";
+import {
+  AssetTransaction,
+  CreateAssetTransactionDTO,
+} from "@/types/dto/asset-transaction/asset-transaction";
 import AssetTransactionCreateDialog from "./asset-transaction-create-dialog";
 import { Asset } from "@/types/data/asset";
 import AssetTransactionTable from "./asset-transaction-table";
@@ -15,7 +17,7 @@ export default function AssetTransactions({
   assetTransactions?: AssetTransaction[];
 
   handleCreateAssetTransaction: (
-    assetTransaction: AssetTransaction,
+    assetTransaction: CreateAssetTransactionDTO,
   ) => Promise<void>;
 
   handleDeleteAssetTransaction: (id: string) => Promise<void>;

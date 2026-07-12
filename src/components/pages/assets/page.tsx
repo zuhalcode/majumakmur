@@ -25,7 +25,10 @@ import AssetDeleteDialog from "./components/asset-delete-dialog";
 import { AlertDialog } from "@/components/ui/alert-dialog";
 import DashboardTable from "@/components/dashboard/dashboard-table";
 import AssetTransactions from "./components/asset-transactions";
-import { AssetTransaction } from "@/types/data/asset-transaction";
+import {
+  AssetTransaction,
+  CreateAssetTransactionDTO,
+} from "@/types/dto/asset-transaction/asset-transaction";
 
 //#endregion
 
@@ -57,7 +60,7 @@ export default function AssetsPage(props: AssetPageProps) {
   };
 
   const handleCreateAssetTransaction = async (
-    assetTransaction: AssetTransaction,
+    assetTransaction: CreateAssetTransactionDTO,
   ) => {
     await createAssetTransaction(assetTransaction);
     await fetchAssetTransaction();

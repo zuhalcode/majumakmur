@@ -35,7 +35,7 @@ import {
   AssetTransactionForm,
   assetTransactionFormSchema,
 } from "@/schemas/asset-transaction.schema";
-import { AssetTransaction } from "@/types/data/asset-transaction";
+import { AssetTransaction } from "@/types/dto/asset-transaction/asset-transaction";
 import {
   Select,
   SelectContent,

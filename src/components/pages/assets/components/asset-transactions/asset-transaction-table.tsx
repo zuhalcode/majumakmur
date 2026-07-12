@@ -1,4 +1,3 @@
-import ActionCell from "@/components/dashboard/action-cell";
 import {
   Table,
   TableBody,
@@ -7,7 +6,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { AssetTransaction } from "@/types/data/asset-transaction";
+import { AssetTransaction } from "@/types/dto/asset-transaction/asset-transaction";
 import React from "react";
 import AssetTransactionDeleteDialog from "./asset-transaction-delete-dialog";
 
@@ -23,6 +22,7 @@ export default function AssetTransactionTable({
       <TableHeader>
         <TableRow>
           <TableHead>No</TableHead>
+          <TableHead>Date</TableHead>
           <TableHead>Source Asset</TableHead>
           <TableHead>Source Qty</TableHead>
           <TableHead>Destination Asset</TableHead>
@@ -35,6 +35,7 @@ export default function AssetTransactionTable({
         {transactions.map((data, i) => (
           <TableRow key={data.id}>
             <TableCell>{i + 1}</TableCell>
+            <TableCell>{data.date}</TableCell>
             <TableCell>{data.source_asset?.name ?? "NULL"}</TableCell>
             <TableCell className="space-x-1">
               <span>{data.source_quantity ?? "NULL"}</span>
