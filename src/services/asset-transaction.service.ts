@@ -1,10 +1,15 @@
+//#region-imports
+
 import api from "@/lib/axios";
-import { Asset } from "@/types/data/asset";
+
 import {
   AssetTransaction,
   AssetTransactionResponse,
   CreateAssetTransactionDTO,
+  UpdateAssetTransactionDTO,
 } from "@/types/dto/asset-transaction/asset-transaction.dto";
+
+//#endregion
 
 export const assetTransactionService = {
   async findAll(): Promise<{ data: AssetTransactionResponse[] }> {
@@ -17,8 +22,8 @@ export const assetTransactionService = {
     return res.data;
   },
 
-  async update(id: number, updatedData: Partial<Asset>) {
-    const res = await api.put(`/asset-transactions/${id}`, updatedData);
+  async update(id: string, data: UpdateAssetTransactionDTO) {
+    const res = await api.patch(`/asset-transactions/${id}`, data);
     return res.data;
   },
 

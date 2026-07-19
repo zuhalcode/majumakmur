@@ -3,11 +3,12 @@ import { assetTransactionService } from "@/services/asset-transaction.service";
 import {
   AssetTransactionResponse,
   CreateAssetTransactionDTO,
+  UpdateAssetTransactionDTO,
 } from "@/types/dto/asset-transaction/asset-transaction.dto";
 
-//#endregion
-
 import { useCallback, useEffect, useState } from "react";
+
+//#endregion
 
 export function useAssetTransactionAPI() {
   const [data, setData] = useState<AssetTransactionResponse[]>([]);
@@ -16,9 +17,7 @@ export function useAssetTransactionAPI() {
   const fetchData = useCallback(async () => {
     try {
       setLoading(true);
-
       const { data } = await assetTransactionService.findAll();
-
       setData(data);
     } catch (err: any) {
       console.log(err);
@@ -36,6 +35,12 @@ export function useAssetTransactionAPI() {
     [],
   );
 
+  const updateData = useCallback(async (dto: UpdateAssetTransactionDTO) => {
+    setLoading(true);
+    await assetTransactionService.update(dto.id, dto);
+    setLoading(false);
+  }, []);
+
   const deleteData = useCallback(async (id: string) => {
     setLoading(true);
     await assetTransactionService.softDelete(id);
@@ -51,6 +56,7 @@ export function useAssetTransactionAPI() {
     loading,
     fetchData,
     createData,
+    updateData,
     deleteData,
   };
 }

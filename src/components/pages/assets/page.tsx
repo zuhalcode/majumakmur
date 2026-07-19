@@ -28,6 +28,7 @@ import AssetTransactions from "./components/asset-transactions";
 import {
   AssetTransaction,
   CreateAssetTransactionDTO,
+  UpdateAssetTransactionDTO,
 } from "@/types/dto/asset-transaction/asset-transaction.dto";
 
 //#endregion
@@ -48,6 +49,7 @@ export default function AssetsPage(props: AssetPageProps) {
 
     fetchAssetTransaction,
     createAssetTransaction,
+    updateAssetTransaction,
     deleteAssetTransaction,
   } = props;
 
@@ -67,6 +69,14 @@ export default function AssetsPage(props: AssetPageProps) {
     assetTransaction: CreateAssetTransactionDTO,
   ) => {
     await createAssetTransaction(assetTransaction);
+    await fetchAssetTransaction();
+    await fetchAssetBalance();
+  };
+
+  const handleUpdateAssetTransaction = async (
+    dto: UpdateAssetTransactionDTO,
+  ) => {
+    await updateAssetTransaction(dto);
     await fetchAssetTransaction();
     await fetchAssetBalance();
   };
@@ -132,6 +142,7 @@ export default function AssetsPage(props: AssetPageProps) {
           assetTransactions={assetTransactions}
           handleDeleteAssetTransaction={handleDeleteAssetTransaction}
           handleCreateAssetTransaction={handleCreateAssetTransaction}
+          handleUpdateAssetTransaction={handleUpdateAssetTransaction}
         />
         {/* Asset Transactions */}
       </div>

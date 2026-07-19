@@ -3,6 +3,7 @@ import {
   AssetTransaction,
   CreateAssetTransactionDTO,
 } from "@/types/dto/asset-transaction/asset-transaction";
+import { AssetTransactionHandlers } from "./asset-transaction";
 
 interface AssetCardInfo {
   id: string;
@@ -27,11 +28,10 @@ interface AssetPageProps {
   createAsset: (asset: Asset) => Promise<void>;
   deleteAsset: (id: string) => Promise<void>;
 
-  fetchAssetTransaction: () => Promise<void>;
-  createAssetTransaction: (
-    assetTransaction: CreateAssetTransactionDTO,
-  ) => Promise<void>;
-  deleteAssetTransaction: (id: string) => Promise<void>;
+  fetchAssetTransaction: AssetTransactionHandlers["fetch"];
+  createAssetTransaction: AssetTransactionHandlers["create"];
+  updateAssetTransaction: AssetTransactionHandlers["update"];
+  deleteAssetTransaction: AssetTransactionHandlers["delete"];
 }
 
 export type { AssetCardInfo, AssetPageProps };

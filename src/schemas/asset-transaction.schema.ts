@@ -2,6 +2,7 @@ import { z } from "zod";
 
 export const assetTransactionFormSchema = z
   .object({
+    id: z.string().optional(),
     source_asset_id: z.string().optional(),
     source_quantity: z.string().optional(),
 

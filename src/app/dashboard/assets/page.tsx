@@ -25,6 +25,7 @@ export default function Page() {
     fetchData: fetchAssetTransaction,
     createData: createAssetTransaction,
     deleteData: deleteAssetTransaction,
+    updateData: updateAssetTransaction,
   } = useAssetTransactionAPI();
 
   const { data: assetBalances, fetchData: fetchAssetBalance } =
@@ -64,6 +65,7 @@ export default function Page() {
       deleteAsset={deleteAsset}
       fetchAssetTransaction={fetchAssetTransaction}
       createAssetTransaction={createAssetTransaction}
+      updateAssetTransaction={updateAssetTransaction}
       deleteAssetTransaction={deleteAssetTransaction}
     />
   );

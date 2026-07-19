@@ -13,8 +13,11 @@ interface AssetTransaction {
 
 type CreateAssetTransactionDTO = Omit<AssetTransaction, "id">;
 
-interface AssetTransactionResponse extends AssetTransaction {
+type UpdateAssetTransactionDTO = Partial<CreateAssetTransactionDTO> & {
   id: string;
+};
+
+interface AssetTransactionResponse extends AssetTransaction {
   source_asset?: { name: string; unit: string };
   destination_asset?: { name: string; unit: string };
 }
@@ -23,4 +26,5 @@ export type {
   AssetTransaction,
   AssetTransactionResponse,
   CreateAssetTransactionDTO,
+  UpdateAssetTransactionDTO,
 };

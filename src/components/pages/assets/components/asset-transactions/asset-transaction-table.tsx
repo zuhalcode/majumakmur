@@ -1,3 +1,4 @@
+//#region-imports
 import {
   Table,
   TableBody,
@@ -6,16 +7,27 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { AssetTransaction } from "@/types/dto/asset-transaction/asset-transaction";
+import {
+  AssetTransactionResponse,
+  UpdateAssetTransactionDTO,
+} from "@/types/dto/asset-transaction/asset-transaction.dto";
 import React from "react";
 import AssetTransactionDeleteDialog from "./asset-transaction-delete-dialog";
+import AssetTransactionEditDialog from "./asset-transaction-edit-dialog";
+import { Asset } from "@/types/data/asset";
+import { AssetTransactionHandlers } from "@/types/ui/dashboard/asset-transaction";
+//#endregion
 
 export default function AssetTransactionTable({
+  assets,
   transactions,
+  handleUpdateAssetTransaction,
   handleDeleteAssetTransaction,
 }: {
-  transactions: AssetTransaction[];
-  handleDeleteAssetTransaction: (id: string) => Promise<void>;
+  assets: Asset[];
+  transactions: AssetTransactionResponse[];
+  handleDeleteAssetTransaction: AssetTransactionHandlers["delete"];
+  handleUpdateAssetTransaction: AssetTransactionHandlers["update"];
 }) {
   return (
     <Table>
@@ -23,11 +35,12 @@ export default function AssetTransactionTable({
         <TableRow>
           <TableHead>No</TableHead>
           <TableHead>Date</TableHead>
-          <TableHead>Source Asset</TableHead>
-          <TableHead>Source Qty</TableHead>
-          <TableHead>Destination Asset</TableHead>
-          <TableHead>Destination Qty</TableHead>
-          <TableHead>Description</TableHead>
+          <TableHead>Src Asset</TableHead>
+          <TableHead>Src Qty</TableHead>
+          <TableHead>Dest Asset</TableHead>
+          <TableHead>Dest Qty</TableHead>
+          <TableHead>Desc</TableHead>
+          <TableHead>Action</TableHead>
         </TableRow>
       </TableHeader>
 
@@ -42,7 +55,9 @@ export default function AssetTransactionTable({
               <span className="uppercase">{data.source_asset?.unit}</span>
             </TableCell>
 
-            <TableCell>{data.destination_asset?.name}</TableCell>
+            <TableCell className="capitalize">
+              {data.destination_asset?.name}
+            </TableCell>
 
             <TableCell className="space-x-1">
               <span>{data.destination_quantity}</span>
@@ -50,7 +65,13 @@ export default function AssetTransactionTable({
             </TableCell>
 
             <TableCell>{data.description ?? "-"}</TableCell>
-            <TableCell>
+
+            <TableCell className="space-x-1">
+              <AssetTransactionEditDialog
+                assets={assets}
+                transaction={data}
+                onEdit={handleUpdateAssetTransaction}
+              />
               <AssetTransactionDeleteDialog
                 id={data.id}
                 onDelete={handleDeleteAssetTransaction}

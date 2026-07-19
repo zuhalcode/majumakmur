@@ -4,11 +4,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   AssetTransaction,
   CreateAssetTransactionDTO,
+  UpdateAssetTransactionDTO,
 } from "@/types/dto/asset-transaction/asset-transaction.dto";
 
 import AssetTransactionCreateDialog from "./asset-transaction-create-dialog";
 import { Asset } from "@/types/data/asset";
 import AssetTransactionTable from "./asset-transaction-table";
+import { AssetTransactionHandlers } from "@/types/ui/dashboard/asset-transaction";
 
 //#endregion
 
@@ -16,16 +18,15 @@ export default function AssetTransactions({
   assets,
   assetTransactions,
   handleCreateAssetTransaction,
+  handleUpdateAssetTransaction,
   handleDeleteAssetTransaction,
 }: {
   assets?: Asset[];
   assetTransactions?: AssetTransaction[];
 
-  handleCreateAssetTransaction: (
-    assetTransaction: CreateAssetTransactionDTO,
-  ) => Promise<void>;
-
-  handleDeleteAssetTransaction: (id: string) => Promise<void>;
+  handleCreateAssetTransaction: AssetTransactionHandlers["create"];
+  handleUpdateAssetTransaction: AssetTransactionHandlers["update"];
+  handleDeleteAssetTransaction: AssetTransactionHandlers["delete"];
 }) {
   return (
     <Card className="w-full mx-auto">
@@ -39,7 +40,9 @@ export default function AssetTransactions({
       <CardContent>
         <AssetTransactionTable
           transactions={assetTransactions ?? []}
+          assets={assets ?? []}
           handleDeleteAssetTransaction={handleDeleteAssetTransaction}
+          handleUpdateAssetTransaction={handleUpdateAssetTransaction}
         />
       </CardContent>
     </Card>
