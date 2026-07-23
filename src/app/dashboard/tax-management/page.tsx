@@ -2,7 +2,7 @@
 //#regionimports
 import { useCapitalAPI } from "@/hooks/use-capital-api";
 import TaxManagementPage from "@/components/pages/tax-page";
-import { CardInfo, ColumnConfig } from "@/types/ui/dashboard/capital";
+import { CapitalCardInfo, ColumnConfig } from "@/types/ui/dashboard/capital";
 import { useMemo, useState } from "react";
 
 import { buildTaxReport, buildTaxSummary } from "@/utils/tax.util";
@@ -19,7 +19,7 @@ export default function Page() {
 
   const { totalPurchase, totalTaxPPh, monthLength } = summary;
 
-  const cardInfos: CardInfo[] = [
+  const cardInfos: CapitalCardInfo[] = [
     {
       title: "Total Purchase",
       value: totalPurchase,

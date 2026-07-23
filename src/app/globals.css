@@ -42,6 +42,8 @@
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+    --warning: 43 96% 56%;
+    --warning-foreground: 26 83% 14%;
   }
 
   .dark {

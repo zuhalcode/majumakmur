@@ -5,7 +5,7 @@
 import { useCapitalAPI } from "@/hooks/use-capital-api";
 import CapitalManagementPage from "@/components/pages/capital-page";
 import { capitalSummary } from "@/utils/capital.util";
-import { CardInfo, ColumnConfig } from "@/types/ui/dashboard/capital";
+import { CapitalCardInfo, ColumnConfig } from "@/types/ui/dashboard/capital";
 import { useMemo, useState } from "react";
 import { DEFAULT_CAPITAL_FILTERS } from "@/constants/capital.constant";
 
@@ -28,7 +28,7 @@ export default function Page() {
     lastDateAfter1Year,
   } = summary;
 
-  const cardInfos = useMemo<CardInfo[]>(
+  const cardInfos = useMemo<CapitalCardInfo[]>(
     () => [
       {
         title: "Cash Flow",

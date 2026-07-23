@@ -4,15 +4,8 @@ export const SIDEBAR_MENU = [
     url: "/dashboard",
   },
   {
-    title: "Assets",
-    url: "/dashboard/asset-management",
-    items: [
-      {
-        title: "Transactions",
-        url: "/dashboard/asset-transaction",
-        isActive: true,
-      },
-    ],
+    title: "Assets Management",
+    url: "/dashboard/assets",
   },
   {
     title: "Transactions",
