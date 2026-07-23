@@ -17,6 +17,7 @@ import AssetTransactionEditDialog from "./asset-transaction-edit-dialog";
 import { Asset } from "@/types/data/asset";
 import { AssetTransactionHandlers } from "@/types/ui/dashboard/asset-transaction";
 import { Loader } from "lucide-react";
+import { AssetResponse } from "@/types/dto/asset/asset.dto";
 //#endregion
 
 export default function AssetTransactionTable({
@@ -26,7 +27,7 @@ export default function AssetTransactionTable({
   handleUpdateAssetTransaction,
   handleDeleteAssetTransaction,
 }: {
-  assets: Asset[];
+  assets: AssetResponse[];
   transactions: AssetTransactionResponse[];
   loading: boolean;
   handleDeleteAssetTransaction: AssetTransactionHandlers["delete"];
