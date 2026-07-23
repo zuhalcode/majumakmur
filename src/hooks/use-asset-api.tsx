@@ -1,11 +1,11 @@
 import { assetService } from "@/services/asset.service";
 import { capitalService } from "@/services/capital.service";
 import { Asset } from "@/types/data/asset";
-import { UpdateAssetDTO } from "@/types/dto/asset/asset.dto";
+import { AssetResponse, UpdateAssetDTO } from "@/types/dto/asset/asset.dto";
 import { useCallback, useEffect, useState } from "react";
 
 export function useAssetAPI() {
-  const [data, setData] = useState<Asset[]>([]);
+  const [data, setData] = useState<AssetResponse[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
   const fetchData = useCallback(async () => {

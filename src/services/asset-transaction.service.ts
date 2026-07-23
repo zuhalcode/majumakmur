@@ -22,7 +22,10 @@ export const assetTransactionService = {
     return res.data;
   },
 
-  async update(id: string, data: UpdateAssetTransactionDTO) {
+  async update(
+    id: string,
+    data: UpdateAssetTransactionDTO,
+  ): Promise<AssetTransaction> {
     const res = await api.patch(`/asset-transactions/${id}`, data);
     return res.data;
   },

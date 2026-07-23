@@ -11,6 +11,7 @@ import AssetTransactionCreateDialog from "./asset-transaction-create-dialog";
 import { Asset } from "@/types/data/asset";
 import AssetTransactionTable from "./asset-transaction-table";
 import { AssetTransactionHandlers } from "@/types/ui/dashboard/asset-transaction";
+import { AssetResponse } from "@/types/dto/asset/asset.dto";
 
 //#endregion
 
@@ -22,7 +23,7 @@ export default function AssetTransactions({
   handleUpdateAssetTransaction,
   handleDeleteAssetTransaction,
 }: {
-  assets: Asset[];
+  assets: AssetResponse[];
   assetTransactions: AssetTransaction[];
   loadingAssetTransaction: boolean;
 
