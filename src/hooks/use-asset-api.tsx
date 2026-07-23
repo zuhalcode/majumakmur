@@ -1,6 +1,7 @@
 import { assetService } from "@/services/asset.service";
 import { capitalService } from "@/services/capital.service";
 import { Asset } from "@/types/data/asset";
+import { UpdateAssetDTO } from "@/types/dto/asset/asset.dto";
 import { useCallback, useEffect, useState } from "react";
 
 export function useAssetAPI() {
@@ -27,6 +28,12 @@ export function useAssetAPI() {
     setLoading(false);
   }, []);
 
+  const updateData = useCallback(async (dto: UpdateAssetDTO) => {
+    setLoading(true);
+    await assetService.update(dto.id, dto);
+    setLoading(false);
+  }, []);
+
   const deleteData = useCallback(async (id: string) => {
     setLoading(true);
     await assetService.softDelete(id);
@@ -42,6 +49,7 @@ export function useAssetAPI() {
     loading,
     fetchData,
     createData,
+    updateData,
     deleteData,
   };
 }

@@ -1,5 +1,6 @@
 import api from "@/lib/axios";
 import { Asset } from "@/types/data/asset";
+import { CreateAssetDTO, UpdateAssetDTO } from "@/types/dto/asset/asset.dto";
 
 export const assetService = {
   async findAll(): Promise<{ data: Asset[] }> {
@@ -7,13 +8,13 @@ export const assetService = {
     return res.data;
   },
 
-  async create(data: Asset): Promise<Asset> {
-    const res = await api.post("/assets", data);
+  async create(dto: CreateAssetDTO): Promise<Asset> {
+    const res = await api.post("/assets", dto);
     return res.data;
   },
 
-  async update(id: number, updatedData: Partial<Asset>) {
-    const res = await api.put(`/assets/${id}`, updatedData);
+  async update(id: string, dto: UpdateAssetDTO) {
+    const res = await api.patch(`/assets/${id}`, dto);
     return res.data;
   },
 

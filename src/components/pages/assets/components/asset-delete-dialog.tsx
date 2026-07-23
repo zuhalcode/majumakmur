@@ -15,9 +15,11 @@ import { Trash } from "lucide-react";
 
 export default function AssetDeleteDialog({
   id,
+  loading,
   onDelete,
 }: {
   id?: string;
+  loading: boolean;
   onDelete: (id: string) => Promise<void>;
 }) {
   const handleOnDelete = async (id?: string) => {

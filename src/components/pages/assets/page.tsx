@@ -16,7 +16,7 @@ import { IntlProvider } from "react-intl";
 
 import { cn } from "@/lib/utils";
 
-import { AssetPageProps } from "@/types/ui/dashboard/asset";
+import { AssetHandlers, AssetPageProps } from "@/types/ui/dashboard/asset";
 import AssetEditDialog from "./components/asset-edit-dialog";
 import AssetCreateDialog from "./components/asset-create-dialog";
 import { Asset } from "@/types/data/asset";
@@ -30,21 +30,24 @@ import {
   CreateAssetTransactionDTO,
   UpdateAssetTransactionDTO,
 } from "@/types/dto/asset-transaction/asset-transaction.dto";
+import { AssetTransactionHandlers } from "@/types/ui/dashboard/asset-transaction";
 
 //#endregion
 
 export default function AssetsPage(props: AssetPageProps) {
   const {
     assets,
+    loadingAsset,
+
     assetTransactions,
+    loadingAssetTransaction,
     cardInfos,
-    columns,
-    loading,
 
     fetchAssetBalance,
 
     fetchAsset,
     createAsset,
+    updateAsset,
     deleteAsset,
 
     fetchAssetTransaction,
@@ -53,86 +56,88 @@ export default function AssetsPage(props: AssetPageProps) {
     deleteAssetTransaction,
   } = props;
 
-  const handleCreateAsset = async (asset: Asset) => {
-    await createAsset(asset);
+  const handleCreateAsset: AssetHandlers["create"] = async (dto) => {
+    await createAsset(dto);
     await fetchAsset();
     await fetchAssetBalance();
   };
 
-  const handleDeleteAsset = async (id: string) => {
+  const handleUpdateAsset: AssetHandlers["update"] = async (dto) => {
+    await updateAsset(dto);
+    await fetchAsset();
+    await fetchAssetBalance();
+  };
+
+  const handleDeleteAsset: AssetHandlers["delete"] = async (id) => {
     await deleteAsset(id);
     await fetchAsset();
     await fetchAssetBalance();
   };
 
-  const handleCreateAssetTransaction = async (
-    assetTransaction: CreateAssetTransactionDTO,
-  ) => {
-    await createAssetTransaction(assetTransaction);
-    await fetchAssetTransaction();
-    await fetchAssetBalance();
-  };
+  const handleCreateAssetTransaction: AssetTransactionHandlers["create"] =
+    async (dto) => {
+      await createAssetTransaction(dto);
+      await fetchAssetTransaction();
+      await fetchAssetBalance();
+    };
 
-  const handleUpdateAssetTransaction = async (
-    dto: UpdateAssetTransactionDTO,
-  ) => {
-    await updateAssetTransaction(dto);
-    await fetchAssetTransaction();
-    await fetchAssetBalance();
-  };
+  const handleUpdateAssetTransaction: AssetTransactionHandlers["update"] =
+    async (dto) => {
+      await updateAssetTransaction(dto);
+      await fetchAssetTransaction();
+      await fetchAssetBalance();
+    };
 
-  const handleDeleteAssetTransaction = async (id: string) => {
-    await deleteAssetTransaction(id);
-    await fetchAssetTransaction();
-    await fetchAssetBalance();
-  };
+  const handleDeleteAssetTransaction: AssetTransactionHandlers["delete"] =
+    async (id) => {
+      await deleteAssetTransaction(id);
+      await fetchAssetTransaction();
+      await fetchAssetBalance();
+    };
 
   return (
     <IntlProvider locale="id-ID">
       <div className="w-full flex flex-col gap-5 px-5 lg:px-10 mt-5 pb-5">
         <div className="mx-auto">
-          <AssetCreateDialog onCreate={handleCreateAsset} />
+          <AssetCreateDialog
+            loading={loadingAsset}
+            onCreate={handleCreateAsset}
+          />
         </div>
 
         {/* Card Info */}
         <div className="w-full grid lg:grid-cols-3 grid-cols-1 gap-2">
-          {cardInfos?.map(
-            ({ name, value, description, unit, id, active, percent }) => (
-              <Card key={id}>
-                <CardHeader>
-                  <CardTitle className="text-base flex items-center justify-between">
-                    <p>{name}</p>
-                    <div className="flex space-x-2">
-                      <AssetEditDialog />
-                      <AssetDeleteDialog id={id} onDelete={handleDeleteAsset} />
-                    </div>
-                  </CardTitle>
-
-                  {/* Value */}
-                  <div className={cn("text-2xl font-bold")}>
-                    <p>{formatAssetValue(value, unit)}</p>
+          {cardInfos?.map((asset) => (
+            <Card key={asset.id}>
+              <CardHeader>
+                <CardTitle className="text-base flex items-center justify-between">
+                  <p>{asset.name}</p>
+                  <div className="flex space-x-2">
+                    <AssetEditDialog
+                      asset={asset}
+                      loading={loadingAsset}
+                      onEdit={handleUpdateAsset}
+                    />
+                    <AssetDeleteDialog
+                      id={asset.id}
+                      loading={loadingAsset}
+                      onDelete={handleDeleteAsset}
+                    />
                   </div>
-                  {/* Value */}
+                </CardTitle>
 
-                  <CardDescription className="flex justify-between items-center">
-                    <p className="">{description || "Last 2 months"}</p>
-                    {active &&
-                      (percent > 0 ? (
-                        <p className="text-green-500 flex">
-                          <MoveUp className="size-5 text-blue-500" />
-                          {percent}
-                        </p>
-                      ) : (
-                        <p className="flex items-center text-red-500">
-                          <MoveDown className="size-5" />
-                          {percent}
-                        </p>
-                      ))}
-                  </CardDescription>
-                </CardHeader>
-              </Card>
-            ),
-          )}
+                {/* Value */}
+                <div className={cn("text-2xl font-bold")}>
+                  <p>{formatAssetValue(asset.value, asset.unit)}</p>
+                </div>
+                {/* Value */}
+
+                <CardDescription className="flex justify-between items-center">
+                  <p className="">{asset.description || "Last 2 months"}</p>
+                </CardDescription>
+              </CardHeader>
+            </Card>
+          ))}
         </div>
         {/* Card Info */}
 
@@ -140,6 +145,7 @@ export default function AssetsPage(props: AssetPageProps) {
         <AssetTransactions
           assets={assets}
           assetTransactions={assetTransactions}
+          loadingAssetTransaction={loadingAssetTransaction}
           handleDeleteAssetTransaction={handleDeleteAssetTransaction}
           handleCreateAssetTransaction={handleCreateAssetTransaction}
           handleUpdateAssetTransaction={handleUpdateAssetTransaction}

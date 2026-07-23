@@ -1,9 +1,13 @@
+//#region-imports
+
 import { Asset } from "@/types/data/asset";
 import {
   AssetTransaction,
   CreateAssetTransactionDTO,
 } from "@/types/dto/asset-transaction/asset-transaction";
 import { AssetTransactionHandlers } from "./asset-transaction";
+
+//#endregion
 
 interface AssetCardInfo {
   id: string;
@@ -15,18 +19,28 @@ interface AssetCardInfo {
   percent: number;
 }
 
+interface AssetHandlers {
+  fetch: () => Promise<void>;
+  create: (dto: CreateAssetDTO) => Promise<void>;
+  update: (dto: UpdateAssetDTO) => Promise<void>;
+  delete: (id: string) => Promise<void>;
+}
+
 interface AssetPageProps {
   assets: Asset[];
+  loadingAsset: boolean;
+
   assetTransactions: AssetTransaction[];
+  loadingAssetTransaction: boolean;
+
   cardInfos?: AssetCardInfo[];
-  columns: ColumnConfig[];
-  loading: boolean;
 
   fetchAssetBalance: () => Promise<void>;
 
-  fetchAsset: () => Promise<void>;
-  createAsset: (asset: Asset) => Promise<void>;
-  deleteAsset: (id: string) => Promise<void>;
+  fetchAsset: AssetHandlers["fetch"];
+  createAsset: AssetHandlers["create"];
+  updateAsset: AssetHandlers["update"];
+  deleteAsset: AssetHandlers["delete"];
 
   fetchAssetTransaction: AssetTransactionHandlers["fetch"];
   createAssetTransaction: AssetTransactionHandlers["create"];
@@ -34,4 +48,4 @@ interface AssetPageProps {
   deleteAssetTransaction: AssetTransactionHandlers["delete"];
 }
 
-export type { AssetCardInfo, AssetPageProps };
+export type { AssetCardInfo, AssetPageProps, AssetHandlers };

@@ -16,16 +16,19 @@ import AssetTransactionDeleteDialog from "./asset-transaction-delete-dialog";
 import AssetTransactionEditDialog from "./asset-transaction-edit-dialog";
 import { Asset } from "@/types/data/asset";
 import { AssetTransactionHandlers } from "@/types/ui/dashboard/asset-transaction";
+import { Loader } from "lucide-react";
 //#endregion
 
 export default function AssetTransactionTable({
   assets,
   transactions,
+  loading,
   handleUpdateAssetTransaction,
   handleDeleteAssetTransaction,
 }: {
   assets: Asset[];
   transactions: AssetTransactionResponse[];
+  loading: boolean;
   handleDeleteAssetTransaction: AssetTransactionHandlers["delete"];
   handleUpdateAssetTransaction: AssetTransactionHandlers["update"];
 }) {
@@ -70,10 +73,12 @@ export default function AssetTransactionTable({
               <AssetTransactionEditDialog
                 assets={assets}
                 transaction={data}
+                loading={loading}
                 onEdit={handleUpdateAssetTransaction}
               />
               <AssetTransactionDeleteDialog
                 id={data.id}
+                loading={loading}
                 onDelete={handleDeleteAssetTransaction}
               />
             </TableCell>

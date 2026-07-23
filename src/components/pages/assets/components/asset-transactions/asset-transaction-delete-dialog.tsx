@@ -22,9 +22,11 @@ import {
 
 export default function AssetTransactionDeleteDialog({
   id,
+  loading,
   onDelete,
 }: {
   id: string;
+  loading: boolean;
   onDelete: (id: string) => Promise<void>;
 }) {
   const handleOnDelete = async () => {

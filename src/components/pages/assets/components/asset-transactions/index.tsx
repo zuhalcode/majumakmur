@@ -17,12 +17,14 @@ import { AssetTransactionHandlers } from "@/types/ui/dashboard/asset-transaction
 export default function AssetTransactions({
   assets,
   assetTransactions,
+  loadingAssetTransaction,
   handleCreateAssetTransaction,
   handleUpdateAssetTransaction,
   handleDeleteAssetTransaction,
 }: {
-  assets?: Asset[];
-  assetTransactions?: AssetTransaction[];
+  assets: Asset[];
+  assetTransactions: AssetTransaction[];
+  loadingAssetTransaction: boolean;
 
   handleCreateAssetTransaction: AssetTransactionHandlers["create"];
   handleUpdateAssetTransaction: AssetTransactionHandlers["update"];
@@ -34,13 +36,15 @@ export default function AssetTransactions({
         <CardTitle>Asset Transaction</CardTitle>
         <AssetTransactionCreateDialog
           assets={assets}
+          loading={loadingAssetTransaction}
           onCreate={handleCreateAssetTransaction}
         />
       </CardHeader>
       <CardContent>
         <AssetTransactionTable
-          transactions={assetTransactions ?? []}
-          assets={assets ?? []}
+          assets={assets}
+          transactions={assetTransactions}
+          loading={loadingAssetTransaction}
           handleDeleteAssetTransaction={handleDeleteAssetTransaction}
           handleUpdateAssetTransaction={handleUpdateAssetTransaction}
         />

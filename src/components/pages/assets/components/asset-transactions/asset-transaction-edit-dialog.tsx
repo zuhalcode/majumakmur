@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/dialog";
 
 import { Input } from "@/components/ui/input";
-import { Pencil, Plus } from "lucide-react";
+import { Circle, Loader, Pencil, Plus } from "lucide-react";
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -44,16 +44,19 @@ import {
   UpdateAssetTransactionDTO,
 } from "@/types/dto/asset-transaction/asset-transaction.dto";
 import { AssetTransactionHandlers } from "@/types/ui/dashboard/asset-transaction";
+import { AssetResponse } from "@/types/dto/asset/asset.dto";
 
 //#endregion
 
 export default function AssetTransactionEditDialog({
   assets,
   transaction,
+  loading,
   onEdit,
 }: {
-  assets: Asset[];
+  assets: AssetResponse[];
   transaction: AssetTransactionResponse;
+  loading: boolean;
   onEdit: AssetTransactionHandlers["update"];
 }) {
   const [open, setOpen] = useState<boolean>(false);
@@ -292,12 +295,16 @@ export default function AssetTransactionEditDialog({
 
             <DialogFooter className="pt-1">
               <DialogClose asChild>
-                <Button variant="outline" size="sm">
+                <Button variant="outline" size="sm" disabled={loading}>
                   Cancel
                 </Button>
               </DialogClose>
-              <Button type="submit" size="sm">
-                Submit
+              <Button type="submit" size="sm" disabled={loading}>
+                {loading ? (
+                  <Loader className="animate-spin" />
+                ) : (
+                  <span>Submit</span>
+                )}
               </Button>
             </DialogFooter>
           </form>

@@ -14,14 +14,16 @@ import { useAssetBalanceAPI } from "@/hooks/use-asset-balance-api";
 export default function Page() {
   const {
     data: assetData,
-    loading,
+    loading: assetLoading,
     fetchData: fetchAsset,
     createData: createAsset,
+    updateData: updateAsset,
     deleteData: deleteAsset,
   } = useAssetAPI();
 
   const {
     data: assetTransactionData,
+    loading: assetTransactionLoading,
     fetchData: fetchAssetTransaction,
     createData: createAssetTransaction,
     deleteData: deleteAssetTransaction,
@@ -30,13 +32,6 @@ export default function Page() {
 
   const { data: assetBalances, fetchData: fetchAssetBalance } =
     useAssetBalanceAPI();
-
-  const columns: ColumnConfig[] = [
-    { header: "Date", accessor: "date", type: "date" },
-    { header: "Capital", accessor: "capital", type: "number" },
-    { header: "Purchase", accessor: "purchase", type: "number" },
-    { header: "Sell", accessor: "sell", type: "number" },
-  ];
 
   const cardInfos = useMemo(
     () =>
@@ -55,13 +50,14 @@ export default function Page() {
   return (
     <AssetsPage
       assets={assetData}
+      loadingAsset={assetLoading}
       assetTransactions={assetTransactionData}
+      loadingAssetTransaction={assetTransactionLoading}
       cardInfos={cardInfos}
-      columns={columns}
-      loading={loading}
       fetchAssetBalance={fetchAssetBalance}
       fetchAsset={fetchAsset}
       createAsset={createAsset}
+      updateAsset={updateAsset}
       deleteAsset={deleteAsset}
       fetchAssetTransaction={fetchAssetTransaction}
       createAssetTransaction={createAssetTransaction}

@@ -15,7 +15,7 @@ import {
 import { Field, FieldGroup } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Plus } from "lucide-react";
+import { Loader, Plus } from "lucide-react";
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -34,8 +34,10 @@ import { useState } from "react";
 //#endregion
 
 export default function AssetCreateDialog({
+  loading,
   onCreate,
 }: {
+  loading: boolean;
   onCreate: (asset: Asset) => Promise<void>;
 }) {
   const [open, setOpen] = useState<boolean>(false);
@@ -139,9 +141,17 @@ export default function AssetCreateDialog({
 
             <DialogFooter className="pt-2">
               <DialogClose asChild>
-                <Button variant="outline">Cancel</Button>
+                <Button variant="outline" disabled={loading}>
+                  Cancel
+                </Button>
               </DialogClose>
-              <Button type="submit">Submit</Button>
+              <Button type="submit" disabled={loading}>
+                {loading ? (
+                  <Loader className="animate-spin" />
+                ) : (
+                  <span>Submit</span>
+                )}
+              </Button>
             </DialogFooter>
           </form>
         </Form>
