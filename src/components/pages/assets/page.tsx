@@ -2,11 +2,8 @@
 
 //#region Imports
 
-import { MoveDown, MoveUp } from "lucide-react";
-
 import {
   Card,
-  CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
@@ -19,17 +16,10 @@ import { cn } from "@/lib/utils";
 import { AssetHandlers, AssetPageProps } from "@/types/ui/dashboard/asset";
 import AssetEditDialog from "./components/asset-edit-dialog";
 import AssetCreateDialog from "./components/asset-create-dialog";
-import { Asset } from "@/types/data/asset";
 import { formatAssetValue } from "@/utils/asset.util";
 import AssetDeleteDialog from "./components/asset-delete-dialog";
-import { AlertDialog } from "@/components/ui/alert-dialog";
-import DashboardTable from "@/components/dashboard/dashboard-table";
 import AssetTransactions from "./components/asset-transactions";
-import {
-  AssetTransaction,
-  CreateAssetTransactionDTO,
-  UpdateAssetTransactionDTO,
-} from "@/types/dto/asset-transaction/asset-transaction.dto";
+
 import { AssetTransactionHandlers } from "@/types/ui/dashboard/asset-transaction";
 
 //#endregion

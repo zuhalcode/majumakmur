@@ -6,6 +6,7 @@ import {
   CreateAssetTransactionDTO,
 } from "@/types/dto/asset-transaction/asset-transaction";
 import { AssetTransactionHandlers } from "./asset-transaction";
+import { AssetResponse } from "@/types/dto/asset/asset.dto";
 
 //#endregion
 
@@ -27,7 +28,7 @@ interface AssetHandlers {
 }
 
 interface AssetPageProps {
-  assets: Asset[];
+  assets: AssetResponse[];
   loadingAsset: boolean;
 
   assetTransactions: AssetTransaction[];
