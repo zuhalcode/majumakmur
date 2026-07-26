@@ -14,7 +14,7 @@ export const useBackup = () => {
     const backupData: { tables: BackupTable[] } = { tables: [] };
 
     // Daftar tabel yang ingin di-backup
-    const tableNames = ["capitals", "daily_transactions", "global_golds"];
+    const tableNames = ["capitals", "assets", "asset_transactions"];
 
     for (const tableName of tableNames) {
       try {
@@ -23,7 +23,7 @@ export const useBackup = () => {
         if (error) {
           console.error(
             `Error fetching data from ${tableName}:`,
-            error.message
+            error.message,
           );
           continue;
         }
