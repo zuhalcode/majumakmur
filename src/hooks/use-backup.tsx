@@ -1,64 +1,39 @@
-import { createClient } from "@/app/utils/supabase/client";
+import { useCallback, useEffect, useState } from "react";
+import { backupService } from "@/services/backup.service";
 
-const supabase = createClient();
+export function useBackup() {
+  const [loading, setLoading] = useState<boolean>(false);
 
-// Tipe data untuk item di dalam array tables
-type BackupTable = {
-  table_name: string;
-  data: any[];
-};
-
-export const useBackup = () => {
-  const backupTables = async () => {
-    // Deklarasikan tipe eksplisit untuk backupData
-    const backupData: { tables: BackupTable[] } = { tables: [] };
-
-    // Daftar tabel yang ingin di-backup
-    const tableNames = ["capitals", "assets", "asset_transactions"];
-
-    for (const tableName of tableNames) {
-      try {
-        const { data, error } = await supabase.from(tableName).select("*");
-
-        if (error) {
-          console.error(
-            `Error fetching data from ${tableName}:`,
-            error.message,
-          );
-          continue;
-        }
-
-        // Tambahkan data tabel ke backupData
-        backupData.tables.push({
-          table_name: tableName,
-          data: data || [],
-        });
-      } catch (err) {
-        console.error(`Unexpected error while processing ${tableName}:`, err);
-      }
-    }
-
-    // Simpan backup data ke file JSON di client
+  const backup = useCallback(async () => {
     try {
-      const jsonBlob = new Blob([JSON.stringify(backupData, null, 2)], {
-        type: "application/json",
-      });
+      setLoading(true);
 
-      // Buat link untuk mengunduh file
-      const downloadLink = document.createElement("a");
-      downloadLink.href = URL.createObjectURL(jsonBlob);
-      downloadLink.download = "backup.json";
+      const res = await backupService.download();
+      const blob = res.data;
 
-      // Trigger pengunduhan
-      document.body.appendChild(downloadLink);
-      downloadLink.click();
-      document.body.removeChild(downloadLink);
+      const contentDisposition = res.headers["content-disposition"];
 
-      console.log("Backup successfully created and ready for download.");
-    } catch (err) {
-      console.error("Error creating backup file:", err);
+      const filename =
+        contentDisposition?.match(/filename="?(.+?)"?$/)?.[1] ??
+        `backup-${new Date().toISOString()}.json`;
+
+      const url = URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      a.click();
+
+      URL.revokeObjectURL(url);
+    } catch (err: any) {
+      console.log(err);
+    } finally {
+      setLoading(false);
     }
-  };
+  }, []);
 
-  return { backupTables };
-};
+  return {
+    backup,
+    loading,
+  };
+}

@@ -9,18 +9,15 @@ import { Loader } from "lucide-react";
 import { toast } from "sonner";
 
 const DashboardHeader = () => {
-  const { backupTables } = useBackup();
-  const [loading, setLoading] = useState<boolean>(false);
+  const { backup, loading } = useBackup();
 
   const handleOnBackupData = async () => {
-    setLoading(true);
     try {
-      await backupTables();
+      await backup();
+      toast("Backup process completed", { duration: 2000 });
     } catch (error) {
       console.log(error);
-    } finally {
-      toast("Backup process completed", { duration: 2000 });
-      setLoading(false);
+      toast("Backup process error", { duration: 2000 });
     }
   };
 
@@ -31,7 +28,7 @@ const DashboardHeader = () => {
         <Separator orientation="vertical" className="mr-2 h-4" />
       </div>
       <Button onClick={handleOnBackupData} disabled={loading}>
-        {loading ? <Loader /> : "Backup Data"}
+        {loading ? <Loader className="animate-spin" /> : "Backup Data"}
       </Button>
     </header>
   );
