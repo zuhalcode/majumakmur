@@ -26,7 +26,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 import { TaxReport } from "@/types/data/tax";
-import { CardInfo, ColumnConfig } from "@/types/ui/dashboard/capital";
+import { CapitalCardInfo, ColumnConfig } from "@/types/ui/dashboard/capital";
 import {
   Select,
   SelectContent,
@@ -47,7 +47,7 @@ export default function TaxManagementPage({
   setYear,
 }: {
   data: TaxReport[];
-  cardInfos: CardInfo[];
+  cardInfos: CapitalCardInfo[];
   year: number;
   setYear: Dispatch<SetStateAction<number>>;
 }) {
