@@ -15,17 +15,16 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { CapitalHandlers } from "../types/capital-ui";
 
 //#endregion
 
 export default function CapitalDeleteDialog({
   id,
-  loading,
   onDelete,
 }: {
   id: string;
-  loading: boolean;
-  onDelete: (id: string) => Promise<void>;
+  onDelete: CapitalHandlers["delete"];
 }) {
   const handleOnDelete = async () => {
     try {

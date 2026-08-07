@@ -66,9 +66,10 @@ export function useCapitalAPI() {
 
   return {
     data,
+    loading,
     fetch,
     create,
     update,
-    loading,
+    remove,
   };
 }

@@ -10,14 +10,22 @@ import React from "react";
 import { CapitalResponse, UpdateCapitalDTO } from "../types/capital.dto";
 import CapitalEditDialog from "./edit-dialog";
 import { FormattedNumber } from "react-intl";
+import { CapitalHandlers } from "../types/capital-ui";
+import CapitalDeleteDialog from "./delete-dialog";
 
 interface Props {
   capitals: CapitalResponse[];
   loading: boolean;
-  onUpdate: (dto: UpdateCapitalDTO) => Promise<void>;
+  onUpdate: CapitalHandlers["update"];
+  onDelete: CapitalHandlers["delete"];
 }
 
-export default function CapitalTable({ capitals, loading, onUpdate }: Props) {
+export default function CapitalTable({
+  capitals,
+  loading,
+  onUpdate,
+  onDelete,
+}: Props) {
   return (
     <Table>
       <TableHeader>
@@ -67,6 +75,8 @@ export default function CapitalTable({ capitals, loading, onUpdate }: Props) {
                 loading={loading}
                 onUpdate={onUpdate}
               />
+
+              <CapitalDeleteDialog onDelete={onDelete} id={data.id} />
             </TableCell>
           </TableRow>
         ))}

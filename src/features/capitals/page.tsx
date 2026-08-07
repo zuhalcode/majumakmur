@@ -81,7 +81,7 @@ interface PageProps {
 
 export default function CapitalPage(props: PageProps) {
   const { api, cardInfos, filter } = props;
-  const { data: capitals, create, fetch, update, loading } = api;
+  const { data: capitals, create, fetch, update, remove, loading } = api;
   const { month, year } = filter.value;
 
   const resetFilters = () => filter.setValue(DEFAULT_CAPITAL_FILTERS);
@@ -118,6 +118,11 @@ export default function CapitalPage(props: PageProps) {
 
   const handleUpdateCapital: CapitalHandlers["update"] = async (dto) => {
     await update(dto);
+    await fetch();
+  };
+
+  const handleDeleteCapital: CapitalHandlers["delete"] = async (id) => {
+    await remove(id);
     await fetch();
   };
 
@@ -360,6 +365,7 @@ export default function CapitalPage(props: PageProps) {
                 capitals={capitals}
                 loading={loading}
                 onUpdate={handleUpdateCapital}
+                onDelete={handleDeleteCapital}
               />
             </div>
           </CardContent>

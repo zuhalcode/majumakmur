@@ -4,10 +4,7 @@
 
 import { useCapitalAPI } from "@/features/capitals/api/use-capital";
 import { capitalSummary } from "@/features/capitals/capital.util";
-import {
-  CapitalCardInfo,
-  ColumnConfig,
-} from "@/features/capitals/types/capital-ui";
+import { CapitalCardInfo } from "@/features/capitals/types/capital-ui";
 import { useMemo, useState } from "react";
 import { DEFAULT_CAPITAL_FILTERS } from "@/features/capitals/capital.constant";
 import CapitalPage from "@/features/capitals/page";
@@ -20,8 +17,6 @@ export default function Page() {
   const { data } = api;
 
   const [filters, setFilters] = useState(DEFAULT_CAPITAL_FILTERS);
-
-  const displayedData = useMemo(() => data.slice(0, 50), [data]);
 
   const summary = useMemo(() => capitalSummary(data), [data]);
 
@@ -70,7 +65,6 @@ export default function Page() {
   return (
     <CapitalPage
       api={api}
-      data={displayedData}
       cardInfos={cardInfos}
       filter={{ value: filters, setValue: setFilters }}
     />
