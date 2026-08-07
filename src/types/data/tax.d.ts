@@ -1,4 +1,4 @@
-import { Capital } from "./capital";
+import { Capital } from "../../features/capitals/types/capital";
 
 interface TaxReport {
   date: string;

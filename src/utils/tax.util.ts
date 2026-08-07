@@ -1,4 +1,4 @@
-import { Capital } from "@/types/data/capital";
+import { Capital } from "@/features/capitals/types/capital";
 import { TaxReport, TaxSummary } from "@/types/data/tax";
 
 export const buildTaxReport = (data: Capital[], year?: number): TaxReport[] => {

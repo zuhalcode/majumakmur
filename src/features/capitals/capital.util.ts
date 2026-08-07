@@ -1,4 +1,4 @@
-import { Capital, CapitalSummary } from "@/types/data/capital";
+import { Capital, CapitalSummary } from "@/features/capitals/types/capital";
 
 export function capitalSummary(data: Capital[]): CapitalSummary {
   if (!data || data.length === 0) {
