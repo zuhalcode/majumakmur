@@ -4,7 +4,6 @@ import { useCapitalAPI } from "@/features/capitals/api/use-capital";
 import TaxManagementPage from "@/components/pages/tax-page";
 import {
   CapitalCardInfo,
-  ColumnConfig,
 } from "@/features/capitals/types/capital-ui";
 import { useMemo, useState } from "react";
 
