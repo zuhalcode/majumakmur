@@ -1,7 +1,10 @@
-import { Capital } from "@/features/capitals/types/capital";
+import { CapitalResponse } from "@/features/capitals/types/capital.dto";
 import { TaxReport, TaxSummary } from "@/types/data/tax";
 
-export const buildTaxReport = (data: Capital[], year?: number): TaxReport[] => {
+export const buildTaxReport = (
+  data: CapitalResponse[],
+  year?: number,
+): TaxReport[] => {
   const filteredData =
     !year || year === 0
       ? data
