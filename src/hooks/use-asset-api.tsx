@@ -1,5 +1,5 @@
 import { assetService } from "@/services/asset.service";
-import { capitalService } from "@/services/capital.service";
+import { capitalService } from "@/features/capitals/api/capital.service";
 import { Asset } from "@/types/data/asset";
 import { AssetResponse, UpdateAssetDTO } from "@/types/dto/asset/asset.dto";
 import { useCallback, useEffect, useState } from "react";

@@ -38,11 +38,20 @@ import {
 
 import { cn } from "@/lib/utils";
 
-import DashboardTable from "@/components/dashboard/dashboard-table";
-import { CapitalForm, capitalFormSchema } from "@/schemas/capital.schema";
-import { Capital, CapitalFilters } from "@/types/data/capital";
-import { CapitalCardInfo, ColumnConfig } from "@/types/ui/dashboard/capital";
+import {
+  CapitalCardInfo,
+  CapitalFilters,
+  CapitalHandlers,
+} from "@/features/capitals/types/capital-ui";
 
+import {
+  DEFAULT_CAPITAL_FILTERS,
+  MONTHS,
+  TODAY,
+  YEARS,
+} from "@/features/capitals/capital.constant";
+
+import CapitalTable from "./components/table";
 import {
   Select,
   SelectContent,
@@ -50,43 +59,35 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../ui/select";
+} from "@/components/ui/select";
+import { useCapitalAPI } from "./api/use-capital";
+import { CapitalResponse, CreateCapitalDTO } from "./types/capital.dto";
 import {
-  DEFAULT_CAPITAL_FILTERS,
-  MONTHS,
-  TODAY,
-  YEARS,
-} from "@/constants/capital.constant";
+  CreateCapitalForm,
+  createCapitalFormSchema,
+} from "./schemas/create.schema";
 
 //#endregion
 
-export default function CapitalManagementPage({
-  data,
-  cardInfos,
-  columns,
-  loading,
-  filters,
-  setFilters,
-  createData,
-  deleteData,
-  fetchData,
-}: {
-  data: Capital[];
+interface PageProps {
+  api: ReturnType<typeof useCapitalAPI>;
   cardInfos: CapitalCardInfo[];
-  columns: ColumnConfig[];
-  loading: boolean;
-  filters: CapitalFilters;
-  setFilters: Dispatch<SetStateAction<CapitalFilters>>;
-  createData: (capital: Capital) => Promise<void>;
-  deleteData: (id: number) => Promise<void>;
-  fetchData: (filters: CapitalFilters) => Promise<void>;
-}) {
-  const { month, year } = filters;
 
-  const resetFilters = () => setFilters(DEFAULT_CAPITAL_FILTERS);
+  filter: {
+    value: CapitalFilters;
+    setValue: Dispatch<SetStateAction<CapitalFilters>>;
+  };
+}
 
-  const form = useForm<CapitalForm>({
-    resolver: zodResolver(capitalFormSchema),
+export default function CapitalPage(props: PageProps) {
+  const { api, cardInfos, filter } = props;
+  const { data: capitals, create, fetch, update, remove, loading } = api;
+  const { month, year } = filter.value;
+
+  const resetFilters = () => filter.setValue(DEFAULT_CAPITAL_FILTERS);
+
+  const form = useForm<CreateCapitalForm>({
+    resolver: zodResolver(createCapitalFormSchema),
     defaultValues: {
       date: TODAY,
       capital: "",
@@ -99,40 +100,34 @@ export default function CapitalManagementPage({
 
   const handleOnSubmit = handleSubmit(async (values) => {
     try {
-      const transactionData: Capital = {
+      const payload: CreateCapitalDTO = {
         capital: Number(values.capital),
         purchase: Number(values.purchase),
         sell: Number(values.sell),
-        date: new Date(values.date),
+        date: values.date,
       };
 
-      await createData(transactionData);
+      await create(payload);
     } catch (error) {
       console.error("Error inserting data:", error);
     } finally {
       resetFilters();
-      await fetchData(DEFAULT_CAPITAL_FILTERS);
+      await fetch(DEFAULT_CAPITAL_FILTERS);
     }
   });
 
-  const handleOnDelete = async (id: number) => {
-    if (!id) {
-      console.error("ID is not Valid");
-      return;
-    }
+  const handleUpdateCapital: CapitalHandlers["update"] = async (dto) => {
+    await update(dto);
+    await fetch();
+  };
 
-    try {
-      await deleteData(id);
-    } catch (error) {
-      console.error("Error deleting data:", error);
-    } finally {
-      resetFilters();
-      await fetchData(DEFAULT_CAPITAL_FILTERS);
-    }
+  const handleDeleteCapital: CapitalHandlers["delete"] = async (id) => {
+    await remove(id);
+    await fetch();
   };
 
   const handleFilterChange = (key: keyof CapitalFilters) => (value: string) => {
-    setFilters((prev) => ({ ...prev, [key]: Number(value) }));
+    filter.setValue((prev) => ({ ...prev, [key]: Number(value) }));
   };
 
   const disabledInvalidFiltering =
@@ -141,12 +136,12 @@ export default function CapitalManagementPage({
 
   const handleFilterOnClick = async () => {
     if (year === 0 || month === 0) return;
-    await fetchData(filters);
+    await fetch(filter.value);
   };
 
   const handleRefresh = async () => {
     resetFilters();
-    await fetchData(DEFAULT_CAPITAL_FILTERS);
+    await fetch(DEFAULT_CAPITAL_FILTERS);
   };
 
   return (
@@ -366,10 +361,11 @@ export default function CapitalManagementPage({
               </Form>
               {/* Form */}
 
-              <DashboardTable
-                columns={columns}
-                data={data}
-                handleOnDelete={handleOnDelete}
+              <CapitalTable
+                capitals={capitals}
+                loading={loading}
+                onUpdate={handleUpdateCapital}
+                onDelete={handleDeleteCapital}
               />
             </div>
           </CardContent>

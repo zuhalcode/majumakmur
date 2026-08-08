@@ -26,7 +26,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 import { TaxReport } from "@/types/data/tax";
-import { CapitalCardInfo, ColumnConfig } from "@/types/ui/dashboard/capital";
+import { CapitalCardInfo } from "@/features/capitals/types/capital-ui";
 import {
   Select,
   SelectContent,

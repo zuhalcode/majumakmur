@@ -2,21 +2,21 @@
 
 //#region Imports
 
-import { useCapitalAPI } from "@/hooks/use-capital-api";
-import CapitalManagementPage from "@/components/pages/capital-page";
-import { capitalSummary } from "@/utils/capital.util";
-import { CapitalCardInfo, ColumnConfig } from "@/types/ui/dashboard/capital";
+import { useCapitalAPI } from "@/features/capitals/api/use-capital";
+import { capitalSummary } from "@/features/capitals/capital.util";
+import { CapitalCardInfo } from "@/features/capitals/types/capital-ui";
 import { useMemo, useState } from "react";
-import { DEFAULT_CAPITAL_FILTERS } from "@/constants/capital.constant";
+import { DEFAULT_CAPITAL_FILTERS } from "@/features/capitals/capital.constant";
+import CapitalPage from "@/features/capitals/page";
 
 //#endregion
 
 export default function Page() {
-  const { data, loading, createData, deleteData, fetchData } = useCapitalAPI();
+  const api = useCapitalAPI();
+
+  const { data } = api;
 
   const [filters, setFilters] = useState(DEFAULT_CAPITAL_FILTERS);
-
-  const displayedData = useMemo(() => data.slice(0, 50), [data]);
 
   const summary = useMemo(() => capitalSummary(data), [data]);
 
@@ -62,24 +62,11 @@ export default function Page() {
     [totalCashFlow, totalPurchase, totalSell, purchaseDays, lastDateAfter1Year],
   );
 
-  const columns: ColumnConfig[] = [
-    { header: "Date", accessor: "date", type: "date" },
-    { header: "Capital", accessor: "capital", type: "number" },
-    { header: "Purchase", accessor: "purchase", type: "number" },
-    { header: "Sell", accessor: "sell", type: "number" },
-  ];
-
   return (
-    <CapitalManagementPage
-      data={displayedData}
+    <CapitalPage
+      api={api}
       cardInfos={cardInfos}
-      columns={columns}
-      loading={loading}
-      filters={filters}
-      setFilters={setFilters}
-      createData={createData}
-      fetchData={fetchData}
-      deleteData={deleteData}
+      filter={{ value: filters, setValue: setFilters }}
     />
   );
 }

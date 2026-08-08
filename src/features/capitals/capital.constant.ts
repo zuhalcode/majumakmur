@@ -1,4 +1,4 @@
-import { CapitalFilters } from "@/types/data/capital";
+import { CapitalFilters } from "./types/capital-ui";
 
 export const DEFAULT_CAPITAL_FILTERS: CapitalFilters = {
   year: 0,

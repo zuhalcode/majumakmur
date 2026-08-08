@@ -2,8 +2,7 @@
 
 //#region Imports
 
-import { ColumnConfig } from "@/types/ui/dashboard/capital";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { useAssetAPI } from "@/hooks/use-asset-api";
 import AssetsPage from "@/components/pages/assets/page";
 import { useAssetTransactionAPI } from "@/hooks/use-asset-transaction-api";

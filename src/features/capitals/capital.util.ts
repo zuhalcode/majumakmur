@@ -1,6 +1,7 @@
-import { Capital, CapitalSummary } from "@/types/data/capital";
+import { CapitalSummary } from "./types/capital-ui";
+import { CapitalResponse } from "./types/capital.dto";
 
-export function capitalSummary(data: Capital[]): CapitalSummary {
+export function capitalSummary(data: CapitalResponse[]): CapitalSummary {
   if (!data || data.length === 0) {
     return {
       totalPurchase: 0,
