@@ -23,4 +23,8 @@ export const SIDEBAR_MENU = [
       },
     ],
   },
+  {
+    title: "Trash",
+    url: "/dashboard/trash",
+  },
 ];
