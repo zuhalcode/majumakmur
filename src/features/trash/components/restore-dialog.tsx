@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 
-import { Trash } from "lucide-react";
+import { Recycle, Trash } from "lucide-react";
 
 import {
   AlertDialog,
@@ -15,42 +15,44 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { CapitalHandlers } from "../types/capital-ui";
+import { TrashHandlers, TrashResource } from "../trash";
 
 //#endregion
 
-export default function CapitalDeleteDialog({
+export default function TrashRestoreDialog({
   id,
-  onDelete,
+  resource,
+  onRestore,
 }: {
   id: string;
-  onDelete: CapitalHandlers["delete"];
+  resource: TrashResource;
+  onRestore: TrashHandlers["restore"];
 }) {
-  const handleOnDelete = async () => {
+  const handleOnClick = async () => {
     try {
-      await onDelete(id);
+      await onRestore(resource, id);
     } catch (error) {
-      console.error("Error deleting data:", error);
+      console.error("Error Restoring data:", error);
     }
   };
 
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="destructive" size="icon">
-          <Trash className="size-4" />
+        <Button variant="warning" size="icon">
+          <Recycle className="size-4" />
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
           <AlertDialogDescription>
-            This will move capital with id {id} to trash.
+            This will restore {resource} with id {id} from our servers.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={handleOnDelete}>
+          <AlertDialogAction onClick={handleOnClick}>
             Continue
           </AlertDialogAction>
         </AlertDialogFooter>

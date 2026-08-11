@@ -1,16 +1,16 @@
 "use client";
-
 //#regionimports
-import { useCapitalAPI } from "@/features/capitals/api/use-capital";
+
 import TaxManagementPage from "@/components/pages/tax-page";
 import { CapitalCardInfo } from "@/features/capitals/types/capital-ui";
 import { useMemo, useState } from "react";
-
 import { buildTaxReport, buildTaxSummary } from "@/utils/tax.util";
+import { useCapital } from "@/features/capitals/api/use-capital";
+
 //#endregion
 
 export default function Page() {
-  const { data, loading } = useCapitalAPI();
+  const { data, loading } = useCapital();
 
   const [year, setYear] = useState<number>(0);
 
