@@ -1,3 +1,4 @@
+//#region-imports
 import { capitalService } from "@/features/capitals/api/capital.service";
 
 import {
@@ -8,7 +9,9 @@ import {
 import { useCallback, useEffect, useState } from "react";
 import { CapitalFilters } from "../types/capital-ui";
 
-export function useCapitalAPI() {
+//#endregion
+
+export function useCapital() {
   const [data, setData] = useState<CapitalResponse[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
