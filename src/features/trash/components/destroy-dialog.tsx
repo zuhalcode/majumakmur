@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 
-import { Trash } from "lucide-react";
+import { Trash2 } from "lucide-react";
 
 import {
   AlertDialog,
@@ -15,20 +15,22 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { CapitalHandlers } from "../types/capital-ui";
+import { TrashHandlers, TrashResource } from "../trash";
 
 //#endregion
 
-export default function CapitalDeleteDialog({
+export default function TrashDestroyDialog({
   id,
-  onDelete,
+  resource,
+  onDestroy,
 }: {
   id: string;
-  onDelete: CapitalHandlers["delete"];
+  resource: TrashResource;
+  onDestroy: TrashHandlers["destroy"];
 }) {
-  const handleOnDelete = async () => {
+  const handleOnlick = async () => {
     try {
-      await onDelete(id);
+      await onDestroy(resource, id);
     } catch (error) {
       console.error("Error deleting data:", error);
     }
@@ -38,21 +40,20 @@ export default function CapitalDeleteDialog({
     <AlertDialog>
       <AlertDialogTrigger asChild>
         <Button variant="destructive" size="icon">
-          <Trash className="size-4" />
+          <Trash2 className="size-4" />
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
           <AlertDialogDescription>
-            This will move capital with id {id} to trash.
+            This action cannot be undone. This will delete {resource} with id{" "}
+            {id} permanently.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={handleOnDelete}>
-            Continue
-          </AlertDialogAction>
+          <AlertDialogAction onClick={handleOnlick}>Continue</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

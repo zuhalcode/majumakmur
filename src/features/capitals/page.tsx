@@ -60,8 +60,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useCapitalAPI } from "./api/use-capital";
-import { CapitalResponse, CreateCapitalDTO } from "./types/capital.dto";
+import { useCapital } from "./api/use-capital";
+import { CreateCapitalDTO } from "./types/capital.dto";
 import {
   CreateCapitalForm,
   createCapitalFormSchema,
@@ -70,7 +70,7 @@ import {
 //#endregion
 
 interface PageProps {
-  api: ReturnType<typeof useCapitalAPI>;
+  api: ReturnType<typeof useCapital>;
   cardInfos: CapitalCardInfo[];
 
   filter: {

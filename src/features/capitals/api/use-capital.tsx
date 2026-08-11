@@ -8,7 +8,7 @@ import {
 import { useCallback, useEffect, useState } from "react";
 import { CapitalFilters } from "../types/capital-ui";
 
-export function useCapitalAPI() {
+export function useCapital() {
   const [data, setData] = useState<CapitalResponse[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
