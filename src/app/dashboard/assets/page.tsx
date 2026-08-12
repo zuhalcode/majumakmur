@@ -3,10 +3,10 @@
 //#region Imports
 
 import { useMemo } from "react";
-import { useAsset } from "@/features/assets/api/use-asset";
-import AssetsPage from "@/features/assets/page";
-import { useAssetTransaction } from "@/features/assets/api/use-asset-transaction";
 import { useAssetBalanceAPI } from "@/hooks/use-asset-balance-api";
+import { useAsset } from "@/features/asset/api/use-asset";
+import { useAssetTransaction } from "@/features/asset/api/use-asset-transaction";
+import AssetsPage from "@/features/asset/page";
 
 //#endregion
 

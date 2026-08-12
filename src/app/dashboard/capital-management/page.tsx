@@ -2,12 +2,12 @@
 
 //#region Imports
 
-import { capitalSummary } from "@/features/capitals/capital.util";
-import { CapitalCardInfo } from "@/features/capitals/types/capital-ui";
+import { capitalSummary } from "@/features/capital/capital.util";
+import { CapitalCardInfo } from "@/features/capital/types/capital-ui";
 import { useMemo, useState } from "react";
-import { DEFAULT_CAPITAL_FILTERS } from "@/features/capitals/capital.constant";
-import CapitalPage from "@/features/capitals/page";
-import { useCapital } from "@/features/capitals/api/use-capital";
+import { DEFAULT_CAPITAL_FILTERS } from "@/features/capital/capital.constant";
+import CapitalPage from "@/features/capital/page";
+import { useCapital } from "@/features/capital/api/use-capital";
 
 //#endregion
 
