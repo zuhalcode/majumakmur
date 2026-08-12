@@ -3,7 +3,7 @@ import {
   AssetResponse,
   CreateAssetDTO,
   UpdateAssetDTO,
-} from "@/features/assets/asset.dto";
+} from "@/features/asset/asset.dto";
 
 export const assetService = {
   async findAll(): Promise<{ data: AssetResponse[] }> {
