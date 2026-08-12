@@ -7,7 +7,7 @@ import AssetTransactionCreateDialog from "./asset-transaction-create-dialog";
 
 import AssetTransactionTable from "./asset-transaction-table";
 import { AssetTransactionHandlers } from "@/types/ui/dashboard/asset-transaction";
-import { AssetResponse } from "@/features/assets/asset.dto";
+import { AssetResponse } from "@/features/asset/asset.dto";
 
 //#endregion
 
