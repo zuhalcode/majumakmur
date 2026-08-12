@@ -4,7 +4,7 @@ import {
   CapitalResponse,
   CreateCapitalDTO,
   UpdateCapitalDTO,
-} from "@/features/capitals/types/capital.dto";
+} from "@/features/capital/types/capital.dto";
 import { CapitalFilters } from "../types/capital-ui";
 
 export const capitalService = {
