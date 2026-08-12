@@ -1,6 +1,7 @@
 "use client";
 
 //#regionimports
+
 import {
   Table,
   TableBody,
@@ -10,7 +11,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import { Banknote, Loader, MoveDown, MoveUp, RefreshCcw } from "lucide-react";
+import { Banknote, MoveDown, MoveUp, RefreshCcw } from "lucide-react";
 
 import {
   Card,
@@ -26,7 +27,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 import { TaxReport } from "@/types/data/tax";
-import { CapitalCardInfo } from "@/features/capitals/types/capital-ui";
+
 import {
   Select,
   SelectContent,
@@ -34,9 +35,10 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../ui/select";
+} from "../../components/ui/select";
 
 import { Dispatch, SetStateAction, useState } from "react";
+import { CapitalCardInfo } from "../capital/types/capital-ui";
 
 //#endregion
 

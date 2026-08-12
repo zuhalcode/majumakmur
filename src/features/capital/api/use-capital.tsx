@@ -1,13 +1,13 @@
 //#region-imports
-import { capitalService } from "@/features/capitals/api/capital.service";
 
+import { useCallback, useEffect, useState } from "react";
+import { CapitalFilters } from "../types/capital-ui";
 import {
   CapitalResponse,
   CreateCapitalDTO,
   UpdateCapitalDTO,
-} from "@/features/capitals/types/capital.dto";
-import { useCallback, useEffect, useState } from "react";
-import { CapitalFilters } from "../types/capital-ui";
+} from "../types/capital.dto";
+import { capitalService } from "./capital.service";
 
 //#endregion
 

@@ -1,5 +1,5 @@
 //#region-imports
-import { assetTransactionService } from "@/services/asset-transaction.service";
+import { assetTransactionService } from "@/features/asset/services/asset-transaction.service";
 import {
   AssetTransactionResponse,
   CreateAssetTransactionDTO,

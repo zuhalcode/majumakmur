@@ -1,11 +1,12 @@
 "use client";
 //#regionimports
 
-import TaxManagementPage from "@/components/pages/tax-page";
-import { CapitalCardInfo } from "@/features/capitals/types/capital-ui";
+import TaxManagementPage from "@/features/tax/page";
+
 import { useMemo, useState } from "react";
 import { buildTaxReport, buildTaxSummary } from "@/utils/tax.util";
-import { useCapital } from "@/features/capitals/api/use-capital";
+import { useCapital } from "@/features/capital/api/use-capital";
+import { CapitalCardInfo } from "@/features/capital/types/capital-ui";
 
 //#endregion
 

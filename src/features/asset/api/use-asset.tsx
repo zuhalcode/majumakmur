@@ -1,6 +1,6 @@
 //#region-imports
 
-import { assetService } from "@/services/asset.service";
+import { assetService } from "@/features/asset/services/asset.service";
 
 import {
   AssetResponse,
