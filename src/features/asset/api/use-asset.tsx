@@ -6,7 +6,7 @@ import {
   AssetResponse,
   CreateAssetDTO,
   UpdateAssetDTO,
-} from "@/features/assets/asset.dto";
+} from "@/features/asset/asset.dto";
 import { useCallback, useEffect, useState } from "react";
 
 //#endregion
