@@ -1,19 +1,24 @@
+//#region-imports
+
 import { assetService } from "@/services/asset.service";
-import { capitalService } from "@/features/capitals/api/capital.service";
-import { Asset } from "@/types/data/asset";
-import { AssetResponse, UpdateAssetDTO } from "@/types/dto/asset/asset.dto";
+
+import {
+  AssetResponse,
+  CreateAssetDTO,
+  UpdateAssetDTO,
+} from "@/features/assets/asset.dto";
 import { useCallback, useEffect, useState } from "react";
 
-export function useAssetAPI() {
+//#endregion
+
+export function useAsset() {
   const [data, setData] = useState<AssetResponse[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
   const fetchData = useCallback(async () => {
     try {
       setLoading(true);
-
       const { data } = await assetService.findAll();
-
       setData(data);
     } catch (err: any) {
       console.log(err);
@@ -22,7 +27,7 @@ export function useAssetAPI() {
     }
   }, []);
 
-  const createData = useCallback(async (asset: Asset) => {
+  const createData = useCallback(async (asset: CreateAssetDTO) => {
     setLoading(true);
     await assetService.create(asset);
     setLoading(false);

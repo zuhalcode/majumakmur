@@ -3,9 +3,9 @@
 //#region Imports
 
 import { useMemo } from "react";
-import { useAssetAPI } from "@/hooks/use-asset-api";
-import AssetsPage from "@/components/pages/assets/page";
-import { useAssetTransactionAPI } from "@/hooks/use-asset-transaction-api";
+import { useAsset } from "@/features/assets/api/use-asset";
+import AssetsPage from "@/features/assets/page";
+import { useAssetTransaction } from "@/features/assets/api/use-asset-transaction";
 import { useAssetBalanceAPI } from "@/hooks/use-asset-balance-api";
 
 //#endregion
@@ -18,7 +18,7 @@ export default function Page() {
     createData: createAsset,
     updateData: updateAsset,
     deleteData: deleteAsset,
-  } = useAssetAPI();
+  } = useAsset();
 
   const {
     data: assetTransactionData,
@@ -27,7 +27,7 @@ export default function Page() {
     createData: createAssetTransaction,
     deleteData: deleteAssetTransaction,
     updateData: updateAssetTransaction,
-  } = useAssetTransactionAPI();
+  } = useAssetTransaction();
 
   const { data: assetBalances, fetchData: fetchAssetBalance } =
     useAssetBalanceAPI();

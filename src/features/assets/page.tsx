@@ -13,18 +13,42 @@ import { IntlProvider } from "react-intl";
 
 import { cn } from "@/lib/utils";
 
-import { AssetHandlers, AssetPageProps } from "@/types/ui/dashboard/asset";
+import { AssetCardInfo, AssetHandlers } from "@/features/assets/asset";
 import AssetEditDialog from "./components/asset-edit-dialog";
 import AssetCreateDialog from "./components/asset-create-dialog";
 import { formatAssetValue } from "@/utils/asset.util";
 import AssetDeleteDialog from "./components/asset-delete-dialog";
-import AssetTransactions from "./components/asset-transactions";
+import AssetTransactions from "./components/asset-transaction";
 
 import { AssetTransactionHandlers } from "@/types/ui/dashboard/asset-transaction";
+import { AssetResponse } from "@/features/assets/asset.dto";
+import { AssetTransaction } from "@/types/dto/asset-transaction/asset-transaction.dto";
 
 //#endregion
 
-export default function AssetsPage(props: AssetPageProps) {
+interface Props {
+  assets: AssetResponse[];
+  loadingAsset: boolean;
+
+  assetTransactions: AssetTransaction[];
+  loadingAssetTransaction: boolean;
+
+  cardInfos?: AssetCardInfo[];
+
+  fetchAssetBalance: () => Promise<void>;
+
+  fetchAsset: AssetHandlers["fetch"];
+  createAsset: AssetHandlers["create"];
+  updateAsset: AssetHandlers["update"];
+  deleteAsset: AssetHandlers["delete"];
+
+  fetchAssetTransaction: AssetTransactionHandlers["fetch"];
+  createAssetTransaction: AssetTransactionHandlers["create"];
+  updateAssetTransaction: AssetTransactionHandlers["update"];
+  deleteAssetTransaction: AssetTransactionHandlers["delete"];
+}
+
+export default function AssetsPage(props: Props) {
   const {
     assets,
     loadingAsset,

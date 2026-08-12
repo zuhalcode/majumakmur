@@ -19,7 +19,10 @@ import { Loader, Plus } from "lucide-react";
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AssetForm, assetFormSchema } from "@/schemas/asset.schema";
+import {
+  AssetForm,
+  assetFormSchema,
+} from "@/features/assets/schemas/asset.schema";
 import {
   Form,
   FormControl,
@@ -28,8 +31,9 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Asset } from "@/types/data/asset";
 import { useState } from "react";
+import { AssetHandlers } from "../asset";
+import { CreateAssetDTO } from "../asset.dto";
 
 //#endregion
 
@@ -38,7 +42,7 @@ export default function AssetCreateDialog({
   onCreate,
 }: {
   loading: boolean;
-  onCreate: (asset: Asset) => Promise<void>;
+  onCreate: AssetHandlers["create"];
 }) {
   const [open, setOpen] = useState<boolean>(false);
 
@@ -57,13 +61,13 @@ export default function AssetCreateDialog({
     const { name, description, unit } = values;
 
     try {
-      const assetData: Asset = {
+      const payload: CreateAssetDTO = {
         name: name,
         description: description,
         unit: unit,
       };
 
-      await onCreate(assetData);
+      await onCreate(payload);
     } catch (error) {
       console.error("Error inserting data:", error);
     } finally {

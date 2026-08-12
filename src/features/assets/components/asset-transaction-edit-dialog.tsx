@@ -44,7 +44,7 @@ import {
   UpdateAssetTransactionDTO,
 } from "@/types/dto/asset-transaction/asset-transaction.dto";
 import { AssetTransactionHandlers } from "@/types/ui/dashboard/asset-transaction";
-import { AssetResponse } from "@/types/dto/asset/asset.dto";
+import { AssetResponse } from "@/features/assets/asset.dto";
 
 //#endregion
 

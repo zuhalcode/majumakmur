@@ -7,17 +7,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  AssetTransactionResponse,
-  UpdateAssetTransactionDTO,
-} from "@/types/dto/asset-transaction/asset-transaction.dto";
+import { AssetTransactionResponse } from "@/types/dto/asset-transaction/asset-transaction.dto";
 import React from "react";
 import AssetTransactionDeleteDialog from "./asset-transaction-delete-dialog";
 import AssetTransactionEditDialog from "./asset-transaction-edit-dialog";
-import { Asset } from "@/types/data/asset";
+
 import { AssetTransactionHandlers } from "@/types/ui/dashboard/asset-transaction";
-import { Loader } from "lucide-react";
-import { AssetResponse } from "@/types/dto/asset/asset.dto";
+
+import { AssetResponse } from "@/features/assets/asset.dto";
 //#endregion
 
 export default function AssetTransactionTable({

@@ -10,7 +10,7 @@ import { useCallback, useEffect, useState } from "react";
 
 //#endregion
 
-export function useAssetTransactionAPI() {
+export function useAssetTransaction() {
   const [data, setData] = useState<AssetTransactionResponse[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 

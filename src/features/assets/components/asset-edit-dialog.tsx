@@ -22,9 +22,12 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { AssetForm, assetFormSchema } from "@/schemas/asset.schema";
-import { AssetResponse, UpdateAssetDTO } from "@/types/dto/asset/asset.dto";
-import { AssetHandlers } from "@/types/ui/dashboard/asset";
+import {
+  AssetForm,
+  assetFormSchema,
+} from "@/features/assets/schemas/asset.schema";
+import { AssetResponse, UpdateAssetDTO } from "@/features/assets/asset.dto";
+import { AssetHandlers } from "@/features/assets/asset";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader, Pencil } from "lucide-react";
 import { useEffect, useState } from "react";

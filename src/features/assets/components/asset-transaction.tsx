@@ -1,19 +1,25 @@
 //#region-imports
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  AssetTransaction,
-  CreateAssetTransactionDTO,
-  UpdateAssetTransactionDTO,
-} from "@/types/dto/asset-transaction/asset-transaction.dto";
+import { AssetTransaction } from "@/types/dto/asset-transaction/asset-transaction.dto";
 
 import AssetTransactionCreateDialog from "./asset-transaction-create-dialog";
-import { Asset } from "@/types/data/asset";
+
 import AssetTransactionTable from "./asset-transaction-table";
 import { AssetTransactionHandlers } from "@/types/ui/dashboard/asset-transaction";
-import { AssetResponse } from "@/types/dto/asset/asset.dto";
+import { AssetResponse } from "@/features/assets/asset.dto";
 
 //#endregion
+
+interface Props {
+  assets: AssetResponse[];
+  assetTransactions: AssetTransaction[];
+  loadingAssetTransaction: boolean;
+
+  handleCreateAssetTransaction: AssetTransactionHandlers["create"];
+  handleUpdateAssetTransaction: AssetTransactionHandlers["update"];
+  handleDeleteAssetTransaction: AssetTransactionHandlers["delete"];
+}
 
 export default function AssetTransactions({
   assets,
@@ -22,15 +28,7 @@ export default function AssetTransactions({
   handleCreateAssetTransaction,
   handleUpdateAssetTransaction,
   handleDeleteAssetTransaction,
-}: {
-  assets: AssetResponse[];
-  assetTransactions: AssetTransaction[];
-  loadingAssetTransaction: boolean;
-
-  handleCreateAssetTransaction: AssetTransactionHandlers["create"];
-  handleUpdateAssetTransaction: AssetTransactionHandlers["update"];
-  handleDeleteAssetTransaction: AssetTransactionHandlers["delete"];
-}) {
+}: Props) {
   return (
     <Card className="w-full mx-auto">
       <CardHeader className="flex-row flex justify-between items-center">
