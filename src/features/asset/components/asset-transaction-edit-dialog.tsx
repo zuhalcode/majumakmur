@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/dialog";
 
 import { Input } from "@/components/ui/input";
-import { Circle, Loader, Pencil, Plus } from "lucide-react";
+import { Loader, Pencil, Plus } from "lucide-react";
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -25,7 +25,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Asset } from "@/types/data/asset";
+
 import { useEffect, useState } from "react";
 import {
   AssetTransactionForm,
@@ -44,7 +44,7 @@ import {
   UpdateAssetTransactionDTO,
 } from "@/types/dto/asset-transaction/asset-transaction.dto";
 import { AssetTransactionHandlers } from "@/types/ui/dashboard/asset-transaction";
-import { AssetResponse } from "@/features/assets/asset.dto";
+import { AssetResponse } from "@/features/asset/asset.dto";
 
 //#endregion
 

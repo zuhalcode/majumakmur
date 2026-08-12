@@ -25,7 +25,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Asset } from "@/types/data/asset";
 import { useState } from "react";
 import {
   AssetTransactionForm,
@@ -40,6 +39,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { CreateAssetTransactionDTO } from "@/types/dto/asset-transaction/asset-transaction.dto";
+import { AssetResponse } from "../asset.dto";
 
 //#endregion
 
@@ -48,7 +48,7 @@ export default function AssetTransactionCreateDialog({
   loading,
   onCreate,
 }: {
-  assets?: Asset[];
+  assets?: AssetResponse[];
   loading: boolean;
   onCreate: (transaction: CreateAssetTransactionDTO) => Promise<void>;
 }) {

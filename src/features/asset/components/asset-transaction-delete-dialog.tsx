@@ -4,8 +4,6 @@ import { Button } from "@/components/ui/button";
 
 import { Trash } from "lucide-react";
 
-import { useState } from "react";
-
 import {
   AlertDialog,
   AlertDialogAction,
