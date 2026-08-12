@@ -14,7 +14,7 @@ import AssetTransactionEditDialog from "./asset-transaction-edit-dialog";
 
 import { AssetTransactionHandlers } from "@/types/ui/dashboard/asset-transaction";
 
-import { AssetResponse } from "@/features/assets/asset.dto";
+import { AssetResponse } from "@/features/asset/asset.dto";
 //#endregion
 
 export default function AssetTransactionTable({
