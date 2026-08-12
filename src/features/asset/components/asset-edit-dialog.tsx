@@ -11,7 +11,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Field, FieldGroup } from "@/components/ui/field";
 import {
   Form,
   FormControl,
@@ -21,13 +20,12 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   AssetForm,
   assetFormSchema,
-} from "@/features/assets/schemas/asset.schema";
-import { AssetResponse, UpdateAssetDTO } from "@/features/assets/asset.dto";
-import { AssetHandlers } from "@/features/assets/asset";
+} from "@/features/asset/schemas/asset.schema";
+import { AssetResponse, UpdateAssetDTO } from "@/features/asset/asset.dto";
+import { AssetHandlers } from "@/features/asset/asset";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader, Pencil } from "lucide-react";
 import { useEffect, useState } from "react";

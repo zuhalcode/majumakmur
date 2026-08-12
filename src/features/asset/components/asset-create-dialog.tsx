@@ -12,9 +12,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
-import { Field, FieldGroup } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Loader, Plus } from "lucide-react";
 
 import { useForm } from "react-hook-form";
@@ -22,7 +20,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   AssetForm,
   assetFormSchema,
-} from "@/features/assets/schemas/asset.schema";
+} from "@/features/asset/schemas/asset.schema";
 import {
   Form,
   FormControl,
