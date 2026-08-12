@@ -13,7 +13,7 @@ import { IntlProvider } from "react-intl";
 
 import { cn } from "@/lib/utils";
 
-import { AssetCardInfo, AssetHandlers } from "@/features/assets/asset";
+import { AssetCardInfo, AssetHandlers } from "@/features/asset/asset";
 import AssetEditDialog from "./components/asset-edit-dialog";
 import AssetCreateDialog from "./components/asset-create-dialog";
 import { formatAssetValue } from "@/utils/asset.util";
@@ -21,7 +21,7 @@ import AssetDeleteDialog from "./components/asset-delete-dialog";
 import AssetTransactions from "./components/asset-transaction";
 
 import { AssetTransactionHandlers } from "@/types/ui/dashboard/asset-transaction";
-import { AssetResponse } from "@/features/assets/asset.dto";
+import { AssetResponse } from "@/features/asset/asset.dto";
 import { AssetTransaction } from "@/types/dto/asset-transaction/asset-transaction.dto";
 
 //#endregion
