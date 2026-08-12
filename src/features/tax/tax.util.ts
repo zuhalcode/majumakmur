@@ -1,5 +1,5 @@
-import { CapitalResponse } from "@/features/capitals/types/capital.dto";
 import { TaxReport, TaxSummary } from "@/types/data/tax";
+import { CapitalResponse } from "../capital/types/capital.dto";
 
 export const buildTaxReport = (
   data: CapitalResponse[],

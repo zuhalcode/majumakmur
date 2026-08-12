@@ -16,7 +16,7 @@ import { cn } from "@/lib/utils";
 import { AssetCardInfo, AssetHandlers } from "@/features/asset/asset";
 import AssetEditDialog from "./components/asset-edit-dialog";
 import AssetCreateDialog from "./components/asset-create-dialog";
-import { formatAssetValue } from "@/utils/asset.util";
+import { formatAssetValue } from "@/features/asset/asset.util";
 import AssetDeleteDialog from "./components/asset-delete-dialog";
 import AssetTransactions from "./components/asset-transaction";
 

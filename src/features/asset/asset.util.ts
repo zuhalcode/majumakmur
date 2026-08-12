@@ -1,6 +1,6 @@
-import { Asset, AssetSummary } from "@/types/data/asset";
+import { AssetResponse } from "@/features/asset/asset.dto";
 
-export function assetSummary(data: Asset[]): AssetSummary {
+export function assetSummary(data: AssetResponse[]) {
   console.log(data);
 
   if (!data || data.length === 0) {
