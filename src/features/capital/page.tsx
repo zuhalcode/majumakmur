@@ -42,14 +42,14 @@ import {
   CapitalCardInfo,
   CapitalFilters,
   CapitalHandlers,
-} from "@/features/capitals/types/capital-ui";
+} from "@/features/capital/types/capital-ui";
 
 import {
   DEFAULT_CAPITAL_FILTERS,
   MONTHS,
   TODAY,
   YEARS,
-} from "@/features/capitals/capital.constant";
+} from "@/features/capital/capital.constant";
 
 import CapitalTable from "./components/table";
 import {
