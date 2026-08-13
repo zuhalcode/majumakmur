@@ -34,7 +34,10 @@ import DashboardTable from "../dashboard/dashboard-table";
 import api from "@/lib/axios";
 import axios from "axios";
 import env from "@/config/env";
-import { ProductForm, productFormSchema } from "@/schemas/product.schema";
+import {
+  ProductForm,
+  productFormSchema,
+} from "@/features/product/product.schema";
 
 const ProductManagementPage = ({
   data,
@@ -103,7 +106,7 @@ const ProductManagementPage = ({
         uploadFormData,
         {
           withCredentials: false,
-        }
+        },
       );
 
       const { url } = uploadRes.data;

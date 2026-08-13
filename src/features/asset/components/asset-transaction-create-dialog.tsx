@@ -29,7 +29,7 @@ import { useState } from "react";
 import {
   AssetTransactionForm,
   assetTransactionFormSchema,
-} from "@/schemas/asset-transaction.schema";
+} from "@/features/asset/schemas/asset-transaction.schema";
 
 import {
   Select,

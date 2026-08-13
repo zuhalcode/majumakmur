@@ -30,7 +30,7 @@ import { useEffect, useState } from "react";
 import {
   AssetTransactionForm,
   assetTransactionFormSchema,
-} from "@/schemas/asset-transaction.schema";
+} from "@/features/asset/schemas/asset-transaction.schema";
 
 import {
   Select,
@@ -136,10 +136,8 @@ export default function AssetTransactionEditDialog({
       </DialogTrigger>
       <DialogContent className="sm:max-w-sm">
         <DialogHeader>
-          <DialogTitle>Add New Asset Transaction</DialogTitle>
-          <DialogDescription>
-            Fill in the required information below.
-          </DialogDescription>
+          <DialogTitle>Edit Asset Transaction</DialogTitle>
+          <DialogDescription>Update field information below.</DialogDescription>
         </DialogHeader>
 
         <Form {...form}>
