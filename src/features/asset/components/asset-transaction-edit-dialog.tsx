@@ -42,9 +42,9 @@ import {
 import {
   AssetTransactionResponse,
   UpdateAssetTransactionDTO,
-} from "@/types/dto/asset-transaction/asset-transaction.dto";
+} from "@/features/asset/dto/asset-transaction.dto";
 import { AssetTransactionHandlers } from "@/types/ui/dashboard/asset-transaction";
-import { AssetResponse } from "@/features/asset/asset.dto";
+import { AssetResponse } from "@/features/asset/dto/asset.dto";
 
 //#endregion
 

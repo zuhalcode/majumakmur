@@ -1,12 +1,6 @@
 //#region-imports
 
-import { Asset } from "@/types/data/asset";
-import {
-  AssetTransaction,
-  CreateAssetTransactionDTO,
-} from "@/types/dto/asset-transaction/asset-transaction";
-import { AssetTransactionHandlers } from "../../types/ui/dashboard/asset-transaction";
-import { AssetResponse } from "@/features/assets/asset.dto";
+import { CreateAssetDTO, UpdateAssetDTO } from "../dto/asset.dto";
 
 //#endregion
 
@@ -27,4 +21,12 @@ interface AssetHandlers {
   delete: (id: string) => Promise<void>;
 }
 
-export type { AssetCardInfo, AssetPageProps, AssetHandlers };
+interface AssetBalance {
+  id: string;
+  name: string;
+  description?: string;
+  value: number;
+  unit: string;
+}
+
+export type { AssetCardInfo, AssetHandlers, AssetBalance };

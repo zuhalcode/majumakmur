@@ -1,4 +1,4 @@
-import { AssetResponse } from "@/features/asset/asset.dto";
+import { AssetResponse } from "@/features/asset/dto/asset.dto";
 
 export function assetSummary(data: AssetResponse[]) {
   console.log(data);

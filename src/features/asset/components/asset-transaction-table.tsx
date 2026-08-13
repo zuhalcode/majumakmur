@@ -7,14 +7,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { AssetTransactionResponse } from "@/types/dto/asset-transaction/asset-transaction.dto";
+import { AssetTransactionResponse } from "@/features/asset/dto/asset-transaction.dto";
 import React from "react";
 import AssetTransactionDeleteDialog from "./asset-transaction-delete-dialog";
 import AssetTransactionEditDialog from "./asset-transaction-edit-dialog";
 
 import { AssetTransactionHandlers } from "@/types/ui/dashboard/asset-transaction";
 
-import { AssetResponse } from "@/features/asset/asset.dto";
+import { AssetResponse } from "@/features/asset/dto/asset.dto";
 //#endregion
 
 export default function AssetTransactionTable({

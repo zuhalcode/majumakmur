@@ -38,8 +38,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { CreateAssetTransactionDTO } from "@/types/dto/asset-transaction/asset-transaction.dto";
-import { AssetResponse } from "../asset.dto";
+import { CreateAssetTransactionDTO } from "@/features/asset/dto/asset-transaction.dto";
+import { AssetResponse } from "../dto/asset.dto";
 
 //#endregion
 

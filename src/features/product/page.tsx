@@ -1,9 +1,16 @@
 "use client";
 
+//#region-imports
+
 import React, { useState } from "react";
 
 import { IntlProvider } from "react-intl";
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "../../components/ui/card";
 import {
   Form,
   FormControl,
@@ -11,15 +18,15 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../ui/form";
+} from "../../components/ui/form";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../ui/select";
-import { Input } from "../ui/input";
+} from "../../components/ui/select";
+import { Input } from "../../components/ui/input";
 import { Prefix } from "@/types/data/prefix";
 import { Gold } from "@/types/data/gold";
 
@@ -27,10 +34,10 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Product } from "@/types/data/product";
-import { Button } from "../ui/button";
+import { Button } from "../../components/ui/button";
 import { Loader, Plus } from "lucide-react";
 
-import DashboardTable from "../dashboard/dashboard-table";
+import DashboardTable from "../../components/dashboard/dashboard-table";
 import api from "@/lib/axios";
 import axios from "axios";
 import env from "@/config/env";
@@ -38,6 +45,8 @@ import {
   ProductForm,
   productFormSchema,
 } from "@/features/product/product.schema";
+
+//#endregion
 
 const ProductManagementPage = ({
   data,

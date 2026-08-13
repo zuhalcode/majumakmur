@@ -30,8 +30,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useState } from "react";
-import { AssetHandlers } from "../asset";
-import { CreateAssetDTO } from "../asset.dto";
+import { AssetHandlers } from "../types/asset.types";
+import { CreateAssetDTO } from "../dto/asset.dto";
 
 //#endregion
 

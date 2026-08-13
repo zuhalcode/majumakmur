@@ -4,7 +4,7 @@ import { useFetchPrefix } from "@/hooks/use-prefix";
 import { useFetchGoldType } from "@/hooks/use-gold-type";
 import { useProductAPI } from "@/hooks/use-product-api";
 
-import ProductManagementPage from "@/components/pages/product-page";
+import ProductManagementPage from "@/features/product/page";
 
 export default function Page() {
   const { data, refetch, createData } = useProductAPI();

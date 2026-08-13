@@ -7,7 +7,7 @@ import {
   AssetTransactionResponse,
   CreateAssetTransactionDTO,
   UpdateAssetTransactionDTO,
-} from "@/types/dto/asset-transaction/asset-transaction.dto";
+} from "@/features/asset/dto/asset-transaction.dto";
 
 //#endregion
 

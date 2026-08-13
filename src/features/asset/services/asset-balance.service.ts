@@ -1,5 +1,5 @@
 import api from "@/lib/axios";
-import { AssetBalance } from "@/types/data/asset-balance";
+import { AssetBalance } from "../types/asset.types";
 
 export const assetBalanceService = {
   async findAll(): Promise<{ data: AssetBalance[] }> {

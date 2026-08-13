@@ -1,13 +1,13 @@
 //#region-imports
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { AssetTransaction } from "@/types/dto/asset-transaction/asset-transaction.dto";
+import { AssetTransaction } from "@/features/asset/dto/asset-transaction.dto";
 
 import AssetTransactionCreateDialog from "./asset-transaction-create-dialog";
 
 import AssetTransactionTable from "./asset-transaction-table";
 import { AssetTransactionHandlers } from "@/types/ui/dashboard/asset-transaction";
-import { AssetResponse } from "@/features/asset/asset.dto";
+import { AssetResponse } from "@/features/asset/dto/asset.dto";
 
 //#endregion
 
