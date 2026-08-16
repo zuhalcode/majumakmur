@@ -26,7 +26,7 @@ import { FormattedNumber, IntlProvider } from "react-intl";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-import { TaxReport } from "@/types/data/tax";
+import { TaxReport } from "@/features/tax/tax";
 
 import {
   Select,

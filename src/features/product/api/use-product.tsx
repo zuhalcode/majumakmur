@@ -1,11 +1,11 @@
 import { createClient } from "@/app/utils/supabase/client";
-import { productService } from "@/services/product.service";
-import { Product } from "@/types/data/product";
+import { productService } from "@/features/product/product.service";
+import { Product } from "@/features/product/product";
 import { useCallback, useEffect, useState } from "react";
 
 const supabase = createClient();
 
-export const useProductAPI = () => {
+export const useProduct = () => {
   const [data, setData] = useState<Product[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);

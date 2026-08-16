@@ -1,5 +1,5 @@
 import api from "@/lib/axios";
-import { Product } from "@/types/data/product";
+import { Product } from "@/features/product/product";
 
 export const productService = {
   async findAll(): Promise<{ data: Product[] }> {

@@ -23,7 +23,7 @@ import { formatAssetValue } from "@/features/asset/asset.util";
 import AssetDeleteDialog from "./components/asset-delete-dialog";
 import AssetTransactions from "./components/asset-transaction";
 
-import { AssetTransactionHandlers } from "@/types/ui/dashboard/asset-transaction";
+import { AssetTransactionHandlers } from "@/features/asset/types/asset-transaction.types";
 import { AssetResponse } from "@/features/asset/dto/asset.dto";
 import { AssetTransaction } from "@/features/asset/dto/asset-transaction.dto";
 

@@ -33,7 +33,7 @@ import { Gold } from "@/types/data/gold";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Product } from "@/types/data/product";
+import { Product } from "@/features/product/product";
 import { Button } from "../../components/ui/button";
 import { Loader, Plus } from "lucide-react";
 
@@ -50,12 +50,10 @@ import {
 
 const ProductManagementPage = ({
   data,
-  prefixes,
   goldTypes,
   createData,
   refetch,
 }: {
-  prefixes: Prefix[];
   goldTypes: Gold[];
   data: Product[];
   createData: (formData: FormData) => Promise<any>;
@@ -176,7 +174,7 @@ const ProductManagementPage = ({
                   className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 items-end"
                 >
                   {/* Code */}
-                  <FormField
+                  {/* <FormField
                     control={control}
                     name="code"
                     render={({ field }) => {
@@ -209,7 +207,7 @@ const ProductManagementPage = ({
                         </FormItem>
                       );
                     }}
-                  />
+                  /> */}
 
                   {/* Gold Type */}
                   <FormField

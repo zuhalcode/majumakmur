@@ -3,7 +3,7 @@
 //#region Imports
 
 import { useMemo } from "react";
-import { useAssetBalanceAPI } from "@/hooks/use-asset-balance-api";
+import { useAssetBalanceAPI } from "@/features/asset/api/use-asset-balance";
 import { useAsset } from "@/features/asset/api/use-asset";
 import { useAssetTransaction } from "@/features/asset/api/use-asset-transaction";
 import AssetsPage from "@/features/asset/page";

@@ -1,20 +1,17 @@
 "use client";
 
-import { useFetchPrefix } from "@/hooks/use-prefix";
-import { useFetchGoldType } from "@/hooks/use-gold-type";
-import { useProductAPI } from "@/hooks/use-product-api";
+import { useGold } from "@/features/gold/api/use-gold";
+import { useProduct } from "@/features/product/api/use-product";
 
 import ProductManagementPage from "@/features/product/page";
 
 export default function Page() {
-  const { data, refetch, createData } = useProductAPI();
-  const { data: prefixes } = useFetchPrefix();
-  const { data: goldTypes } = useFetchGoldType();
+  const { data, refetch, createData } = useProduct();
+  const { data: goldTypes } = useGold();
 
   return (
     <ProductManagementPage
       data={data}
-      prefixes={prefixes}
       goldTypes={goldTypes}
       createData={createData}
       refetch={refetch}

@@ -1,6 +1,7 @@
 import { assetBalanceService } from "@/features/asset/services/asset-balance.service";
-import { AssetBalance } from "@/features/asset/types/asset-balance.type";
+
 import { useCallback, useEffect, useState } from "react";
+import { AssetBalance } from "../types/asset.types";
 
 export function useAssetBalanceAPI() {
   const [data, setData] = useState<AssetBalance[]>([]);
