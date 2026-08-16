@@ -27,10 +27,9 @@ import {
   SelectValue,
 } from "../../components/ui/select";
 import { Input } from "../../components/ui/input";
-import { Prefix } from "@/types/data/prefix";
+
 import { Gold } from "@/types/data/gold";
 
-import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Product } from "@/features/product/product";
@@ -50,11 +49,9 @@ import {
 
 const ProductManagementPage = ({
   data,
-  goldTypes,
   createData,
   refetch,
 }: {
-  goldTypes: Gold[];
   data: Product[];
   createData: (formData: FormData) => Promise<any>;
   refetch: () => void;
@@ -210,7 +207,7 @@ const ProductManagementPage = ({
                   /> */}
 
                   {/* Gold Type */}
-                  <FormField
+                  {/* <FormField
                     control={control}
                     name="gold_type"
                     render={({ field }) => {
@@ -243,7 +240,7 @@ const ProductManagementPage = ({
                         </FormItem>
                       );
                     }}
-                  />
+                  /> */}
 
                   {/* Name */}
                   <FormField
