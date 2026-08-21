@@ -8,6 +8,10 @@ export const SIDEBAR_MENU = [
     url: "/dashboard/assets",
   },
   {
+    title: "Products Management",
+    url: "/dashboard/products",
+  },
+  {
     title: "Transactions",
     url: "#",
     items: [
