@@ -1,17 +1,18 @@
 "use client";
 
+import { useProductCategory } from "@/features/product-category/api/use-product-category";
 import { useProduct } from "@/features/product/api/use-product";
 
 import ProductManagementPage from "@/features/product/page";
 
 export default function Page() {
-  const { data, refetch, createData } = useProduct();
+  const apiProduct = useProduct();
+  const apiProductCategory = useProductCategory();
 
   return (
     <ProductManagementPage
-      data={data}
-      createData={createData}
-      refetch={refetch}
+      apiProduct={apiProduct}
+      apiProductCategory={apiProductCategory}
     />
   );
 }

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { ProductStatus } from "./product.types";
 
 export const productFileSchema = z
   .instanceof(File)
@@ -9,17 +10,17 @@ export const productFileSchema = z
     (file) => ["image/jpeg", "image/png", "image/webp"].includes(file.type),
     {
       message: "Only .jpg, .png, .webp formats are supported.",
-    }
+    },
   );
 
-export const productFormSchema = z.object({
-  code: z.string(),
-  gold_type: z.string().min(1),
+export const createProductFormSchema = z.object({
+  category_code: z.string(),
   name: z.string().min(1),
-  desc: z.string().min(1).optional(),
-  weight: z.string(),
-  image: productFileSchema,
-  status: z.string(),
+  description: z.string().min(1).optional(),
+  karat: z.union([z.literal(6), z.literal(8), z.literal(16)]),
+  weight: z.number(),
+  status: z.nativeEnum(ProductStatus),
+  // image: productFileSchema,
 });
 
-export type ProductForm = z.infer<typeof productFormSchema>;
+export type ProductForm = z.infer<typeof createProductFormSchema>;

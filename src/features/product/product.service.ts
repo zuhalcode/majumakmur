@@ -1,20 +1,22 @@
 import api from "@/lib/axios";
-import { Product } from "@/features/product/product";
+import { CreateProductPayload, ProductResponse } from "./product.types";
 
 export const productService = {
-  async findAll(): Promise<{ data: Product[] }> {
+  async findAll(): Promise<{ data: ProductResponse[] }> {
     const res = await api.get("/products");
     return res.data;
   },
 
-  async create(data: FormData): Promise<Product> {
+  async create(
+    data: FormData | CreateProductPayload,
+  ): Promise<ProductResponse> {
     const res = await api.post("/products", data, {
       headers: { "Content-Type": "multipart/form-data" },
     });
     return res.data;
   },
 
-  async update(id: number, updatedData: Partial<Product>) {
+  async update(id: number, updatedData: Partial<ProductResponse>) {
     const res = await api.put(`/products/${id}`, updatedData);
     return res.data;
   },
