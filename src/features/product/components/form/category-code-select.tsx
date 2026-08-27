@@ -37,7 +37,7 @@ const CategoryCodeSelect = ({
       <SelectContent>
         {categories.map((category) => (
           <SelectItem key={category.code} value={category.code}>
-            {category.code}
+            {category.code} | {category.name.toUpperCase()}
           </SelectItem>
         ))}
       </SelectContent>

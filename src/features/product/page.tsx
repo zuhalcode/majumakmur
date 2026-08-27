@@ -87,6 +87,8 @@ const ProductManagementPage = ({
     defaultValues: {
       category_code: "CC",
       name: "",
+      description: "",
+      karat: 8,
       weight: 0,
       status: ProductStatus.WAREHOUSE,
       // image: undefined,
@@ -96,6 +98,7 @@ const ProductManagementPage = ({
   const handleCreateProduct: ProductHandlers["create"] = async (payload) => {
     await createProduct(payload);
     await refetch();
+    form.reset();
   };
 
   const handleOnDelete = async (id: number | undefined) => {
