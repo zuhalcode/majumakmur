@@ -18,9 +18,8 @@ export const createProductFormSchema = z.object({
   name: z.string().min(1),
   description: z.string().min(1).optional(),
   karat: z.union([z.literal(6), z.literal(8), z.literal(16)]),
-  weight: z.number(),
+  weight: z.coerce.number(),
   status: z.nativeEnum(ProductStatus),
-  // image: productFileSchema,
 });
 
 export type ProductForm = z.infer<typeof createProductFormSchema>;

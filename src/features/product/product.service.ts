@@ -8,11 +8,14 @@ export const productService = {
   },
 
   async create(
-    data: FormData | CreateProductPayload,
+    payload: FormData | CreateProductPayload,
   ): Promise<ProductResponse> {
-    const res = await api.post("/products", data, {
-      headers: { "Content-Type": "multipart/form-data" },
-    });
+    console.log("ini payload Product service : ", payload);
+
+    const res = await api.post("/products", payload);
+
+    console.log("ini response Product service : ", res);
+
     return res.data;
   },
 
