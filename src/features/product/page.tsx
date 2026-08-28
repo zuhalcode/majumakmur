@@ -2,7 +2,7 @@
 
 //#region-imports
 
-import React, { useState } from "react";
+import React from "react";
 
 import { IntlProvider } from "react-intl";
 import {
@@ -11,149 +11,85 @@ import {
   CardHeader,
   CardTitle,
 } from "../../components/ui/card";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "../../components/ui/form";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../../components/ui/select";
-import { Input } from "../../components/ui/input";
-
-import { Gold } from "@/types/data/gold";
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Product } from "@/features/product/product";
-import { Button } from "../../components/ui/button";
-import { Loader, Plus } from "lucide-react";
 
-import DashboardTable from "../../components/dashboard/dashboard-table";
-import api from "@/lib/axios";
-import axios from "axios";
-import env from "@/config/env";
 import {
-  ProductForm,
-  productFormSchema,
+  createProductFormSchema,
+  CreateProductFormValues,
 } from "@/features/product/product.schema";
+import ProductTable from "./components/table";
+import { ProductHandlers, ProductStatus } from "./product.types";
+
+import { useProduct } from "./api/use-product";
+import { useProductCategory } from "../product-category/api/use-product-category";
+
+import CreateProductForm from "./components/form/create-product-form";
 
 //#endregion
 
-const ProductManagementPage = ({
-  data,
-  createData,
-  refetch,
-}: {
-  data: Product[];
-  createData: (formData: FormData) => Promise<any>;
-  refetch: () => void;
-}) => {
-  const [loading, setLoading] = useState<boolean>(false);
+type PropsPage = {
+  apiProduct: ReturnType<typeof useProduct>;
+  apiProductCategory: ReturnType<typeof useProductCategory>;
+};
 
-  const form = useForm<ProductForm>({
-    resolver: zodResolver(productFormSchema),
+const ProductManagementPage = ({
+  apiProduct,
+  apiProductCategory,
+}: PropsPage) => {
+  const {
+    data: products,
+    loading: loadingProduct,
+    error: errorProduct,
+    refetch,
+    create: createProduct,
+    update: updateProduct,
+  } = apiProduct;
+
+  const {
+    data: productCategories,
+    loading: loadingProductCategory,
+    error: errorProductCategory,
+  } = apiProductCategory;
+
+  const form = useForm<CreateProductFormValues>({
+    resolver: zodResolver(createProductFormSchema),
     defaultValues: {
-      code: "CC",
-      gold_type: "",
+      category_code: "CC",
       name: "",
-      desc: "",
-      weight: "",
-      image: undefined,
-      status: "active",
+      description: "",
+      karat: 8,
+      weight: 0,
+      status: ProductStatus.WAREHOUSE,
+      // image: undefined,
     },
   });
 
-  const { handleSubmit, control } = form;
-
-  const handleOnSubmit = handleSubmit(async (data: ProductForm) => {
-    setLoading(true);
-    if (!data.image) return;
-
-    const { code, gold_type, name, desc, weight, status } = data;
-
-    const imagekitUploadEndpoint =
-      "https://upload.imagekit.io/api/v1/files/upload";
-
-    const imagekitPublicKey = env.IMAGEKIT_PUBLIC_KEY;
-
-    const uploadFormData = new FormData();
-    const formData = new FormData();
-
-    formData.append("code", code);
-    formData.append("gold_type_id", gold_type);
-    formData.append("name", name);
-    formData.append("desc", desc || "");
-    formData.append("weight", weight);
-    formData.append("status", status);
-
-    try {
-      const { data: auth } = await api.get("/imagekit-auth");
-      const { signature, token, expire } = auth;
-
-      uploadFormData.append("file", data.image); // file dari input
-      uploadFormData.append("fileName", data.image.name); // wajib ada
-      uploadFormData.append("publicKey", imagekitPublicKey); // wajib ada
-      uploadFormData.append("signature", signature);
-      uploadFormData.append("token", token);
-      uploadFormData.append("expire", expire);
-
-      const uploadRes = await axios.post(
-        imagekitUploadEndpoint,
-        uploadFormData,
-        {
-          withCredentials: false,
-        },
-      );
-
-      const { url } = uploadRes.data;
-
-      formData.append("image_url", url || "");
-
-      const res: Product = await createData(formData);
-      if (res) refetch();
-    } catch (error) {
-      console.error("Error inserting data:", error);
-    } finally {
-      setLoading(false);
-    }
-  });
-
-  const handleOnDelete = async (id: number | undefined) => {
-    if (!id) {
-      console.error("ID is not Valid");
-      return;
-    }
-
-    try {
-      //   await deleteData(id);
-      //   refetch();
-    } catch (error) {
-      console.error("Error deleting data:", error);
-    }
+  const handleCreateProduct: ProductHandlers["create"] = async (payload) => {
+    await createProduct(payload);
+    await refetch();
+    form.reset();
   };
 
-  const dataResructured = data.map(({ gold_types, ...item }) => ({
-    ...item,
-    karat: gold_types?.karat || 0,
-  }));
+  const handleUpdateProduct: ProductHandlers["update"] = async (payload) => {
+    await updateProduct(payload);
+    await refetch();
+  };
 
-  const columns = [
-    { header: "Code", accessor: "code", type: "text" },
-    { header: "Name", accessor: "name", type: "text" },
-    { header: "Karat", accessor: "karat", type: "number" },
-    { header: "Weight", accessor: "weight", type: "number" },
-    { header: "Description", accessor: "desc", type: "text" },
-    { header: "Profit", accessor: "profit", type: "number" },
-    { header: "Status", accessor: "status", type: "text" },
-  ];
+  // const handleOnDelete = async (id: number | undefined) => {
+  //   if (!id) {
+  //     console.error("ID is not Valid");
+  //     return;
+  //   }
+
+  //   try {
+  //     //   await deleteData(id);
+  //     //   refetch();
+  //   } catch (error) {
+  //     console.error("Error deleting data:", error);
+  //   }
+  // };
 
   return (
     <IntlProvider locale="id-ID">
@@ -165,191 +101,18 @@ const ProductManagementPage = ({
           <CardContent>
             <div className="space-y-3">
               {/* Form */}
-              <Form {...form}>
-                <form
-                  onSubmit={handleOnSubmit}
-                  className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 items-end"
-                >
-                  {/* Code */}
-                  {/* <FormField
-                    control={control}
-                    name="code"
-                    render={({ field }) => {
-                      return (
-                        <FormItem className="space-y-2 ">
-                          <FormLabel>Code</FormLabel>
-                          <FormControl>
-                            <Select
-                              onValueChange={field.onChange}
-                              value={field.value}
-                              disabled={loading}
-                            >
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select a code" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                {prefixes.map(({ id, code }) => (
-                                  <SelectItem
-                                    key={id}
-                                    value={code}
-                                    className="capitalize"
-                                  >
-                                    {code}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      );
-                    }}
-                  /> */}
-
-                  {/* Gold Type */}
-                  {/* <FormField
-                    control={control}
-                    name="gold_type"
-                    render={({ field }) => {
-                      return (
-                        <FormItem className="space-y-2">
-                          <FormLabel>Gold Type</FormLabel>
-                          <FormControl>
-                            <Select
-                              onValueChange={field.onChange}
-                              value={field.value}
-                              disabled={loading}
-                            >
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select type" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                {goldTypes.map(({ id, karat }) => (
-                                  <SelectItem
-                                    key={id}
-                                    value={id!.toString()}
-                                    className="capitalize"
-                                  >
-                                    {karat}K
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      );
-                    }}
-                  /> */}
-
-                  {/* Name */}
-                  <FormField
-                    control={control}
-                    name="name"
-                    render={({ field }) => {
-                      return (
-                        <FormItem className="space-y-2">
-                          <FormLabel>Name</FormLabel>
-                          <FormControl>
-                            <Input
-                              {...field}
-                              disabled={loading}
-                              placeholder="Name"
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      );
-                    }}
-                  />
-
-                  {/* Description */}
-                  <FormField
-                    control={control}
-                    name="desc"
-                    render={({ field }) => {
-                      return (
-                        <FormItem className="space-y-2">
-                          <FormLabel>Description</FormLabel>
-                          <FormControl>
-                            <Input
-                              {...field}
-                              disabled={loading}
-                              placeholder="description"
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      );
-                    }}
-                  />
-
-                  {/* Weight */}
-                  <FormField
-                    control={control}
-                    name="weight"
-                    render={({ field }) => {
-                      return (
-                        <FormItem className="">
-                          <FormLabel>Weight</FormLabel>
-                          <FormControl>
-                            <Input
-                              {...field}
-                              disabled={loading}
-                              type="number"
-                              placeholder="Amount"
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      );
-                    }}
-                  />
-
-                  {/* Image */}
-                  <FormField
-                    control={control}
-                    name="image"
-                    render={({ field }) => {
-                      return (
-                        <FormItem>
-                          <FormLabel>Image</FormLabel>
-
-                          <FormControl className="cursor-pointer">
-                            <Input
-                              onChange={(e) => {
-                                if (e.target.files) {
-                                  field.onChange(e.target.files[0]);
-                                }
-                              }}
-                              accept="image/*"
-                              disabled={loading}
-                              type="file"
-                              placeholder="Image"
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      );
-                    }}
-                  />
-
-                  <Button className="w-32" disabled={loading}>
-                    <Plus className="w-4 h-4" />
-                    {loading ? (
-                      <Loader className="animate-spin" />
-                    ) : (
-                      "Insert Data"
-                    )}
-                  </Button>
-                </form>
-              </Form>
+              <CreateProductForm
+                form={form}
+                categories={productCategories}
+                loading={loadingProduct}
+                onSubmit={handleCreateProduct}
+              />
               {/* Form */}
 
-              <DashboardTable
-                columns={columns}
-                data={dataResructured}
-                handleOnDelete={handleOnDelete}
+              <ProductTable
+                products={products}
+                onUpdate={handleUpdateProduct}
+                loading={loadingProduct}
               />
             </div>
           </CardContent>

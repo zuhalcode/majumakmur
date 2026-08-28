@@ -19,6 +19,7 @@ export function assetSummary(data: AssetResponse[]) {
 }
 
 export function formatAssetValue(value: number, unit: string) {
+  console.log(`ini unit bro : ${value}-${unit}`);
   switch (unit.toUpperCase()) {
     case "IDR":
       return new Intl.NumberFormat("id-ID", {
