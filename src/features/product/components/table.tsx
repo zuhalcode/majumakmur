@@ -9,20 +9,19 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { ProductHandlers, ProductResponse } from "../product.types";
-import { FormattedNumber } from "react-intl";
+
 import ProductEditDialog from "./edit-dialog";
-import ProductDeleteDialog from "./delete-dialog";
 
 //#endregion
 
 interface Props {
   products: ProductResponse[];
   loading?: boolean;
-  onUpdate?: ProductHandlers["update"];
+  onUpdate: ProductHandlers["update"];
   onDelete?: ProductHandlers["delete"];
 }
 
-export default function CapitalTable({
+export default function ProductTable({
   products,
   loading,
   onUpdate,
@@ -53,13 +52,13 @@ export default function CapitalTable({
             <TableCell>{data.status}</TableCell>
 
             <TableCell className="space-x-1">
-              {/* <ProductEditDialog
-                capital={data}
+              <ProductEditDialog
+                product={data}
                 loading={loading}
                 onUpdate={onUpdate}
               />
 
-              <ProductDeleteDialog onDelete={onDelete} id={data.id} /> */}
+              {/* <ProductDeleteDialog onDelete={onDelete} id={data.id} /> */}
             </TableCell>
           </TableRow>
         ))}

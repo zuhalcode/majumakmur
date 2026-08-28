@@ -96,7 +96,7 @@ export default function CapitalEditDialog({
       </DialogTrigger>
       <DialogContent className="sm:max-w-sm">
         <DialogHeader>
-          <DialogTitle>Add New Asset Transaction</DialogTitle>
+          <DialogTitle>Edit Capital</DialogTitle>
           <DialogDescription>
             Fill in the required information below.
           </DialogDescription>

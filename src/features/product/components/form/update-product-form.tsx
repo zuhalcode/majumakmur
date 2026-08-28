@@ -1,7 +1,6 @@
 //#region-imports
-import React from "react";
-import { UseFormReturn } from "react-hook-form";
-import { ProductCategoryResponse } from "@/features/product-category/product-category.types";
+
+import { useForm } from "react-hook-form";
 import {
   Form,
   FormControl,
@@ -10,56 +9,87 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import CategoryCodeSelect from "./category-code-select";
+
 import KaratSelect from "./karat-select";
 import { Input } from "@/components/ui/input";
 import StatusSelect from "./status-select";
 import { Button } from "@/components/ui/button";
 import { Loader, Plus } from "lucide-react";
-import { CreateProductFormValues } from "../../product.schema";
+import {
+  updateProductFormSchema,
+  UpdateProductFormValues,
+} from "../../product.schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  ProductHandlers,
+  ProductResponse,
+  ProductStatus,
+  UpdateProductPayload,
+} from "../../product.types";
+import { useEffect } from "react";
 //#endregion
 
 interface Props {
-  form: UseFormReturn<CreateProductFormValues>;
-  categories: ProductCategoryResponse[];
-  onSubmit: (values: CreateProductFormValues) => Promise<void>;
+  product: ProductResponse;
+  onUpdate: ProductHandlers["update"];
   loading?: boolean;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
 }
 
-const CreateProductForm = ({
-  form,
-  categories,
-  onSubmit,
-  loading = false,
+const getDefaultValues = (
+  product: ProductResponse,
+): UpdateProductFormValues => ({
+  name: product.name ?? "",
+  description: product.description ?? "",
+  karat: product.karat,
+  weight: product.weight,
+  status: product.status,
+});
+
+const UpdateProductForm = ({
+  product,
+  onUpdate,
+  open,
+  onOpenChange,
+  loading,
 }: Props) => {
+  const form = useForm<UpdateProductFormValues>({
+    resolver: zodResolver(updateProductFormSchema),
+    defaultValues: getDefaultValues(product),
+  });
+
   const { control, handleSubmit } = form;
+
+  const handleOnSubmit = handleSubmit(async (values) => {
+    try {
+      const payload: UpdateProductPayload = {
+        id: product.id,
+        karat: values.karat,
+        name: values.name,
+        description: values.description,
+        weight: values.weight,
+        status: values.status,
+      };
+
+      await onUpdate(payload);
+      onOpenChange(false);
+    } catch (error) {
+      console.error("Error inserting data:", error);
+    }
+  });
+
+  useEffect(() => {
+    if (!open) return;
+    form.reset(getDefaultValues(product));
+  }, [open, product, form]);
+
   return (
     <Form {...form}>
       <form
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleOnSubmit}
         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 items-end"
       >
-        {/* Category Code */}
-        <FormField
-          control={control}
-          name="category_code"
-          render={({ field }) => {
-            return (
-              <FormItem className="space-y-2 ">
-                <FormLabel>Category Code</FormLabel>
-                <FormControl>
-                  <CategoryCodeSelect
-                    categories={categories}
-                    value={field.value}
-                    onChange={field.onChange}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            );
-          }}
-        />
-
         {/* Karat */}
         <FormField
           control={control}
@@ -111,6 +141,7 @@ const CreateProductForm = ({
                     {...field}
                     disabled={loading}
                     placeholder="Description"
+                    value={field.value ?? ""}
                   />
                 </FormControl>
                 <FormMessage />
@@ -162,41 +193,13 @@ const CreateProductForm = ({
           }}
         />
 
-        {/* Image */}
-        {/* <FormField
-                    control={control}
-                    name="image"
-                    render={({ field }) => {
-                      return (
-                        <FormItem>
-                          <FormLabel>Image</FormLabel>
-
-                          <FormControl className="cursor-pointer">
-                            <Input
-                              onChange={(e) => {
-                                if (e.target.files) {
-                                  field.onChange(e.target.files[0]);
-                                }
-                              }}
-                              accept="image/*"
-                              disabled={loading}
-                              type="file"
-                              placeholder="Image"
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      );
-                    }}
-                  /> */}
-
-        <Button className="w-32" disabled={loading}>
+        <Button className="w-32" type="submit" disabled={loading}>
           <Plus className="w-4 h-4" />
-          {loading ? <Loader className="animate-spin" /> : "Insert Data"}
+          {loading ? <Loader className="animate-spin" /> : "Update Data"}
         </Button>
       </form>
     </Form>
   );
 };
 
-export default CreateProductForm;
+export default UpdateProductForm;

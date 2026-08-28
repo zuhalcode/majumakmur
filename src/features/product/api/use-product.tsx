@@ -1,14 +1,18 @@
 import { createClient } from "@/app/utils/supabase/client";
 import { productService } from "@/features/product/product.service";
 import { useCallback, useEffect, useState } from "react";
-import { CreateProductPayload, ProductResponse } from "../product.types";
+import {
+  CreateProductPayload,
+  ProductResponse,
+  UpdateProductPayload,
+} from "../product.types";
 
 export const useProduct = () => {
   const [data, setData] = useState<ProductResponse[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const fetchData = useCallback(async () => {
+  const fetch = useCallback(async () => {
     try {
       setLoading(true);
       const { data } = await productService.findAll();
@@ -20,11 +24,22 @@ export const useProduct = () => {
     }
   }, []);
 
-  const createData = useCallback(async (payload: CreateProductPayload) => {
+  const create = useCallback(async (payload: CreateProductPayload) => {
     setError(null);
 
     try {
       const res = await productService.create(payload);
+      return res;
+    } catch (err: any) {
+      setError(err.response?.data?.message || err.message);
+    }
+  }, []);
+
+  const update = useCallback(async (payload: UpdateProductPayload) => {
+    setError(null);
+
+    try {
+      const res = await productService.update(payload);
       return res;
     } catch (err: any) {
       setError(err.response?.data?.message || err.message);
@@ -43,22 +58,23 @@ export const useProduct = () => {
     if (error) {
       console.log(error);
       setError(error);
-      fetchData();
+      fetch();
     }
 
     setLoading(false);
   }, []);
 
   useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+    fetch();
+  }, [fetch]);
 
   return {
     data,
     error,
     loading,
-    createData,
+    create,
+    update,
     deleteData,
-    refetch: fetchData,
+    refetch: fetch,
   };
 };

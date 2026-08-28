@@ -2,7 +2,7 @@
 
 //#region-imports
 
-import React, { useState } from "react";
+import React from "react";
 
 import { IntlProvider } from "react-intl";
 import {
@@ -11,50 +11,20 @@ import {
   CardHeader,
   CardTitle,
 } from "../../components/ui/card";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "../../components/ui/form";
-
-import { Input } from "../../components/ui/input";
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "../../components/ui/button";
-import { Loader, Plus } from "lucide-react";
 
-import api from "@/lib/axios";
-import axios from "axios";
-import env from "@/config/env";
 import {
   createProductFormSchema,
-  ProductForm,
+  CreateProductFormValues,
 } from "@/features/product/product.schema";
 import ProductTable from "./components/table";
-import {
-  CreateProductPayload,
-  Karat,
-  ProductHandlers,
-  ProductResponse,
-  ProductStatus,
-} from "./product.types";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { ProductCategoryResponse } from "../product-category/product-category.types";
+import { ProductHandlers, ProductStatus } from "./product.types";
+
 import { useProduct } from "./api/use-product";
 import { useProductCategory } from "../product-category/api/use-product-category";
-import KaratSelect from "./components/form/karat-select";
-import StatusSelect from "./components/form/status-select";
-import CategoryCodeSelect from "./components/form/category-code-select";
+
 import CreateProductForm from "./components/form/create-product-form";
 
 //#endregion
@@ -73,7 +43,8 @@ const ProductManagementPage = ({
     loading: loadingProduct,
     error: errorProduct,
     refetch,
-    createData: createProduct,
+    create: createProduct,
+    update: updateProduct,
   } = apiProduct;
 
   const {
@@ -82,7 +53,7 @@ const ProductManagementPage = ({
     error: errorProductCategory,
   } = apiProductCategory;
 
-  const form = useForm<ProductForm>({
+  const form = useForm<CreateProductFormValues>({
     resolver: zodResolver(createProductFormSchema),
     defaultValues: {
       category_code: "CC",
@@ -101,19 +72,24 @@ const ProductManagementPage = ({
     form.reset();
   };
 
-  const handleOnDelete = async (id: number | undefined) => {
-    if (!id) {
-      console.error("ID is not Valid");
-      return;
-    }
-
-    try {
-      //   await deleteData(id);
-      //   refetch();
-    } catch (error) {
-      console.error("Error deleting data:", error);
-    }
+  const handleUpdateProduct: ProductHandlers["update"] = async (payload) => {
+    await updateProduct(payload);
+    await refetch();
   };
+
+  // const handleOnDelete = async (id: number | undefined) => {
+  //   if (!id) {
+  //     console.error("ID is not Valid");
+  //     return;
+  //   }
+
+  //   try {
+  //     //   await deleteData(id);
+  //     //   refetch();
+  //   } catch (error) {
+  //     console.error("Error deleting data:", error);
+  //   }
+  // };
 
   return (
     <IntlProvider locale="id-ID">
@@ -133,7 +109,11 @@ const ProductManagementPage = ({
               />
               {/* Form */}
 
-              <ProductTable products={products} />
+              <ProductTable
+                products={products}
+                onUpdate={handleUpdateProduct}
+                loading={loadingProduct}
+              />
             </div>
           </CardContent>
         </Card>

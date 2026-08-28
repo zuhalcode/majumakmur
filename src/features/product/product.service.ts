@@ -1,5 +1,9 @@
 import api from "@/lib/axios";
-import { CreateProductPayload, ProductResponse } from "./product.types";
+import {
+  CreateProductPayload,
+  ProductResponse,
+  UpdateProductPayload,
+} from "./product.types";
 
 export const productService = {
   async findAll(): Promise<{ data: ProductResponse[] }> {
@@ -10,21 +14,16 @@ export const productService = {
   async create(
     payload: FormData | CreateProductPayload,
   ): Promise<ProductResponse> {
-    console.log("ini payload Product service : ", payload);
-
     const res = await api.post("/products", payload);
-
-    console.log("ini response Product service : ", res);
-
     return res.data;
   },
 
-  async update(id: number, updatedData: Partial<ProductResponse>) {
-    const res = await api.put(`/products/${id}`, updatedData);
+  async update({ id, ...payload }: UpdateProductPayload) {
+    const res = await api.patch(`/products/${id}`, payload);
     return res.data;
   },
 
-  async remove(id: number) {
+  async remove(id: string) {
     const res = await api.delete(`/products/${id}`);
     return res.data;
   },

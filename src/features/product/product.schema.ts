@@ -22,4 +22,16 @@ export const createProductFormSchema = z.object({
   status: z.nativeEnum(ProductStatus),
 });
 
-export type ProductForm = z.infer<typeof createProductFormSchema>;
+export const updateProductFormSchema = z.object({
+  name: z.string().min(1),
+  description: z
+    .string()
+    .transform((val) => (val.trim() === "" ? undefined : val))
+    .optional(),
+  karat: z.union([z.literal(6), z.literal(8), z.literal(16)]),
+  weight: z.coerce.number(),
+  status: z.nativeEnum(ProductStatus),
+});
+
+export type UpdateProductFormValues = z.infer<typeof updateProductFormSchema>;
+export type CreateProductFormValues = z.infer<typeof createProductFormSchema>;

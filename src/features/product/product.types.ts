@@ -37,6 +37,7 @@ interface CreateProductPayload {
 }
 
 interface UpdateProductPayload {
+  id: string;
   karat?: Karat;
   name?: string;
   description?: string;
@@ -51,9 +52,10 @@ interface ProductHandlers {
 }
 
 export type {
+  Karat,
+  ProductHandlers,
   ProductResponse,
   ProductOwnerResponse,
   CreateProductPayload,
-  Karat,
-  ProductHandlers,
+  UpdateProductPayload,
 };
