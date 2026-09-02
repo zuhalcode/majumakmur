@@ -145,7 +145,7 @@ export default function AssetsPage(props: Props) {
 
                 {/* Value */}
                 <div className={cn("text-2xl font-bold")}>
-                  <p>{formatAssetValue(asset.value, asset.unit)}</p>
+                  <p>{formatAssetValue(asset.balance, asset.unit)}</p>
                 </div>
                 {/* Value */}
 

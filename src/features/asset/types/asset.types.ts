@@ -8,7 +8,7 @@ interface AssetCardInfo {
   id: string;
   name: string;
   description?: string;
-  value: number;
+  balance: number;
   unit: string;
   active: boolean;
   percent: number;
@@ -25,7 +25,7 @@ interface AssetBalance {
   id: string;
   name: string;
   description?: string;
-  value: number;
+  balance: number;
   unit: string;
 }
 
