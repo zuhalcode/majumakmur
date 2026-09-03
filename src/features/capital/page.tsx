@@ -66,6 +66,7 @@ import {
   CreateCapitalForm,
   createCapitalFormSchema,
 } from "./schemas/create.schema";
+import { SkeletonCard } from "@/components/skeleton/skeleton-card";
 
 //#endregion
 
@@ -148,57 +149,61 @@ export default function CapitalPage(props: PageProps) {
     <IntlProvider locale="id-ID">
       <div className="w-full flex flex-col gap-5 px-5 lg:px-10 mt-5">
         <div className="w-full grid lg:grid-cols-3 grid-cols-1 gap-2">
-          {cardInfos.map(({ title, desc, value, percent, active }, i) => (
-            <Card key={i}>
-              <CardHeader>
-                <CardTitle className="text-base flex items-center justify-between">
-                  <p>{title}</p>
-                  <Banknote className="size-7" />
-                </CardTitle>
+          {loading ? (
+            <SkeletonCard count={5} />
+          ) : (
+            cardInfos.map(({ title, desc, value, percent, active }, i) => (
+              <Card key={i}>
+                <CardHeader>
+                  <CardTitle className="text-base flex items-center justify-between">
+                    <p>{title}</p>
+                    <Banknote className="size-7" />
+                  </CardTitle>
 
-                <div className={cn("text-2xl font-bold")}>
-                  {title.includes("Ratio") ? (
-                    <>
-                      <p>{value.toFixed(2)} %</p>
-                    </>
-                  ) : (
-                    <p
-                      className={
-                        title.includes("Cash Flow")
-                          ? value < 0
-                            ? "text-red-500"
-                            : "text-green-500"
-                          : "text-white"
-                      }
-                    >
-                      <FormattedNumber
-                        value={value}
-                        style="currency"
-                        currency="IDR"
-                        minimumFractionDigits={0}
-                      />
-                    </p>
-                  )}
-                </div>
-
-                <CardDescription className="flex justify-between items-center">
-                  <p className="">{desc || "Last 2 months"}</p>
-                  {active &&
-                    (percent > 0 ? (
-                      <p className="text-green-500 flex">
-                        <MoveUp className="size-5 text-blue-500" />
-                        {percent}
-                      </p>
+                  <div className={cn("text-2xl font-bold")}>
+                    {title.includes("Ratio") ? (
+                      <>
+                        <p>{value.toFixed(2)} %</p>
+                      </>
                     ) : (
-                      <p className="flex items-center text-red-500">
-                        <MoveDown className="size-5" />
-                        {percent}
+                      <p
+                        className={
+                          title.includes("Cash Flow")
+                            ? value < 0
+                              ? "text-red-500"
+                              : "text-green-500"
+                            : "text-white"
+                        }
+                      >
+                        <FormattedNumber
+                          value={value}
+                          style="currency"
+                          currency="IDR"
+                          minimumFractionDigits={0}
+                        />
                       </p>
-                    ))}
-                </CardDescription>
-              </CardHeader>
-            </Card>
-          ))}
+                    )}
+                  </div>
+
+                  <CardDescription className="flex justify-between items-center">
+                    <p className="">{desc || "Last 2 months"}</p>
+                    {active &&
+                      (percent > 0 ? (
+                        <p className="text-green-500 flex">
+                          <MoveUp className="size-5 text-blue-500" />
+                          {percent}
+                        </p>
+                      ) : (
+                        <p className="flex items-center text-red-500">
+                          <MoveDown className="size-5" />
+                          {percent}
+                        </p>
+                      ))}
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+            ))
+          )}
         </div>
 
         <div className="flex gap-2">

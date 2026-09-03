@@ -11,6 +11,7 @@ import {
 import { ProductHandlers, ProductResponse } from "../product.types";
 
 import ProductEditDialog from "./edit-dialog";
+import { SkeletonTable } from "@/components/skeleton/skeleton-table";
 
 //#endregion
 
@@ -42,26 +43,30 @@ export default function ProductTable({
       </TableHeader>
 
       <TableBody>
-        {products.map((data, i) => (
-          <TableRow key={data.id}>
-            <TableCell>{i + 1}</TableCell>
-            <TableCell>{data.code}</TableCell>
-            <TableCell>{data.name}</TableCell>
-            <TableCell>{data.description}</TableCell>
-            <TableCell>{data.weight}</TableCell>
-            <TableCell>{data.status}</TableCell>
+        {loading ? (
+          <SkeletonTable />
+        ) : (
+          products.map((data, i) => (
+            <TableRow key={data.id}>
+              <TableCell>{i + 1}</TableCell>
+              <TableCell>{data.code}</TableCell>
+              <TableCell>{data.name}</TableCell>
+              <TableCell>{data.description}</TableCell>
+              <TableCell>{data.weight}</TableCell>
+              <TableCell>{data.status}</TableCell>
 
-            <TableCell className="space-x-1">
-              <ProductEditDialog
-                product={data}
-                loading={loading}
-                onUpdate={onUpdate}
-              />
+              <TableCell className="space-x-1">
+                <ProductEditDialog
+                  product={data}
+                  loading={loading}
+                  onUpdate={onUpdate}
+                />
 
-              {/* <ProductDeleteDialog onDelete={onDelete} id={data.id} /> */}
-            </TableCell>
-          </TableRow>
-        ))}
+                {/* <ProductDeleteDialog onDelete={onDelete} id={data.id} /> */}
+              </TableCell>
+            </TableRow>
+          ))
+        )}
       </TableBody>
     </Table>
   );

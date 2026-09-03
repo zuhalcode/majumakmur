@@ -26,6 +26,7 @@ import AssetTransactions from "./components/asset-transaction";
 import { AssetTransactionHandlers } from "@/features/asset/types/asset-transaction.types";
 import { AssetResponse } from "@/features/asset/dto/asset.dto";
 import { AssetTransaction } from "@/features/asset/dto/asset-transaction.dto";
+import { SkeletonCard } from "@/components/skeleton/skeleton-card";
 
 //#endregion
 
@@ -124,37 +125,41 @@ export default function AssetsPage(props: Props) {
 
         {/* Card Info */}
         <div className="w-full grid lg:grid-cols-3 grid-cols-1 gap-2">
-          {cardInfos?.map((asset) => (
-            <Card key={asset.id}>
-              <CardHeader>
-                <CardTitle className="text-base flex items-center justify-between">
-                  <p>{asset.name}</p>
-                  <div className="flex space-x-2">
-                    <AssetEditDialog
-                      asset={asset}
-                      loading={loadingAsset}
-                      onEdit={handleUpdateAsset}
-                    />
-                    <AssetDeleteDialog
-                      id={asset.id}
-                      loading={loadingAsset}
-                      onDelete={handleDeleteAsset}
-                    />
+          {loadingAsset ? (
+            <SkeletonCard />
+          ) : (
+            cardInfos?.map((asset) => (
+              <Card key={asset.id}>
+                <CardHeader>
+                  <CardTitle className="text-base flex items-center justify-between">
+                    <p>{asset.name}</p>
+                    <div className="flex space-x-2">
+                      <AssetEditDialog
+                        asset={asset}
+                        loading={loadingAsset}
+                        onEdit={handleUpdateAsset}
+                      />
+                      <AssetDeleteDialog
+                        id={asset.id}
+                        loading={loadingAsset}
+                        onDelete={handleDeleteAsset}
+                      />
+                    </div>
+                  </CardTitle>
+
+                  {/* Value */}
+                  <div className={cn("text-2xl font-bold")}>
+                    <p>{formatAssetValue(asset.balance, asset.unit)}</p>
                   </div>
-                </CardTitle>
+                  {/* Value */}
 
-                {/* Value */}
-                <div className={cn("text-2xl font-bold")}>
-                  <p>{formatAssetValue(asset.balance, asset.unit)}</p>
-                </div>
-                {/* Value */}
-
-                <CardDescription className="flex justify-between items-center">
-                  <p className="">{asset.description || "Last 2 months"}</p>
-                </CardDescription>
-              </CardHeader>
-            </Card>
-          ))}
+                  <CardDescription className="flex justify-between items-center">
+                    <p className="">{asset.description || "Last 2 months"}</p>
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+            ))
+          )}
         </div>
         {/* Card Info */}
 
