@@ -15,6 +15,7 @@ import AssetTransactionEditDialog from "./asset-transaction-edit-dialog";
 import { AssetTransactionHandlers } from "@/features/asset/types/asset-transaction.types";
 
 import { AssetResponse } from "@/features/asset/dto/asset.dto";
+import { SkeletonTable } from "@/components/skeleton/skeleton-table";
 //#endregion
 
 export default function AssetTransactionTable({
@@ -46,42 +47,48 @@ export default function AssetTransactionTable({
       </TableHeader>
 
       <TableBody>
-        {transactions.map((data, i) => (
-          <TableRow key={data.id}>
-            <TableCell>{i + 1}</TableCell>
-            <TableCell>{data.date}</TableCell>
-            <TableCell>{data.source_asset?.name ?? "NULL"}</TableCell>
-            <TableCell className="space-x-1">
-              <span>{data.source_quantity ?? "NULL"}</span>
-              <span className="uppercase">{data.source_asset?.unit}</span>
-            </TableCell>
+        {loading ? (
+          <SkeletonTable rows={5} columns={8} />
+        ) : (
+          transactions.map((data, i) => (
+            <TableRow key={data.id}>
+              <TableCell>{i + 1}</TableCell>
+              <TableCell>{data.date}</TableCell>
+              <TableCell>{data.source_asset?.name ?? "NULL"}</TableCell>
+              <TableCell className="space-x-1">
+                <span>{data.source_quantity ?? "NULL"}</span>
+                <span className="uppercase">{data.source_asset?.unit}</span>
+              </TableCell>
 
-            <TableCell className="capitalize">
-              {data.destination_asset?.name}
-            </TableCell>
+              <TableCell className="capitalize">
+                {data.destination_asset?.name}
+              </TableCell>
 
-            <TableCell className="space-x-1">
-              <span>{data.destination_quantity}</span>
-              <span className="uppercase">{data.destination_asset?.unit}</span>
-            </TableCell>
+              <TableCell className="space-x-1">
+                <span>{data.destination_quantity}</span>
+                <span className="uppercase">
+                  {data.destination_asset?.unit}
+                </span>
+              </TableCell>
 
-            <TableCell>{data.description ?? "-"}</TableCell>
+              <TableCell>{data.description ?? "-"}</TableCell>
 
-            <TableCell className="space-x-1">
-              <AssetTransactionEditDialog
-                assets={assets}
-                transaction={data}
-                loading={loading}
-                onEdit={handleUpdateAssetTransaction}
-              />
-              <AssetTransactionDeleteDialog
-                id={data.id}
-                loading={loading}
-                onDelete={handleDeleteAssetTransaction}
-              />
-            </TableCell>
-          </TableRow>
-        ))}
+              <TableCell className="space-x-1">
+                <AssetTransactionEditDialog
+                  assets={assets}
+                  transaction={data}
+                  loading={loading}
+                  onEdit={handleUpdateAssetTransaction}
+                />
+                <AssetTransactionDeleteDialog
+                  id={data.id}
+                  loading={loading}
+                  onDelete={handleDeleteAssetTransaction}
+                />
+              </TableCell>
+            </TableRow>
+          ))
+        )}
       </TableBody>
     </Table>
   );
