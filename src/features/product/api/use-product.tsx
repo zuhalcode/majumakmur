@@ -46,21 +46,9 @@ export const useProduct = () => {
     }
   }, []);
 
-  const deleteData = useCallback(async (id: number) => {
-    if (!id) {
-      setError("ID tidak valid untuk penghapusan.");
-      return;
-    }
-
+  const remove = useCallback(async (id: string) => {
     setLoading(true);
-    setError(null); // Reset error sebelum memulai operasi
-
-    if (error) {
-      console.log(error);
-      setError(error);
-      fetch();
-    }
-
+    await productService.remove(id);
     setLoading(false);
   }, []);
 
@@ -74,7 +62,7 @@ export const useProduct = () => {
     loading,
     create,
     update,
-    deleteData,
+    remove,
     refetch: fetch,
   };
 };

@@ -15,7 +15,6 @@ import { Trash } from "lucide-react";
 
 export default function AssetDeleteDialog({
   id,
-  loading,
   onDelete,
 }: {
   id?: string;
@@ -29,7 +28,6 @@ export default function AssetDeleteDialog({
       await onDelete(id);
     } catch (error) {
       console.error("Error deleting data:", error);
-    } finally {
     }
   };
 

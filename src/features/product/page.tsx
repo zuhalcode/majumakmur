@@ -45,6 +45,7 @@ const ProductManagementPage = ({
     refetch,
     create: createProduct,
     update: updateProduct,
+    remove: removeProduct,
   } = apiProduct;
 
   const {
@@ -77,19 +78,10 @@ const ProductManagementPage = ({
     await refetch();
   };
 
-  // const handleOnDelete = async (id: number | undefined) => {
-  //   if (!id) {
-  //     console.error("ID is not Valid");
-  //     return;
-  //   }
-
-  //   try {
-  //     //   await deleteData(id);
-  //     //   refetch();
-  //   } catch (error) {
-  //     console.error("Error deleting data:", error);
-  //   }
-  // };
+  const handleDeleteProduct = async (id: string) => {
+    await removeProduct(id);
+    await refetch();
+  };
 
   return (
     <IntlProvider locale="id-ID">
@@ -107,12 +99,12 @@ const ProductManagementPage = ({
                 loading={loadingProduct}
                 onSubmit={handleCreateProduct}
               />
-              {/* Form */}
 
               <ProductTable
                 products={products}
-                onUpdate={handleUpdateProduct}
                 loading={loadingProduct}
+                onUpdate={handleUpdateProduct}
+                onDelete={handleDeleteProduct}
               />
             </div>
           </CardContent>

@@ -48,9 +48,9 @@ const getDefaultValues = (
 });
 
 const UpdateProductForm = ({
+  open,
   product,
   onUpdate,
-  open,
   onOpenChange,
   loading,
 }: Props) => {
@@ -88,7 +88,7 @@ const UpdateProductForm = ({
     <Form {...form}>
       <form
         onSubmit={handleOnSubmit}
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 items-end"
+        className="grid grid-cols-1 gap-4 items-end"
       >
         {/* Karat */}
         <FormField
