@@ -57,12 +57,6 @@ export function useCapital() {
     setLoading(false);
   }, []);
 
-  const destroy = useCallback(async (id: string) => {
-    setLoading(true);
-    await capitalService.destroy(id);
-    setLoading(false);
-  }, []);
-
   useEffect(() => {
     fetch();
   }, [fetch]);

@@ -12,14 +12,15 @@ import { ProductHandlers, ProductResponse } from "../product.types";
 
 import ProductEditDialog from "./edit-dialog";
 import { SkeletonTable } from "@/components/skeleton/skeleton-table";
+import ProductDeleteDialog from "./delete-dialog";
 
 //#endregion
 
 interface Props {
   products: ProductResponse[];
-  loading?: boolean;
+  loading: boolean;
   onUpdate: ProductHandlers["update"];
-  onDelete?: ProductHandlers["delete"];
+  onDelete: ProductHandlers["delete"];
 }
 
 export default function ProductTable({
@@ -62,7 +63,7 @@ export default function ProductTable({
                   onUpdate={onUpdate}
                 />
 
-                {/* <ProductDeleteDialog onDelete={onDelete} id={data.id} /> */}
+                <ProductDeleteDialog product={data} onDelete={onDelete} />
               </TableCell>
             </TableRow>
           ))
