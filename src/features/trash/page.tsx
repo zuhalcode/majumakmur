@@ -6,9 +6,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 import { IntlProvider } from "react-intl";
 import TrashTable from "./components/table";
-import { TrashHandlers, TrashItem, TrashResource } from "./trash";
+import { TrashHandlers } from "./trash";
 import { useTrash } from "./api/use-trash";
-import { Loader } from "lucide-react";
 
 //#endregion
 

@@ -1,4 +1,4 @@
-import { AssetResponse } from "@/features/asset/dto/asset.dto";
+import { AssetResponse } from "./types/asset.types";
 
 export function assetSummary(data: AssetResponse[]) {
   console.log(data);
@@ -19,7 +19,6 @@ export function assetSummary(data: AssetResponse[]) {
 }
 
 export function formatAssetValue(value: number, unit: string) {
-  console.log(`ini unit bro : ${value}-${unit}`);
   switch (unit.toUpperCase()) {
     case "IDR":
       return new Intl.NumberFormat("id-ID", {

@@ -63,7 +63,7 @@ export default function ProductTable({
                   onUpdate={onUpdate}
                 />
 
-                <ProductDeleteDialog product={data} onDelete={onDelete} />
+                <ProductDeleteDialog id={data.id} onDelete={onDelete} />
               </TableCell>
             </TableRow>
           ))

@@ -16,6 +16,7 @@ import { cn } from "@/lib/utils";
 import {
   AssetCardInfo,
   AssetHandlers,
+  AssetResponse,
 } from "@/features/asset/types/asset.types";
 import AssetEditDialog from "./components/asset-edit-dialog";
 import AssetCreateDialog from "./components/asset-create-dialog";
@@ -23,9 +24,10 @@ import { formatAssetValue } from "@/features/asset/asset.util";
 import AssetDeleteDialog from "./components/asset-delete-dialog";
 import AssetTransactions from "./components/asset-transaction";
 
-import { AssetTransactionHandlers } from "@/features/asset/types/asset-transaction.types";
-import { AssetResponse } from "@/features/asset/dto/asset.dto";
-import { AssetTransaction } from "@/features/asset/dto/asset-transaction.dto";
+import {
+  AssetTransactionHandlers,
+  AssetTransactionResponse,
+} from "@/features/asset/types/asset-transaction.types";
 import { SkeletonCard } from "@/components/skeleton/skeleton-card";
 
 //#endregion
@@ -34,7 +36,7 @@ interface Props {
   assets: AssetResponse[];
   loadingAsset: boolean;
 
-  assetTransactions: AssetTransaction[];
+  assetTransactions: AssetTransactionResponse[];
   loadingAssetTransaction: boolean;
 
   cardInfos?: AssetCardInfo[];
@@ -74,14 +76,14 @@ export default function AssetsPage(props: Props) {
     deleteAssetTransaction,
   } = props;
 
-  const handleCreateAsset: AssetHandlers["create"] = async (dto) => {
-    await createAsset(dto);
+  const handleCreateAsset: AssetHandlers["create"] = async (payload) => {
+    await createAsset(payload);
     await fetchAsset();
     await fetchAssetBalance();
   };
 
-  const handleUpdateAsset: AssetHandlers["update"] = async (dto) => {
-    await updateAsset(dto);
+  const handleUpdateAsset: AssetHandlers["update"] = async (payload) => {
+    await updateAsset(payload);
     await fetchAsset();
     await fetchAssetBalance();
   };

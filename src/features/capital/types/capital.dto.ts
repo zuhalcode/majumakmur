@@ -10,14 +10,14 @@ interface CapitalResponse {
   updated_at: string;
 }
 
-interface CreateCapitalDTO {
+interface CreateCapitalPayload {
   date: string;
   capital: number;
   purchase: number;
   sell: number;
 }
 
-interface UpdateCapitalDTO {
+interface UpdateCapitalPayload {
   id: string;
   date?: string;
   capital?: number;
@@ -25,4 +25,4 @@ interface UpdateCapitalDTO {
   sell?: number;
 }
 
-export type { CapitalResponse, CreateCapitalDTO, UpdateCapitalDTO };
+export type { CapitalResponse, CreateCapitalPayload, UpdateCapitalPayload };

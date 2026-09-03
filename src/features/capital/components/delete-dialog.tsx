@@ -26,14 +26,6 @@ export default function CapitalDeleteDialog({
   id: string;
   onDelete: CapitalHandlers["delete"];
 }) {
-  const handleOnDelete = async () => {
-    try {
-      await onDelete(id);
-    } catch (error) {
-      console.error("Error deleting data:", error);
-    }
-  };
-
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
@@ -50,7 +42,7 @@ export default function CapitalDeleteDialog({
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={handleOnDelete}>
+          <AlertDialogAction onClick={() => onDelete(id)}>
             Continue
           </AlertDialogAction>
         </AlertDialogFooter>

@@ -5,9 +5,9 @@ import api from "@/lib/axios";
 import {
   AssetTransaction,
   AssetTransactionResponse,
-  CreateAssetTransactionDTO,
-  UpdateAssetTransactionDTO,
-} from "@/features/asset/dto/asset-transaction.dto";
+  CreateAssetTransactionPayload,
+  UpdateAssetTransactionPayload,
+} from "@/features/asset/dto/asset-transaction.types";
 
 //#endregion
 
@@ -17,16 +17,18 @@ export const assetTransactionService = {
     return res.data;
   },
 
-  async create(data: CreateAssetTransactionDTO): Promise<AssetTransaction> {
-    const res = await api.post("/asset-transactions", data);
+  async create(
+    payload: CreateAssetTransactionPayload,
+  ): Promise<AssetTransaction> {
+    const res = await api.post("/asset-transactions", payload);
     return res.data;
   },
 
   async update(
     id: string,
-    data: UpdateAssetTransactionDTO,
+    payload: UpdateAssetTransactionPayload,
   ): Promise<AssetTransaction> {
-    const res = await api.patch(`/asset-transactions/${id}`, data);
+    const res = await api.patch(`/asset-transactions/${id}`, payload);
     return res.data;
   },
 

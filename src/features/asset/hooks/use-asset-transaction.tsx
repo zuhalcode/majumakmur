@@ -4,7 +4,7 @@ import {
   AssetTransactionResponse,
   CreateAssetTransactionDTO,
   UpdateAssetTransactionDTO,
-} from "@/features/asset/dto/asset-transaction.dto";
+} from "@/features/asset/dto/asset-transaction.types";
 
 import { useCallback, useEffect, useState } from "react";
 

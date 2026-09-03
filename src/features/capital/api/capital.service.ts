@@ -1,11 +1,15 @@
+//#region-imports
+
 import api from "@/lib/axios";
 
 import {
   CapitalResponse,
-  CreateCapitalDTO,
-  UpdateCapitalDTO,
+  UpdateCapitalPayload,
 } from "@/features/capital/types/capital.dto";
 import { CapitalFilters } from "../types/capital-ui";
+import { CreateAssetPayload } from "@/features/asset/dto/asset.types";
+
+//#endregion
 
 export const capitalService = {
   async findAll(
@@ -15,24 +19,21 @@ export const capitalService = {
     return res.data;
   },
 
-  async create(dto: CreateCapitalDTO): Promise<CapitalResponse> {
-    const res = await api.post("/capitals", dto);
+  async create(payload: CreateAssetPayload): Promise<CapitalResponse> {
+    const res = await api.post("/capitals", payload);
     return res.data;
   },
 
-  async update(id: string, dto: UpdateCapitalDTO): Promise<CapitalResponse> {
-    const res = await api.patch(`/capitals/${id}`, dto);
+  async update(
+    id: string,
+    payload: UpdateCapitalPayload,
+  ): Promise<CapitalResponse> {
+    const res = await api.patch(`/capitals/${id}`, payload);
     return res.data;
   },
 
   // Soft Delete
   async remove(id: string) {
-    const res = await api.delete(`/capitals/${id}`);
-    return res.data;
-  },
-
-  // Hard Delete
-  async destroy(id: string) {
     const res = await api.delete(`/capitals/${id}`);
     return res.data;
   },

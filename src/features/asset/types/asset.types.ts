@@ -1,8 +1,17 @@
-//#region-imports
+interface Asset {
+  id: string;
+  name: string;
+  description?: string;
+  unit: string;
+}
 
-import { CreateAssetDTO, UpdateAssetDTO } from "../dto/asset.dto";
+type CreateAssetPayload = Omit<Asset, "id">;
 
-//#endregion
+type UpdateAssetPayload = Partial<CreateAssetPayload> & {
+  id: string;
+};
+
+type AssetResponse = Asset;
 
 interface AssetCardInfo {
   id: string;
@@ -16,8 +25,8 @@ interface AssetCardInfo {
 
 interface AssetHandlers {
   fetch: () => Promise<void>;
-  create: (dto: CreateAssetDTO) => Promise<void>;
-  update: (dto: UpdateAssetDTO) => Promise<void>;
+  create: (payload: CreateAssetPayload) => Promise<void>;
+  update: (payload: UpdateAssetPayload) => Promise<void>;
   delete: (id: string) => Promise<void>;
 }
 
@@ -29,4 +38,12 @@ interface AssetBalance {
   unit: string;
 }
 
-export type { AssetCardInfo, AssetHandlers, AssetBalance };
+export type {
+  Asset,
+  AssetCardInfo,
+  AssetResponse,
+  CreateAssetPayload,
+  UpdateAssetPayload,
+  AssetHandlers,
+  AssetBalance,
+};

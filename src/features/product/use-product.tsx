@@ -1,11 +1,10 @@
-import { createClient } from "@/app/utils/supabase/client";
 import { productService } from "@/features/product/product.service";
 import { useCallback, useEffect, useState } from "react";
 import {
   CreateProductPayload,
   ProductResponse,
   UpdateProductPayload,
-} from "../product.types";
+} from "./product.types";
 
 export const useProduct = () => {
   const [data, setData] = useState<ProductResponse[]>([]);

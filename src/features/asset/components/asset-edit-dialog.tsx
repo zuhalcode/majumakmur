@@ -24,7 +24,10 @@ import {
   AssetForm,
   assetFormSchema,
 } from "@/features/asset/schemas/asset.schema";
-import { AssetResponse, UpdateAssetDTO } from "@/features/asset/dto/asset.dto";
+import {
+  AssetResponse,
+  UpdateAssetDTO,
+} from "@/features/asset/dto/asset.types";
 import { AssetHandlers } from "@/features/asset/types/asset.types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader, Pencil } from "lucide-react";

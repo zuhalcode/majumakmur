@@ -2,12 +2,12 @@
 
 import { assetService } from "@/features/asset/services/asset.service";
 
+import { useCallback, useEffect, useState } from "react";
 import {
   AssetResponse,
-  CreateAssetDTO,
-  UpdateAssetDTO,
-} from "@/features/asset/dto/asset.dto";
-import { useCallback, useEffect, useState } from "react";
+  CreateAssetPayload,
+  UpdateAssetPayload,
+} from "../types/asset.types";
 
 //#endregion
 
@@ -27,15 +27,15 @@ export function useAsset() {
     }
   }, []);
 
-  const createData = useCallback(async (asset: CreateAssetDTO) => {
+  const createData = useCallback(async (payload: CreateAssetPayload) => {
     setLoading(true);
-    await assetService.create(asset);
+    await assetService.create(payload);
     setLoading(false);
   }, []);
 
-  const updateData = useCallback(async (dto: UpdateAssetDTO) => {
+  const updateData = useCallback(async (payload: UpdateAssetPayload) => {
     setLoading(true);
-    await assetService.update(dto.id, dto);
+    await assetService.update(payload.id, payload);
     setLoading(false);
   }, []);
 

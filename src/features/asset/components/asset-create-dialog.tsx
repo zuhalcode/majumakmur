@@ -31,7 +31,7 @@ import {
 } from "@/components/ui/form";
 import { useState } from "react";
 import { AssetHandlers } from "../types/asset.types";
-import { CreateAssetDTO } from "../dto/asset.dto";
+import { CreateAssetDTO } from "../dto/asset.types";
 
 //#endregion
 

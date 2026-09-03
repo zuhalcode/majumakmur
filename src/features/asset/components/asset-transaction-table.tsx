@@ -7,14 +7,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { AssetTransactionResponse } from "@/features/asset/dto/asset-transaction.dto";
+import { AssetTransactionResponse } from "@/features/asset/dto/asset-transaction.types";
 import React from "react";
 import AssetTransactionDeleteDialog from "./asset-transaction-delete-dialog";
 import AssetTransactionEditDialog from "./asset-transaction-edit-dialog";
 
 import { AssetTransactionHandlers } from "@/features/asset/types/asset-transaction.types";
 
-import { AssetResponse } from "@/features/asset/dto/asset.dto";
+import { AssetResponse } from "@/features/asset/dto/asset.types";
 import { SkeletonTable } from "@/components/skeleton/skeleton-table";
 //#endregion
 

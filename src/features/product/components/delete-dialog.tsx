@@ -21,19 +21,11 @@ import {
 //#endregion
 
 interface Props {
-  product: ProductResponse;
+  id: string;
   onDelete: ProductHandlers["delete"];
 }
 
-export default function ProductDeleteDialog({ product, onDelete }: Props) {
-  const handleOnDelete = async (id: string) => {
-    try {
-      await onDelete(id);
-    } catch (error) {
-      console.error("Error deleting data:", error);
-    }
-  };
-
+export default function ProductDeleteDialog({ id, onDelete }: Props) {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
@@ -45,13 +37,13 @@ export default function ProductDeleteDialog({ product, onDelete }: Props) {
         <AlertDialogHeader>
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. This will delete asset with id{" "}
-            {product.id} from our servers.
+            This action cannot be undone. This will delete product with id {id}{" "}
+            from our servers.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={() => handleOnDelete(product.id)}>
+          <AlertDialogAction onClick={() => onDelete(id)}>
             Continue
           </AlertDialogAction>
         </AlertDialogFooter>
