@@ -12,20 +12,13 @@ import {
   CardTitle,
 } from "../../components/ui/card";
 
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-
-import {
-  createProductFormSchema,
-  CreateProductFormValues,
-} from "@/features/product/product.schema";
 import ProductTable from "./components/table";
-import { ProductHandlers, ProductStatus } from "./product.types";
+import { ProductHandlers } from "./product.types";
 
-import { useProduct } from "./api/use-product";
 import { useProductCategory } from "../product-category/api/use-product-category";
 
 import CreateProductForm from "./components/form/create-product-form";
+import { useProduct } from "./use-product";
 
 //#endregion
 
@@ -54,23 +47,9 @@ const ProductManagementPage = ({
     error: errorProductCategory,
   } = apiProductCategory;
 
-  const form = useForm<CreateProductFormValues>({
-    resolver: zodResolver(createProductFormSchema),
-    defaultValues: {
-      category_code: "CC",
-      name: "",
-      description: "",
-      karat: 8,
-      weight: 0,
-      status: ProductStatus.WAREHOUSE,
-      // image: undefined,
-    },
-  });
-
   const handleCreateProduct: ProductHandlers["create"] = async (payload) => {
     await createProduct(payload);
     await refetch();
-    form.reset();
   };
 
   const handleUpdateProduct: ProductHandlers["update"] = async (payload) => {
@@ -94,7 +73,6 @@ const ProductManagementPage = ({
             <div className="space-y-3">
               {/* Form */}
               <CreateProductForm
-                form={form}
                 categories={productCategories}
                 loading={loadingProduct}
                 onSubmit={handleCreateProduct}

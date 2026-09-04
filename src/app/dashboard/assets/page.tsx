@@ -32,18 +32,15 @@ export default function Page() {
   const { data: assetBalances, fetchData: fetchAssetBalance } =
     useAssetBalanceAPI();
 
-  const cardInfos = useMemo(
-    () =>
-      assetBalances.map(({ id, name, description, unit, balance }) => ({
-        id,
-        name,
-        description,
-        balance,
-        unit,
-        active: true,
-        percent: 0,
-      })),
-    [assetBalances],
+  const cardInfos = assetBalances.map(
+    ({ id, name, description, unit, balance, has_transaction }) => ({
+      id,
+      name,
+      description,
+      has_transaction,
+      balance,
+      unit,
+    }),
   );
 
   return (

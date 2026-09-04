@@ -14,7 +14,7 @@ import { IntlProvider } from "react-intl";
 import { cn } from "@/lib/utils";
 
 import {
-  AssetCardInfo,
+  AssetBalance,
   AssetHandlers,
   AssetResponse,
 } from "@/features/asset/types/asset.types";
@@ -39,7 +39,7 @@ interface Props {
   assetTransactions: AssetTransactionResponse[];
   loadingAssetTransaction: boolean;
 
-  cardInfos?: AssetCardInfo[];
+  cardInfos?: AssetBalance[];
 
   fetchAssetBalance: () => Promise<void>;
 
@@ -76,43 +76,45 @@ export default function AssetsPage(props: Props) {
     deleteAssetTransaction,
   } = props;
 
+  const refreshAssets = async () => {
+    await Promise.all([fetchAsset(), fetchAssetBalance()]);
+  };
+
+  const refreshAssetTransactions = async () => {
+    await Promise.all([fetchAssetTransaction(), fetchAssetBalance()]);
+  };
+
   const handleCreateAsset: AssetHandlers["create"] = async (payload) => {
     await createAsset(payload);
-    await fetchAsset();
-    await fetchAssetBalance();
+    await refreshAssets();
   };
 
   const handleUpdateAsset: AssetHandlers["update"] = async (payload) => {
     await updateAsset(payload);
-    await fetchAsset();
-    await fetchAssetBalance();
+    await refreshAssets();
   };
 
   const handleDeleteAsset: AssetHandlers["delete"] = async (id) => {
     await deleteAsset(id);
-    await fetchAsset();
-    await fetchAssetBalance();
+    await refreshAssets();
   };
 
   const handleCreateAssetTransaction: AssetTransactionHandlers["create"] =
     async (dto) => {
       await createAssetTransaction(dto);
-      await fetchAssetTransaction();
-      await fetchAssetBalance();
+      await refreshAssetTransactions();
     };
 
   const handleUpdateAssetTransaction: AssetTransactionHandlers["update"] =
     async (dto) => {
       await updateAssetTransaction(dto);
-      await fetchAssetTransaction();
-      await fetchAssetBalance();
+      await refreshAssetTransactions();
     };
 
   const handleDeleteAssetTransaction: AssetTransactionHandlers["delete"] =
     async (id) => {
       await deleteAssetTransaction(id);
-      await fetchAssetTransaction();
-      await fetchAssetBalance();
+      await refreshAssetTransactions();
     };
 
   return (
@@ -141,11 +143,12 @@ export default function AssetsPage(props: Props) {
                         loading={loadingAsset}
                         onEdit={handleUpdateAsset}
                       />
-                      <AssetDeleteDialog
-                        id={asset.id}
-                        loading={loadingAsset}
-                        onDelete={handleDeleteAsset}
-                      />
+                      {!asset.has_transaction && (
+                        <AssetDeleteDialog
+                          id={asset.id}
+                          onDelete={handleDeleteAsset}
+                        />
+                      )}
                     </div>
                   </CardTitle>
 

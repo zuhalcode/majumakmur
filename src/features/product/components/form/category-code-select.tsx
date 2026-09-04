@@ -13,7 +13,7 @@ interface Props {
   value?: ProductCategoryResponse["code"];
   categories: ProductCategoryResponse[];
   onChange: (value: ProductCategoryResponse["code"]) => void;
-  disabled?: boolean;
+  disabled: boolean;
 }
 
 const CategoryCodeSelect = ({

@@ -11,17 +11,7 @@ type UpdateAssetPayload = Partial<CreateAssetPayload> & {
   id: string;
 };
 
-type AssetResponse = Asset;
-
-interface AssetCardInfo {
-  id: string;
-  name: string;
-  description?: string;
-  balance: number;
-  unit: string;
-  active: boolean;
-  percent: number;
-}
+type AssetResponse = Asset & { has_transaction?: boolean };
 
 interface AssetHandlers {
   fetch: () => Promise<void>;
@@ -34,13 +24,13 @@ interface AssetBalance {
   id: string;
   name: string;
   description?: string;
+  has_transaction: boolean;
   balance: number;
   unit: string;
 }
 
 export type {
   Asset,
-  AssetCardInfo,
   AssetResponse,
   CreateAssetPayload,
   UpdateAssetPayload,

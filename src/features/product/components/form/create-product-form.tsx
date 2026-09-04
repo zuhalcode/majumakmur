@@ -1,6 +1,6 @@
 //#region-imports
 import React from "react";
-import { UseFormReturn } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { ProductCategoryResponse } from "@/features/product-category/product-category.types";
 import {
   Form,
@@ -16,23 +16,36 @@ import { Input } from "@/components/ui/input";
 import StatusSelect from "./status-select";
 import { Button } from "@/components/ui/button";
 import { Loader, Plus } from "lucide-react";
-import { CreateProductFormValues } from "../../product.schema";
+import {
+  createProductFormSchema,
+  CreateProductFormValues,
+} from "../../product.schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { ProductStatus } from "../../product.types";
 //#endregion
 
 interface Props {
-  form: UseFormReturn<CreateProductFormValues>;
   categories: ProductCategoryResponse[];
-  onSubmit: (values: CreateProductFormValues) => Promise<void>;
-  loading?: boolean;
+  onSubmit: SubmitHandler<CreateProductFormValues>;
+  loading: boolean;
 }
 
-const CreateProductForm = ({
-  form,
-  categories,
-  onSubmit,
-  loading = false,
-}: Props) => {
+const CreateProductForm = ({ categories, onSubmit, loading }: Props) => {
+  const form = useForm<CreateProductFormValues>({
+    resolver: zodResolver(createProductFormSchema),
+    defaultValues: {
+      category_code: "CC",
+      name: "",
+      description: "",
+      karat: 8,
+      weight: 0,
+      status: ProductStatus.WAREHOUSE,
+      // image: undefined,
+    },
+  });
+
   const { control, handleSubmit } = form;
+
   return (
     <Form {...form}>
       <form
@@ -52,6 +65,7 @@ const CreateProductForm = ({
                     categories={categories}
                     value={field.value}
                     onChange={field.onChange}
+                    disabled={loading}
                   />
                 </FormControl>
                 <FormMessage />
@@ -190,7 +204,7 @@ const CreateProductForm = ({
                     }}
                   /> */}
 
-        <Button className="w-32" disabled={loading}>
+        <Button className="w-32" disabled={loading} type="submit">
           <Plus className="w-4 h-4" />
           {loading ? <Loader className="animate-spin" /> : "Insert Data"}
         </Button>

@@ -30,8 +30,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useState } from "react";
-import { AssetHandlers } from "../types/asset.types";
-import { CreateAssetDTO } from "../dto/asset.types";
+import { AssetHandlers, CreateAssetPayload } from "../types/asset.types";
 
 //#endregion
 
@@ -53,19 +52,15 @@ export default function AssetCreateDialog({
     },
   });
 
-  const { handleSubmit, control } = form;
+  const { handleSubmit, control, reset } = form;
 
   const handleOnSubmit = handleSubmit(async (values) => {
-    const { name, description, unit } = values;
+    const payload: CreateAssetPayload = values;
 
     try {
-      const payload: CreateAssetDTO = {
-        name: name,
-        description: description,
-        unit: unit,
-      };
-
       await onCreate(payload);
+      reset();
+      setOpen(false);
     } catch (error) {
       console.error("Error inserting data:", error);
     } finally {

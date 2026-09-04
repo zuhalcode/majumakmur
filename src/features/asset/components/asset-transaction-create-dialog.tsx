@@ -38,8 +38,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { CreateAssetTransactionDTO } from "@/features/asset/dto/asset-transaction.types";
-import { AssetResponse } from "../dto/asset.types";
+import { AssetResponse } from "../types/asset.types";
+import { CreateAssetTransactionPayload } from "../types/asset-transaction.types";
 
 //#endregion
 
@@ -50,7 +50,7 @@ export default function AssetTransactionCreateDialog({
 }: {
   assets?: AssetResponse[];
   loading: boolean;
-  onCreate: (transaction: CreateAssetTransactionDTO) => Promise<void>;
+  onCreate: (payload: CreateAssetTransactionPayload) => Promise<void>;
 }) {
   const [open, setOpen] = useState<boolean>(false);
 

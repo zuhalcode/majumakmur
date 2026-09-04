@@ -23,7 +23,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   ProductHandlers,
   ProductResponse,
-  ProductStatus,
   UpdateProductPayload,
 } from "../../product.types";
 import { useEffect } from "react";
@@ -32,7 +31,7 @@ import { useEffect } from "react";
 interface Props {
   product: ProductResponse;
   onUpdate: ProductHandlers["update"];
-  loading?: boolean;
+  loading: boolean;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
@@ -75,7 +74,7 @@ const UpdateProductForm = ({
       await onUpdate(payload);
       onOpenChange(false);
     } catch (error) {
-      console.error("Error inserting data:", error);
+      console.error("Error updating data:", error);
     }
   });
 
@@ -141,7 +140,6 @@ const UpdateProductForm = ({
                     {...field}
                     disabled={loading}
                     placeholder="Description"
-                    value={field.value ?? ""}
                   />
                 </FormControl>
                 <FormMessage />

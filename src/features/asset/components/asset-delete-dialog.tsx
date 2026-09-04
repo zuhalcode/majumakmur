@@ -1,3 +1,4 @@
+//#region-imports
 import {
   AlertDialog,
   AlertDialogAction,
@@ -12,25 +13,17 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { Trash } from "lucide-react";
+import { AssetHandlers } from "../types/asset.types";
+
+//#endregion
 
 export default function AssetDeleteDialog({
   id,
   onDelete,
 }: {
-  id?: string;
-  loading: boolean;
-  onDelete: (id: string) => Promise<void>;
+  id: string;
+  onDelete: AssetHandlers["delete"];
 }) {
-  const handleOnDelete = async (id?: string) => {
-    if (!id) return;
-
-    try {
-      await onDelete(id);
-    } catch (error) {
-      console.error("Error deleting data:", error);
-    }
-  };
-
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
@@ -48,7 +41,7 @@ export default function AssetDeleteDialog({
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={() => handleOnDelete(id)}>
+          <AlertDialogAction onClick={() => onDelete(id)}>
             Continue
           </AlertDialogAction>
         </AlertDialogFooter>

@@ -24,11 +24,12 @@ import {
   AssetForm,
   assetFormSchema,
 } from "@/features/asset/schemas/asset.schema";
+
 import {
+  AssetHandlers,
   AssetResponse,
-  UpdateAssetDTO,
-} from "@/features/asset/dto/asset.types";
-import { AssetHandlers } from "@/features/asset/types/asset.types";
+  UpdateAssetPayload,
+} from "@/features/asset/types/asset.types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader, Pencil } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -51,9 +52,9 @@ export default function AssetEditDialog({
   const form = useForm<AssetForm>({
     resolver: zodResolver(assetFormSchema),
     defaultValues: {
-      name: "none",
-      description: "none",
-      unit: "none",
+      name: "",
+      description: "",
+      unit: "",
     },
   });
 
@@ -63,7 +64,7 @@ export default function AssetEditDialog({
     const { name, unit, description } = values;
 
     try {
-      const assetData: UpdateAssetDTO = {
+      const assetData: UpdateAssetPayload = {
         id,
         name: name === "none" ? undefined : name,
         unit: unit === "none" ? undefined : unit,
@@ -72,10 +73,7 @@ export default function AssetEditDialog({
 
       await onEdit(assetData);
     } catch (error) {
-      console.error("Error inserting data:", error);
-    } finally {
-      form.reset();
-      setOpen(false);
+      console.error("Error updating data:", error);
     }
   });
 
@@ -98,7 +96,7 @@ export default function AssetEditDialog({
       </DialogTrigger>
       <DialogContent className="sm:max-w-sm">
         <DialogHeader>
-          <DialogTitle>Add New Asset Transaction</DialogTitle>
+          <DialogTitle>Update Asset Transaction</DialogTitle>
           <DialogDescription>
             Fill in the required information below.
           </DialogDescription>
