@@ -43,7 +43,7 @@ import UpdateProductForm from "./form/update-product-form";
 
 interface Props {
   product: ProductResponse;
-  loading?: boolean;
+  loading: boolean;
   onUpdate: ProductHandlers["update"];
 }
 

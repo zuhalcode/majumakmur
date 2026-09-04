@@ -11,16 +11,16 @@ interface AssetTransaction {
   description?: string;
 }
 
-type CreateAssetTransactionPayload = Omit<AssetTransaction, "id">;
-
-type UpdateAssetTransactionPayload = Partial<CreateAssetTransactionPayload> & {
-  id: string;
-};
-
 interface AssetTransactionResponse extends AssetTransaction {
   source_asset?: { name: string; unit: string };
   destination_asset?: { name: string; unit: string };
 }
+
+type CreateAssetTransactionPayload = Omit<AssetTransaction, "id">;
+
+type UpdateAssetTransactionPayload = Partial<Omit<AssetTransaction, "id">> & {
+  id: string;
+};
 
 interface AssetTransactionHandlers {
   fetch: () => Promise<void>;
@@ -30,7 +30,6 @@ interface AssetTransactionHandlers {
 }
 
 export type {
-  AssetTransaction,
   AssetTransactionResponse,
   CreateAssetTransactionPayload,
   UpdateAssetTransactionPayload,

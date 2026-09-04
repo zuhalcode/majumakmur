@@ -1,17 +1,17 @@
-interface Asset {
+interface AssetResponse {
   id: string;
   name: string;
   description?: string;
   unit: string;
 }
 
-type CreateAssetPayload = Omit<Asset, "id">;
+type CreateAssetPayload = Omit<AssetResponse, "id">;
+type UpdateAssetPayload = Partial<Omit<AssetResponse, "id">> & { id: string };
 
-type UpdateAssetPayload = Partial<CreateAssetPayload> & {
-  id: string;
-};
-
-type AssetResponse = Asset & { has_transaction?: boolean };
+interface AssetBalance extends AssetResponse {
+  value: number;
+  has_transaction: boolean;
+}
 
 interface AssetHandlers {
   fetch: () => Promise<void>;
@@ -20,17 +20,7 @@ interface AssetHandlers {
   delete: (id: string) => Promise<void>;
 }
 
-interface AssetBalance {
-  id: string;
-  name: string;
-  description?: string;
-  has_transaction: boolean;
-  balance: number;
-  unit: string;
-}
-
 export type {
-  Asset,
   AssetResponse,
   CreateAssetPayload,
   UpdateAssetPayload,

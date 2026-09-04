@@ -32,24 +32,13 @@ export default function Page() {
   const { data: assetBalances, fetchData: fetchAssetBalance } =
     useAssetBalanceAPI();
 
-  const cardInfos = assetBalances.map(
-    ({ id, name, description, unit, balance, has_transaction }) => ({
-      id,
-      name,
-      description,
-      has_transaction,
-      balance,
-      unit,
-    }),
-  );
-
   return (
     <AssetsPage
       assets={assetData}
       loadingAsset={assetLoading}
       assetTransactions={assetTransactionData}
       loadingAssetTransaction={assetTransactionLoading}
-      cardInfos={cardInfos}
+      assetBalances={assetBalances}
       fetchAssetBalance={fetchAssetBalance}
       fetchAsset={fetchAsset}
       createAsset={createAsset}

@@ -1,12 +1,12 @@
 //#region-imports
 import { assetTransactionService } from "@/features/asset/services/asset-transaction.service";
-import {
-  AssetTransactionResponse,
-  CreateAssetTransactionDTO,
-  UpdateAssetTransactionDTO,
-} from "@/features/asset/dto/asset-transaction.types";
 
 import { useCallback, useEffect, useState } from "react";
+import {
+  AssetTransactionResponse,
+  CreateAssetTransactionPayload,
+  UpdateAssetTransactionPayload,
+} from "../types/asset-transaction.types";
 
 //#endregion
 
@@ -14,7 +14,7 @@ export function useAssetTransaction() {
   const [data, setData] = useState<AssetTransactionResponse[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const fetchData = useCallback(async () => {
+  const fetch = useCallback(async () => {
     try {
       setLoading(true);
       const { data } = await assetTransactionService.findAll();
@@ -26,37 +26,34 @@ export function useAssetTransaction() {
     }
   }, []);
 
-  const createData = useCallback(
-    async (assetTransaction: CreateAssetTransactionDTO) => {
-      setLoading(true);
-      await assetTransactionService.create(assetTransaction);
-      setLoading(false);
-    },
-    [],
-  );
-
-  const updateData = useCallback(async (dto: UpdateAssetTransactionDTO) => {
+  const create = useCallback(async (payload: CreateAssetTransactionPayload) => {
     setLoading(true);
-    await assetTransactionService.update(dto.id, dto);
+    await assetTransactionService.create(payload);
     setLoading(false);
   }, []);
 
-  const deleteData = useCallback(async (id: string) => {
+  const update = useCallback(async (payload: UpdateAssetTransactionPayload) => {
     setLoading(true);
-    await assetTransactionService.softDelete(id);
+    await assetTransactionService.update(payload.id, payload);
+    setLoading(false);
+  }, []);
+
+  const remove = useCallback(async (id: string) => {
+    setLoading(true);
+    await assetTransactionService.remove(id);
     setLoading(false);
   }, []);
 
   useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+    fetch();
+  }, [fetch]);
 
   return {
     data,
     loading,
-    fetchData,
-    createData,
-    updateData,
-    deleteData,
+    refetch: fetch,
+    create,
+    update,
+    remove,
   };
 }

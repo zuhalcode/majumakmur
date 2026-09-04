@@ -15,26 +15,17 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { AssetTransactionHandlers } from "../types/asset-transaction.types";
 
 //#endregion
 
 export default function AssetTransactionDeleteDialog({
   id,
-  loading,
   onDelete,
 }: {
   id: string;
-  loading: boolean;
-  onDelete: (id: string) => Promise<void>;
+  onDelete: AssetTransactionHandlers["delete"];
 }) {
-  const handleOnDelete = async () => {
-    try {
-      await onDelete(id);
-    } catch (error) {
-      console.error("Error deleting data:", error);
-    }
-  };
-
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
@@ -52,7 +43,7 @@ export default function AssetTransactionDeleteDialog({
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={handleOnDelete}>
+          <AlertDialogAction onClick={() => onDelete(id)}>
             Continue
           </AlertDialogAction>
         </AlertDialogFooter>

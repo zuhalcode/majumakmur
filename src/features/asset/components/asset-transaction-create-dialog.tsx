@@ -39,7 +39,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { AssetResponse } from "../types/asset.types";
-import { CreateAssetTransactionPayload } from "../types/asset-transaction.types";
+import {
+  AssetTransactionHandlers,
+  CreateAssetTransactionPayload,
+} from "../types/asset-transaction.types";
 
 //#endregion
 
@@ -48,9 +51,9 @@ export default function AssetTransactionCreateDialog({
   loading,
   onCreate,
 }: {
-  assets?: AssetResponse[];
+  assets: AssetResponse[];
   loading: boolean;
-  onCreate: (payload: CreateAssetTransactionPayload) => Promise<void>;
+  onCreate: AssetTransactionHandlers["create"];
 }) {
   const [open, setOpen] = useState<boolean>(false);
 
@@ -79,7 +82,7 @@ export default function AssetTransactionCreateDialog({
     } = values;
 
     try {
-      const assetTransactionData: CreateAssetTransactionDTO = {
+      const payload: CreateAssetTransactionPayload = {
         source_asset_id:
           source_asset_id === "none" ? undefined : source_asset_id,
         destination_asset_id:
@@ -90,7 +93,7 @@ export default function AssetTransactionCreateDialog({
         date,
       };
 
-      await onCreate(assetTransactionData);
+      await onCreate(payload);
     } catch (error) {
       console.error("Error inserting data:", error);
     } finally {

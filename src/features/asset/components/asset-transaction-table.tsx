@@ -82,9 +82,9 @@ export default function AssetTransactionTable({
                   loading={loading}
                   onEdit={handleUpdateAssetTransaction}
                 />
+
                 <AssetTransactionDeleteDialog
                   id={data.id}
-                  loading={loading}
                   onDelete={handleDeleteAssetTransaction}
                 />
               </TableCell>

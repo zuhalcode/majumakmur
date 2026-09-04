@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/dialog";
 
 import { Input } from "@/components/ui/input";
-import { Loader, Pencil, Plus } from "lucide-react";
+import { Loader, Pencil } from "lucide-react";
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -39,12 +39,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+
 import {
+  AssetTransactionHandlers,
   AssetTransactionResponse,
-  UpdateAssetTransactionDTO,
-} from "@/features/asset/dto/asset-transaction.types";
-import { AssetTransactionHandlers } from "@/features/asset/types/asset-transaction.types";
-import { AssetResponse } from "@/features/asset/dto/asset.types";
+  UpdateAssetTransactionPayload,
+} from "@/features/asset/types/asset-transaction.types";
+import { AssetResponse } from "../types/asset.types";
 
 //#endregion
 
@@ -92,7 +93,7 @@ export default function AssetTransactionEditDialog({
     }
 
     try {
-      const assetTransactionData: UpdateAssetTransactionDTO = {
+      const payload: UpdateAssetTransactionPayload = {
         id,
         source_asset_id:
           source_asset_id === "none" ? undefined : source_asset_id,
@@ -104,7 +105,7 @@ export default function AssetTransactionEditDialog({
         date,
       };
 
-      await onEdit(assetTransactionData);
+      await onEdit(payload);
     } catch (error) {
       console.error("Error inserting data:", error);
     } finally {

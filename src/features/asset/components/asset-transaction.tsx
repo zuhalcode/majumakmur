@@ -1,19 +1,21 @@
 //#region-imports
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { AssetTransaction } from "@/features/asset/dto/asset-transaction.types";
 
 import AssetTransactionCreateDialog from "./asset-transaction-create-dialog";
 
 import AssetTransactionTable from "./asset-transaction-table";
-import { AssetTransactionHandlers } from "@/features/asset/types/asset-transaction.types";
-import { AssetResponse } from "@/features/asset/dto/asset.types";
+import {
+  AssetTransactionHandlers,
+  AssetTransactionResponse,
+} from "@/features/asset/types/asset-transaction.types";
+import { AssetResponse } from "../types/asset.types";
 
 //#endregion
 
 interface Props {
   assets: AssetResponse[];
-  assetTransactions: AssetTransaction[];
+  assetTransactions: AssetTransactionResponse[];
   loadingAssetTransaction: boolean;
 
   handleCreateAssetTransaction: AssetTransactionHandlers["create"];

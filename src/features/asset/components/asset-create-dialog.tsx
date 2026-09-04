@@ -14,7 +14,6 @@ import {
 
 import { Input } from "@/components/ui/input";
 import { Loader, Plus } from "lucide-react";
-
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -63,9 +62,6 @@ export default function AssetCreateDialog({
       setOpen(false);
     } catch (error) {
       console.error("Error inserting data:", error);
-    } finally {
-      form.reset();
-      setOpen(false);
     }
   });
 
@@ -74,7 +70,7 @@ export default function AssetCreateDialog({
       <DialogTrigger asChild>
         <Button variant="secondary" size="lg" className="max-w-sm mx-auto">
           <Plus className="size-4" />
-          <p className="">Add Card</p>
+          <span className="">Add Card</span>
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-sm">
@@ -96,7 +92,7 @@ export default function AssetCreateDialog({
                   <FormItem className="space-y-2">
                     <FormLabel>Name *</FormLabel>
                     <FormControl>
-                      <Input {...field} type="text" placeholder="Name" />
+                      <Input {...field} placeholder="Name" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

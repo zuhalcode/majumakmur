@@ -39,7 +39,7 @@ interface Props {
   assetTransactions: AssetTransactionResponse[];
   loadingAssetTransaction: boolean;
 
-  cardInfos?: AssetBalance[];
+  assetBalances?: AssetBalance[];
 
   fetchAssetBalance: () => Promise<void>;
 
@@ -61,7 +61,7 @@ export default function AssetsPage(props: Props) {
 
     assetTransactions,
     loadingAssetTransaction,
-    cardInfos,
+    assetBalances,
 
     fetchAssetBalance,
 
@@ -132,7 +132,7 @@ export default function AssetsPage(props: Props) {
           {loadingAsset ? (
             <SkeletonCard />
           ) : (
-            cardInfos?.map((asset) => (
+            assetBalances?.map((asset) => (
               <Card key={asset.id}>
                 <CardHeader>
                   <CardTitle className="text-base flex items-center justify-between">
@@ -154,7 +154,7 @@ export default function AssetsPage(props: Props) {
 
                   {/* Value */}
                   <div className={cn("text-2xl font-bold")}>
-                    <p>{formatAssetValue(asset.balance, asset.unit)}</p>
+                    <p>{formatAssetValue(asset.value, asset.unit)}</p>
                   </div>
                   {/* Value */}
 

@@ -1,13 +1,11 @@
 //#region-imports
 
 import api from "@/lib/axios";
-
 import {
-  AssetTransaction,
   AssetTransactionResponse,
   CreateAssetTransactionPayload,
   UpdateAssetTransactionPayload,
-} from "@/features/asset/dto/asset-transaction.types";
+} from "../types/asset-transaction.types";
 
 //#endregion
 
@@ -19,7 +17,7 @@ export const assetTransactionService = {
 
   async create(
     payload: CreateAssetTransactionPayload,
-  ): Promise<AssetTransaction> {
+  ): Promise<AssetTransactionResponse> {
     const res = await api.post("/asset-transactions", payload);
     return res.data;
   },
@@ -27,12 +25,12 @@ export const assetTransactionService = {
   async update(
     id: string,
     payload: UpdateAssetTransactionPayload,
-  ): Promise<AssetTransaction> {
+  ): Promise<AssetTransactionResponse> {
     const res = await api.patch(`/asset-transactions/${id}`, payload);
     return res.data;
   },
 
-  async softDelete(id: string) {
+  async remove(id: string) {
     const res = await api.delete(`/asset-transactions/${id}`);
     return res.data;
   },

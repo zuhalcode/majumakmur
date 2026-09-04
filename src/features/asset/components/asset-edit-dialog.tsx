@@ -20,10 +20,6 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import {
-  AssetForm,
-  assetFormSchema,
-} from "@/features/asset/schemas/asset.schema";
 
 import {
   AssetHandlers,
@@ -34,6 +30,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader, Pencil } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { AssetForm, assetFormSchema } from "../schemas/asset.schema";
 
 //#endregion
 
@@ -121,7 +118,7 @@ export default function AssetEditDialog({
               }}
             />
 
-            {/* NAME */}
+            {/* UNIT */}
             <FormField
               control={control}
               name="unit"
