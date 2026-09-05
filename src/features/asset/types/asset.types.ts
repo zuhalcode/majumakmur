@@ -9,7 +9,7 @@ type CreateAssetPayload = Omit<AssetResponse, "id">;
 type UpdateAssetPayload = Partial<Omit<AssetResponse, "id">> & { id: string };
 
 interface AssetBalance extends AssetResponse {
-  value: number;
+  balance: number;
   has_transaction: boolean;
 }
 
