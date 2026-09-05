@@ -4,10 +4,10 @@ import api from "@/lib/axios";
 
 import {
   CapitalResponse,
+  CreateCapitalPayload,
   UpdateCapitalPayload,
 } from "@/features/capital/types/capital.types";
 import { CapitalFilters } from "../types/capital-ui";
-import { CreateAssetPayload } from "@/features/asset/dto/asset.types";
 
 //#endregion
 
@@ -19,7 +19,7 @@ export const capitalService = {
     return res.data;
   },
 
-  async create(payload: CreateAssetPayload): Promise<CapitalResponse> {
+  async create(payload: CreateCapitalPayload): Promise<CapitalResponse> {
     const res = await api.post("/capitals", payload);
     return res.data;
   },
