@@ -5,7 +5,7 @@ import api from "@/lib/axios";
 import {
   CapitalResponse,
   UpdateCapitalPayload,
-} from "@/features/capital/types/capital.dto";
+} from "@/features/capital/types/capital.types";
 import { CapitalFilters } from "../types/capital-ui";
 import { CreateAssetPayload } from "@/features/asset/dto/asset.types";
 

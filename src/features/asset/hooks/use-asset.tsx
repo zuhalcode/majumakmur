@@ -15,7 +15,7 @@ export function useAsset() {
   const [data, setData] = useState<AssetResponse[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const fetchData = useCallback(async () => {
+  const fetch = useCallback(async () => {
     try {
       setLoading(true);
       const { data } = await assetService.findAll();
@@ -27,34 +27,34 @@ export function useAsset() {
     }
   }, []);
 
-  const createData = useCallback(async (payload: CreateAssetPayload) => {
+  const create = useCallback(async (payload: CreateAssetPayload) => {
     setLoading(true);
     await assetService.create(payload);
     setLoading(false);
   }, []);
 
-  const updateData = useCallback(async (payload: UpdateAssetPayload) => {
+  const update = useCallback(async (payload: UpdateAssetPayload) => {
     setLoading(true);
     await assetService.update(payload.id, payload);
     setLoading(false);
   }, []);
 
-  const deleteData = useCallback(async (id: string) => {
+  const remove = useCallback(async (id: string) => {
     setLoading(true);
     await assetService.softDelete(id);
     setLoading(false);
   }, []);
 
   useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+    fetch();
+  }, [fetch]);
 
   return {
     data,
     loading,
-    fetchData,
-    createData,
-    updateData,
-    deleteData,
+    fetch,
+    create,
+    update,
+    remove,
   };
 }

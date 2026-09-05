@@ -29,52 +29,40 @@ import {
   AssetTransactionResponse,
 } from "@/features/asset/types/asset-transaction.types";
 import { SkeletonCard } from "@/components/skeleton/skeleton-card";
+import { useAsset } from "./hooks/use-asset";
+import { useAssetTransaction } from "./hooks/use-asset-transaction";
+import { useAssetBalance } from "./hooks/use-asset-balance";
 
 //#endregion
 
 interface Props {
-  assets: AssetResponse[];
-  loadingAsset: boolean;
-
-  assetTransactions: AssetTransactionResponse[];
-  loadingAssetTransaction: boolean;
-
-  assetBalances?: AssetBalance[];
-
-  fetchAssetBalance: () => Promise<void>;
-
-  fetchAsset: AssetHandlers["fetch"];
-  createAsset: AssetHandlers["create"];
-  updateAsset: AssetHandlers["update"];
-  deleteAsset: AssetHandlers["delete"];
-
-  fetchAssetTransaction: AssetTransactionHandlers["fetch"];
-  createAssetTransaction: AssetTransactionHandlers["create"];
-  updateAssetTransaction: AssetTransactionHandlers["update"];
-  deleteAssetTransaction: AssetTransactionHandlers["delete"];
+  apiAsset: ReturnType<typeof useAsset>;
+  apiAssetTransaction: ReturnType<typeof useAssetTransaction>;
+  apiAssetBalance: ReturnType<typeof useAssetBalance>;
 }
 
 export default function AssetsPage(props: Props) {
+  const { apiAsset, apiAssetTransaction, apiAssetBalance } = props;
+
   const {
-    assets,
-    loadingAsset,
+    data: assets,
+    loading: loadingAsset,
+    fetch: fetchAsset,
+    create: createAsset,
+    update: updateAsset,
+    remove: removeAsset,
+  } = apiAsset;
 
-    assetTransactions,
-    loadingAssetTransaction,
-    assetBalances,
+  const {
+    data: assetTransactions,
+    loading: loadingAssetTransaction,
+    fetch: fetchAssetTransaction,
+    create: createAssetTransaction,
+    update: updateAssetTransaction,
+    remove: removeAssetTransaction,
+  } = apiAssetTransaction;
 
-    fetchAssetBalance,
-
-    fetchAsset,
-    createAsset,
-    updateAsset,
-    deleteAsset,
-
-    fetchAssetTransaction,
-    createAssetTransaction,
-    updateAssetTransaction,
-    deleteAssetTransaction,
-  } = props;
+  const { data: assetBalances, fetch: fetchAssetBalance } = apiAssetBalance;
 
   const refreshAssets = async () => {
     await Promise.all([fetchAsset(), fetchAssetBalance()]);
@@ -95,7 +83,7 @@ export default function AssetsPage(props: Props) {
   };
 
   const handleDeleteAsset: AssetHandlers["delete"] = async (id) => {
-    await deleteAsset(id);
+    await removeAsset(id);
     await refreshAssets();
   };
 
@@ -113,7 +101,7 @@ export default function AssetsPage(props: Props) {
 
   const handleDeleteAssetTransaction: AssetTransactionHandlers["delete"] =
     async (id) => {
-      await deleteAssetTransaction(id);
+      await removeAssetTransaction(id);
       await refreshAssetTransactions();
     };
 

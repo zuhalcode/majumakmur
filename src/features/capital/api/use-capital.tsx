@@ -4,9 +4,9 @@ import { useCallback, useEffect, useState } from "react";
 import { CapitalFilters } from "../types/capital-ui";
 import {
   CapitalResponse,
-  CreateCapitalDTO,
-  UpdateCapitalDTO,
-} from "../types/capital.dto";
+  CreateCapitalPayload,
+  UpdateCapitalPayload,
+} from "../types/capital.types";
 import { capitalService } from "./capital.service";
 
 //#endregion
@@ -39,15 +39,15 @@ export function useCapital() {
     }
   }, []);
 
-  const create = useCallback(async (dto: CreateCapitalDTO) => {
+  const create = useCallback(async (payload: CreateCapitalPayload) => {
     setLoading(true);
-    await capitalService.create(dto);
+    await capitalService.create(payload);
     setLoading(false);
   }, []);
 
-  const update = useCallback(async (dto: UpdateCapitalDTO) => {
+  const update = useCallback(async (payload: UpdateCapitalPayload) => {
     setLoading(true);
-    await capitalService.update(dto.id, dto);
+    await capitalService.update(payload.id, payload);
     setLoading(false);
   }, []);
 

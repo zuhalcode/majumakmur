@@ -9,7 +9,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import React from "react";
-import { CapitalResponse } from "../types/capital.dto";
+import { CapitalResponse } from "../types/capital.types";
 import CapitalEditDialog from "./edit-dialog";
 import { FormattedNumber } from "react-intl";
 import { CapitalHandlers } from "../types/capital-ui";

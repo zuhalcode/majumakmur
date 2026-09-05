@@ -1,4 +1,4 @@
-import { CapitalResponse } from "../capital/types/capital.dto";
+import { CapitalResponse } from "../capital/types/capital.types";
 import { TaxReport, TaxSummary } from "./tax";
 
 export const buildTaxReport = (

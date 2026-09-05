@@ -1,5 +1,5 @@
 import { CapitalSummary } from "./types/capital-ui";
-import { CapitalResponse } from "./types/capital.dto";
+import { CapitalResponse } from "./types/capital.types";
 
 export function capitalSummary(data: CapitalResponse[]): CapitalSummary {
   if (!data || data.length === 0) {

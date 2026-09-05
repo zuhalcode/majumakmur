@@ -51,7 +51,7 @@ export function useAssetTransaction() {
   return {
     data,
     loading,
-    refetch: fetch,
+    fetch,
     create,
     update,
     remove,

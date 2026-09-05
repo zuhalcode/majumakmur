@@ -27,7 +27,7 @@ import {
 } from "@/components/ui/form";
 import { useEffect, useState } from "react";
 
-import { CapitalResponse, UpdateCapitalDTO } from "../types/capital.dto";
+import { CapitalResponse, UpdateCapitalDTO } from "../types/capital.types";
 import { EditCapitalForm, editCapitalFormSchema } from "../schemas/edit.schema";
 
 //#endregion

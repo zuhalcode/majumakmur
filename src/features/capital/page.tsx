@@ -61,12 +61,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useCapital } from "./api/use-capital";
-import { CreateCapitalDTO } from "./types/capital.dto";
+
 import {
   CreateCapitalForm,
   createCapitalFormSchema,
 } from "./schemas/create.schema";
 import { SkeletonCard } from "@/components/skeleton/skeleton-card";
+import { CreateCapitalPayload } from "./types/capital.types";
 
 //#endregion
 
@@ -101,7 +102,7 @@ export default function CapitalPage(props: PageProps) {
 
   const handleOnSubmit = handleSubmit(async (values) => {
     try {
-      const payload: CreateCapitalDTO = {
+      const payload: CreateCapitalPayload = {
         capital: Number(values.capital),
         purchase: Number(values.purchase),
         sell: Number(values.sell),

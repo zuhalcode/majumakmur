@@ -3,11 +3,11 @@ import { assetBalanceService } from "@/features/asset/services/asset-balance.ser
 import { useCallback, useEffect, useState } from "react";
 import { AssetBalance } from "../types/asset.types";
 
-export function useAssetBalanceAPI() {
+export function useAssetBalance() {
   const [data, setData] = useState<AssetBalance[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const fetchData = useCallback(async () => {
+  const fetch = useCallback(async () => {
     try {
       setLoading(true);
 
@@ -22,12 +22,12 @@ export function useAssetBalanceAPI() {
   }, []);
 
   useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+    fetch();
+  }, [fetch]);
 
   return {
     data,
     loading,
-    fetchData,
+    fetch,
   };
 }
