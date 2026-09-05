@@ -27,15 +27,16 @@ import {
 } from "@/components/ui/form";
 import { useEffect, useState } from "react";
 
-import { CapitalResponse, UpdateCapitalDTO } from "../types/capital.types";
+import { CapitalResponse, UpdateCapitalPayload } from "../types/capital.types";
 import { EditCapitalForm, editCapitalFormSchema } from "../schemas/edit.schema";
+import { CapitalHandlers } from "../types/capital-ui";
 
 //#endregion
 
 interface Props {
   capital: CapitalResponse;
   loading: boolean;
-  onUpdate: (dto: UpdateCapitalDTO) => Promise<void>;
+  onUpdate: CapitalHandlers["update"];
 }
 
 export default function CapitalEditDialog({
@@ -59,7 +60,7 @@ export default function CapitalEditDialog({
 
   const handleOnSubmit = handleSubmit(async (values) => {
     try {
-      const payload: UpdateCapitalDTO = {
+      const payload: UpdateCapitalPayload = {
         id: capital.id,
         date: values.date,
         capital: Number(values.capital),
