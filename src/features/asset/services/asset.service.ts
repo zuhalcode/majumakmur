@@ -3,7 +3,7 @@ import {
   AssetResponse,
   CreateAssetPayload,
   UpdateAssetPayload,
-} from "@/features/asset/dto/asset.types";
+} from "../types/asset.types";
 
 export const assetService = {
   async findAll(): Promise<{ data: AssetResponse[] }> {
