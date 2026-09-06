@@ -3,16 +3,38 @@ import { ThemeProvider } from "next-themes";
 import "./globals.css";
 
 import { Toaster } from "@/components/ui/sonner";
-import { Provider } from "react-redux";
+import { Metadata } from "next";
 
-const defaultUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : "http://localhost:3000";
+const siteUrl = "https://majumakmur.netlify.app";
 
-export const metadata = {
-  metadataBase: new URL(defaultUrl),
-  title: "Maju Makmur",
-  description: "The fastest way to build apps with Next.js and Supabase",
+export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: "Maju Makmur | Jewelry Store",
+    template: "%s | Maju Makmur",
+  },
+  description:
+    "Maju Makmur is a jewelry store offering gold rings, necklaces, bracelets, earrings, and other jewelry products.",
+  applicationName: "Maju Makmur",
+  verification: { google: "yZ0TP8CPLC5LmJYSsfgSw1kmh-U_AXq-kKd4oHHvZI4" },
+  keywords: [
+    "Maju Makmur",
+    "jewelry store",
+    "gold jewelry",
+    "gold ring",
+    "gold necklace",
+    "gold bracelet",
+  ],
+  alternates: { canonical: "/" },
+  robots: { index: true, follow: true },
+  openGraph: {
+    type: "website",
+    url: siteUrl,
+    siteName: "Maju Makmur",
+    title: "Maju Makmur | Jewelry Store",
+    description:
+      "Maju Makmur is a jewelry store offering gold jewelry and other jewelry products.",
+  },
 };
 
 export default function RootLayout({
